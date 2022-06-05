@@ -6,14 +6,13 @@ import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
 const theme = createTheme({
-  // lightColors: {
-  //   primary: '#547561',
-  //   secondary: '#ffffcc'
-  // },
-  // darkColors: {
-  //   primary: '#547561',
-  //   secondary: '#ffffcc'
-  // }
+  lightColors: {
+    primary: '#0A3542',
+    secondary: '#F4E5BE',
+    brown: '#D19667',
+    red: '#BA532E',
+    green: '#4D4727'
+  }
 })
 
 

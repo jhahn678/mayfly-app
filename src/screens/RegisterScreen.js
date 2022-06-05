@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Input, FAB } from '@rneui/themed'
 import { useState, useEffect, useReducer } from 'react'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
-import { auth, db } from '../firebase/config'
 import { nameSchema, emailSchema, passwordSchema } from '../utils/yup-schemas'
 
 const initialState = {
@@ -131,34 +128,8 @@ const RegisterScreen = ({ navigation }) => {
 
     const handleRegister = async () => {
         const { email, password, firstName, lastName } = formState;
-        try{
-            const newUser = await createUserWithEmailAndPassword(auth, email.value, password.value)
-            await newUser.user.update({
-                displayName: `${firstName.value} ${lastName.value}`
-            })
-            const userObj = {
-                displayName: {
-                    firstName: firstName.value,
-                    lastName: lastName.value,
-                    fullName: `${firstName.value} ${lastName.value}`,
-                    handle: null
-                },
-                email: email.value,
-                conversations: [],
-                friends: [],
-                spots: [],
-                createdAt: Date.now()
-            }
-            await setDoc(doc(db, 'users', newUser.user.uid), userObj)
-            navigation.navigate('Home')
-        }catch(err){
-            alert('User is already registered')
-        }
+        console.log(email, password, firstName, lastName)
     }
-
-    useEffect(() => {
-        console.log(user)
-    },[user])
 
     return (
         <View style={styles.container}>
