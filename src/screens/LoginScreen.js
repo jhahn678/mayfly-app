@@ -3,16 +3,23 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { FAB, Input } from '@rneui/themed';
 import logo from '../../assets/mayfly-logo.png'
+import axios from '../utils/axios'
+import { useAuthContext } from '../store/context/auth'
 
 const LoginScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = () => {
-        setEmail('')
-        setPassword('')
-        navigation.navigate('Home')
+  const { signIn } = useAuthContext()
+
+  const handleLogin = async () => {
+    try{
+      const { data } = await axios.post('/auth/login', { email: email, password: password })
+      await signIn(data.user, data.token)
+    }catch(err){
+      alert(err)
+    }
   }
   
   return (
