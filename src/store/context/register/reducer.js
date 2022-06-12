@@ -5,6 +5,7 @@ export const reducer = (state, action) => {
         const { email } = state;
         email.value = action.value;
         email.isTouched = true;
+        email.unique = false;
         try{
             emailSchema.validateSync(action.value)
             email.isValid = true;
@@ -16,7 +17,13 @@ export const reducer = (state, action) => {
         return{ ...state, email }
     }else if(action.type === 'EMAIL_UNIQUE'){
         const { email } = state;
-        action.value === true ? email.unique = true : email.unique = false;
+        if(action.value === true){
+            email.unique = true;
+            email.error = null;
+        }else{
+            email.unique = false
+            email.error = 'Email already in use'
+        }
         return{ ...state, email }
     }else if(action.type === 'PASSWORD'){
         const { password } = state;
@@ -81,6 +88,7 @@ export const reducer = (state, action) => {
         const { username } = state;
         username.value = action.value;
         username.isTouched = true;
+        username.unique = false
         if(username.value.length >= 5){
             username.isValid = true;
             username.error = null;
