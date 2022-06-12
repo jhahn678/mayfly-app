@@ -18,10 +18,9 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState('')
 
     const signIn = async (user, token) => {
-        console.log(user)
         await SecureStore.setItemAsync('ACCESS_TOKEN', token)
         setIsSignedIn(true)
-        setUser()
+        setUser(user)
         setToken(token)
     }
 
