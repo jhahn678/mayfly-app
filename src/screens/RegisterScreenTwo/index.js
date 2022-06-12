@@ -1,59 +1,43 @@
-import { StyleSheet, View, Text } from 'react-native'
-import { FAB } from '@rneui/themed'
+import { StyleSheet, View } from 'react-native'
+import { BlurView } from 'expo-blur';
+import { FAB, Input, useTheme } from '@rneui/themed'
 import PrismBackground from '../../components/backgrounds/PrismBackground'
 import AuthStackHeader from '../../components/headers/AuthStackHeader';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import IconInput from '../../components/inputs/IconInput';
-import GoogleLoginButton from '../../components/buttons/GoogleLoginButton/GoogleLoginButton';
-import FacebookLoginButton from '../../components/buttons/FacebookLoginButton/FacebookLoginButton';
 import { useRegisterContext } from '../../store/context/register'
 
 const RegisterScreenTwo = ({ navigation }) => {
 
     const handleRegister = () => {}
 
+    const { theme } = useTheme()
+
     const { formState, dispatch } = useRegisterContext()
 
     return (
       <PrismBackground style={styles.container}>
-            <AuthStackHeader navigation={navigation} title='Last'/>
+            <AuthStackHeader navigation={navigation} title='Last Step'/>
             <BlurView intensity={10} style={styles.main}>
                 <View style={styles.form}>
-                    <IconInput 
-                        Icon={<IonIcon name='person-outline' size={28}/>} 
-                        value={formState?.firstName.value} 
-                        setValue={value => dispatch({ type: 'FIRSTNAME', value: value })} 
-                        label='First name' containerStyle={styles.input}
+                    <Input 
+                        leftIcon={<IonIcon name='at' size={28} color='#FFFEF3'/>} 
+                        value={formState?.username.value} 
+                        onChangeText={value => dispatch({ type: 'USERNAME', value: value })} 
+                        label='Choose a Username'
+                        inputStyle={styles.input}
+                        inputContainerStyle={{...styles.inputContainer }}
+                        labelStyle={{ ...styles.inputLabel }}
+                        placeholderTextColor='#FFFEF3'
+                        errorStyle={{ color: theme.colors.error, fontWeight: '500' }}
+                        errorMessage={formState?.username.error}
                     />
-                    <IconInput 
-                        Icon={<IonIcon name='person-outline' size={28}/>} 
-                        value={formState?.lastName.value} 
-                        setValue={value => dispatch({ type: 'LASTNAME', value: value})} 
-                        label='Last name' containerStyle={styles.input}
-                    />
-                    <IconInput 
-                        Icon={<IonIcon name='mail-outline' size={28}/>} 
-                        value={formState?.email.value} 
-                        setValue={value => dispatch({ type: 'EMAIL', value: value})} 
-                        label='Email' containerStyle={styles.input}
-                    />
-                    <IconInput 
-                        Icon={<IonIcon name='lock-closed-outline' size={28}/>} 
-                        value={formState?.password.value} 
-                        setValue={value => dispatch({ type: 'PASSWORD', value: value})} 
-                        label='Password' containerStyle={styles.input}
-                    />
-                    <FAB title='Next' 
+                    <FAB title='Get Started' 
                         onPress={handleRegister} 
-                        disabled={!formState?.formStepOne.isValid} 
+                        disabled={!formState?.username.unique || !formState?.username.isValid} 
                         containerStyle={styles.buttonContainer} 
                         buttonStyle={styles.button}
                         disabledStyle={styles.buttonDisabled}
                     />
-                    <View style={styles.providerButtonContainer}>
-                        <GoogleLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
-                        <FacebookLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
-                    </View>
                 </View>
             </BlurView>
         </PrismBackground>
@@ -76,7 +60,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(255, 254, 243, .4)',
       display: 'flex',
       alignItems: 'center',
-      paddingTop: '25%',
+      paddingTop: '35%',
       shadowColor: 'rgb(0,0,0)',
       shadowOpacity: .4,
       shadowRadius: 8,
@@ -87,10 +71,10 @@ const styles = StyleSheet.create({
       width: '80%',
       display: 'flex',
       alignSelf: 'center',
-      transform: [{ skewY: '15deg'}]
+      transform: [{ skewY: '15deg' }]
   },
   buttonContainer: {
-      marginTop: 8,
+      marginTop: 24,
       width: '100%',
       borderRadius: 8
   },
@@ -102,7 +86,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(10, 53, 66, .7)'
   },
   input: {
-      marginBottom: 12
+    color: '#FFFEF3',
+    fontSize: 24
+  },
+  inputContainer: {
+    borderBottomColor: '#0A3542',
+    borderBottomWidth: 1
+  },
+  inputLabel: {
+    color: '#0A3542',
+    fontWeight: '400'
   },
   providerButtonContainer: {
       flexDirection: 'row',
