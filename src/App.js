@@ -9,7 +9,8 @@ const theme = createTheme({
     secondary: '#F4E5BE',
     brown: '#D19667',
     red: '#BA532E',
-    green: '#4D4727'
+    green: '#4D4727',
+    error: '#df2c0c'
   },
   
 })
