@@ -81,16 +81,26 @@ export const reducer = (state, action) => {
         const { username } = state;
         username.value = action.value;
         username.isTouched = true;
-        if(username.length > 5){
+        if(username.value.length >= 5){
             username.isValid = true;
             username.error = null;
         }else{
             username.isValid = false;
             username.error = 'Username too short'
         }
+        return {
+            ...state,
+            username
+        }
     }else if(action.type === 'USERNAME_UNIQUE'){
         const { username } = state;
-        action.value === true ? username.unique = true : username.unique = false;
+        if(action.value === true){
+            username.unique = true 
+            username.error = null
+        }else{
+            username.unique = false;
+            username.error = 'Username is taken'
+        }
         return{ ...state, username }
     }else{
         return state;
