@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
       }, 
       inputField: {
         color: '#0A3542',
-        fontWeight: '500',
+        fontWeight: '400',
         fontSize: 20,
         width: '80%',
         padding: 6
