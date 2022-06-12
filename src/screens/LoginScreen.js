@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import { FAB, Input } from '@rneui/themed';
-import logo from '../../assets/mayfly-logo.png'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { FAB } from '@rneui/themed';
 import axios from '../utils/axios'
 import { useAuthContext } from '../store/context/auth'
+import PrismBackground from '../components/backgrounds/PrismBackground';
+import AuthStackHeader from '../components/headers/AuthStackHeader';
+import { BlurView } from 'expo-blur';
+import Icon from 'react-native-vector-icons/Ionicons';
+import IconInput from '../components/inputs/IconInput';
+import GoogleLoginButton from '../components/buttons/GoogleLoginButton/GoogleLoginButton';
+import FacebookLoginButton from '../components/buttons/FacebookLoginButton/FacebookLoginButton';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -15,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try{
-      const { data } = await axios.post('/auth/login', { email: email, password: password })
+      const { data } = await axios.post('/auth/login', { email, password })
       await signIn(data.user, data.token)
     }catch(err){
       alert(err)
@@ -23,25 +28,44 @@ const LoginScreen = ({ navigation }) => {
   }
   
   return (
-    <View style={styles.container}>
-        <Image source={logo} style={styles.logo}/>
-        <View style={styles.form}>
-            <Input placeholder='Email' lable='Email' onChangeText={setEmail} value={email}/>
-            <Input placeholder='Password' lable='Password' onChangeText={setPassword} value={password}/>
-            <FAB
-            containerStyle={styles.buttonContainer}
-            buttonStyle={styles.button}
-            title='Sign In'
-            onPress={handleLogin}
+      <PrismBackground style={styles.container}>
+        <AuthStackHeader title='Sign in' />
+        <BlurView intensity={10} style={styles.main}>
+          <View style={styles.form}>
+            <IconInput Icon={<Icon name='mail-outline' size={28}/>} 
+              value={email}
+              setValue={setEmail}
+              label='Email'
             />
-        </View>
-        <Text style={{ marginTop: 30 }}>Don't have an account? 
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.getStarted}>Get started</Text>
-            </TouchableOpacity>
-        </Text>
-        <StatusBar style="auto"/>
-    </View>
+            <IconInput Icon={<Icon name='lock-closed-outline' size={28}/>} 
+              value={password}
+              setValue={setPassword}
+              label='Password'
+              containerStyle={styles.bottomInput}
+            />
+            <FAB
+              containerStyle={styles.buttonContainer}
+              buttonStyle={styles.button}
+              title='Sign In'
+              onPress={handleLogin}
+            />
+            <View style={styles.providerButtonContainer}>
+                <GoogleLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
+                <FacebookLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
+            </View>
+            <View style={styles.altAuthPrompts}>
+              <TouchableOpacity onPress={() => navigation.navigate('Choose Username')}>
+                <Text style={styles.forgotPassword}>Forgot password?</Text>
+              </TouchableOpacity>
+              <Text style={styles.noAccount}>Don't have an account? 
+                <TouchableOpacity onPress={() => navigation.navigate('Sign Up')}>
+                    <Text style={styles.getStarted}>Get started</Text>
+                </TouchableOpacity>
+              </Text>
+            </View>
+          </View>
+        </BlurView>
+      </PrismBackground>
   )
 }
 
@@ -49,28 +73,67 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fffef3',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      form: {
-        width: '80%',
-        display: 'flex',
-      },
-      buttonContainer: {
-        marginTop: 10,
-        width: '50%'
-      },
-      button: {
-        backgroundColor: '#547561'
-      },
-      logo: {
-        height: 150,
-        width: 150,
-        marginBottom: '10%'
-      },
-      getStarted: {
-        marginLeft: 5
-      }
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      overflow: 'hidden'
+    },
+    main: {
+      height: '65%',
+      width: '100%',
+      marginBottom: '25%',
+      backgroundColor: 'rgba(255, 254, 243, .4)',
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: '25%',
+      shadowColor: 'rgb(0,0,0)',
+      shadowOpacity: .4,
+      shadowRadius: 8,
+      shadowOffset: { height: 4 },
+      transform: [{ skewY: '-15deg'}]
+    },
+    form: {
+      width: '80%',
+      display: 'flex',
+      transform: [{ skewY: '15deg'}]
+    },
+    providerButtonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 24
+    },
+    buttonContainer: {
+      marginTop: 12,
+      width: '100%',
+      borderRadius: 8
+    },
+    button: {
+      backgroundColor: '#0A3542',
+      color: '#FFFEF3'
+    },
+    bottomInput: {
+      marginTop: 12
+    },
+    altAuthPrompts: {
+      display: 'flex',
+      marginTop: 24
+    },
+    forgotPassword: {
+      fontSize: 14,
+      fontWeight: '500',
+      padding: 0,
+    },
+    noAccount: {
+      fontSize: 12,
+      marginTop: 12,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'baseline'
+    },
+    getStarted: {
+      height: 14,
+      marginLeft: 5,
+      fontSize: 14,
+      fontWeight: '500'
+    }
 })

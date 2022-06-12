@@ -1,20 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
+import { useAuthContext } from '../store/context/auth'
+import { useGetUserQuery } from '../hooks/queries/getUser'
 
 const HomeScreen = ({ navigation }) => {
 
-  useEffect(() => {
-    const getToken = async () => {
-      const token = await SecureStore.getItemAsync('ACCESS_TOKEN')
-      alert(token)
-    }
-    getToken()
-  },[])
-
+  const { user } = useAuthContext()
+  const { data } = useGetUserQuery(user._id)
+  
   return (
     <View style={styles.container}>
-      <Text>HomeScreen</Text>
+      { data && <Text>THE DATA IS HERE</Text>}
+      { data && <Text>{data.getUser.details.fullName}</Text> }
     </View>
   )
 }

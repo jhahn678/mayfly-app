@@ -1,3 +1,5 @@
+import { nameSchema, passwordSchema, emailSchema } from "../../utils/yup-schemas";
+
 export const formReducer = (state, action) => {
     if(action.type === 'EMAIL'){
         const { email } = state;
@@ -74,7 +76,7 @@ export const formReducer = (state, action) => {
             lastName
         }
     }else if(action.type === 'FORM_VALIDATE'){
-        const { firstName, lastName, email, password, passwordConfirm, form } = state;
+        const { firstName, lastName, email, password, passwordConfirm, formStepOne } = state;
         if(
             firstName.isValid &&
             lastName.isValid && 
@@ -82,13 +84,13 @@ export const formReducer = (state, action) => {
             password.isValid && 
             passwordConfirm.isValid
         ){
-            form.isValid = true;
+            formStepOne.isValid = true;
         }else{
-            form.isValid = false;
+            formStepOne.isValid = false;
         }
         return {
             ...state,
-            form
+            formStepOne
         }
     }else{
         return state;
