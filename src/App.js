@@ -10,9 +10,9 @@ const theme = createTheme({
     brown: '#D19667',
     red: '#BA532E',
     green: '#4D4727'
-  }
+  },
+  
 })
-
 
 export default function App() {
 
