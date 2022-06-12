@@ -2,11 +2,12 @@ import { StyleSheet, Text, View } from 'react-native'
 import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
-const GlobalTabHeader = ({ navigation, onIconPress }) => {
+const GlobalTabHeader = ({ onIconPress }) => {
 
     const route = useRoute()
+    const navigation = useNavigation()
 
     return (
         <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>

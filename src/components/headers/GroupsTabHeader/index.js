@@ -2,16 +2,20 @@ import { StyleSheet, Text, View } from 'react-native'
 import { BlurView } from 'expo-blur';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { globalStyles } from '../../../styles/globalStyles';
+import { useNavigation } from '@react-navigation/native'
 
 const GroupsTabHeader = () => {
-  return (
-    <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
-        <View style={styles.headerContent}>
-            <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text>
-            <Icon name='message-plus-outline' size={36} style={{...globalStyles.fontShadow}}/>
-        </View>
-    </BlurView>
-  )
+
+    const navigation = useNavigation()
+
+    return (
+        <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
+            <View style={styles.headerContent}>
+                <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text>
+                <Icon name='message-plus-outline' size={36} style={{...globalStyles.fontShadow}}/>
+            </View>
+        </BlurView>
+    )
 }
 
 export default GroupsTabHeader
