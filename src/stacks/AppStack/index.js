@@ -1,10 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
-import HomeScreen from '../../screens/HomeScreen'
 import { useAuthContext } from '../../store/context/auth';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../styles/globalStyles';
+import GlobalStack from './GlobalStack';
+import PlacesStack from './PlacesStack'
+import GroupsStack from './GroupsStack'
+import CatchesStack from './CatchesStack'
 
 const AppStack = () => {
 
@@ -38,22 +41,22 @@ const AppStack = () => {
                     )
                 }}
             >
-                <Tab.Screen name='Global' component={HomeScreen} options={{
+                <Tab.Screen name='Global' component={GlobalStack} options={{
                     headerShown: false,
                     tabBarIcon: ({ color }) => (<IonIcon name='globe-outline' color={color} size={36}/>),
                     tabBarLabel: 'Global'
                 }}/>
-                <Tab.Screen name='Catches' component={HomeScreen} options={{
+                <Tab.Screen name='Catches' component={CatchesStack} options={{
                     headerShown: false,
                     tabBarIcon: ({ color }) => (<IonIcon name='list-outline' color={color} size={36}/>),
                     tabBarLabel: 'Catches'
                 }}/>
-                <Tab.Screen name='Places' component={HomeScreen} options={{
+                <Tab.Screen name='Places' component={PlacesStack} options={{
                     headerShown: false,
                     tabBarIcon: ({ color }) => (<IonIcon name='map-outline' color={color} size={36}/>),
                     tabBarLabel: 'Places'
                 }}/>
-                <Tab.Screen name='Groups' component={HomeScreen} options={{
+                <Tab.Screen name='Groups' component={GroupsStack} options={{
                     headerShown: false,
                     tabBarIcon: ({ color }) => (<IonIcon name='people-outline' color={color} size={36}/>),
                     tabBarLabel: 'Groups'
