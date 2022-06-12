@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreenOne from '../screens/RegisterScreenOne';
-import RegisterScreenTwo from '../screens/RegisterScreenTwo';
-import { RegisterContextProvider } from '../store/context/register';
+import LoginScreen from '../../screens/Auth/LoginScreen';
+import RegisterScreenOne from '../../screens/Auth/RegisterScreenOne';
+import RegisterScreenTwo from '../../screens/Auth/RegisterScreenTwo';
+import { RegisterContextProvider } from '../../store/context/register';
 
 
 const AuthStack = () => {
