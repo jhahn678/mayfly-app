@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { BlurView } from 'expo-blur';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import FontelloIcon from '../../icons/Fontello'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native'
 
@@ -12,8 +12,8 @@ const GroupsTabHeader = () => {
         <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text>
-                <Icon size={36} 
-                    name='message-plus-outline' 
+                <FontelloIcon size={48} 
+                    name='new-chat' 
                     style={{...globalStyles.fontShadow}}
                     onPress={() => navigation.navigate('NewGroup')}
                 />
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingLeft: 16,
-        paddingRight: 16,
-        paddingBottom: 12
+        paddingRight:10,
+        paddingBottom: 2
     },
     title: {
         fontSize: 32,

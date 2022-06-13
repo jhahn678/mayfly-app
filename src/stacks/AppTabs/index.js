@@ -6,6 +6,7 @@ import GlobalStack from './GlobalStack';
 import PlacesStack from './PlacesStack'
 import CatchesStack from './CatchesStack'
 import GroupsScreen from '../../screens/Groups/GroupsScreen';
+import FontelloIcon from '../../components/icons/Fontello';
 
 const AppTabs = () => {
 
@@ -31,17 +32,17 @@ const AppTabs = () => {
         >
             <Tab.Screen name='Global' component={GlobalStack} options={{
                 headerShown: false,
-                tabBarIcon: ({ color }) => (<IonIcon name='globe-outline' color={color} size={36}/>),
+                tabBarIcon: ({ color }) => (<FontelloIcon name='earth' color={color} size={48}/>),
                 tabBarLabel: 'Global'
             }}/>
             <Tab.Screen name='Catches' component={CatchesStack} options={{
                 headerShown: false,
-                tabBarIcon: ({ color }) => (<IonIcon name='list-outline' color={color} size={36}/>),
+                tabBarIcon: ({ color }) => (<FontelloIcon name='fish' color={color} size={52}/>),
                 tabBarLabel: 'Catches'
             }}/>
             <Tab.Screen name='Places' component={PlacesStack} options={{
                 headerShown: false,
-                tabBarIcon: ({ color }) => (<IonIcon name='map-outline' color={color} size={36}/>),
+                tabBarIcon: ({ color }) => (<FontelloIcon name='map' color={color} size={32}/>),
                 tabBarLabel: 'Places'
             }}/>
             <Tab.Screen name='Groups' component={GroupsScreen} options={{

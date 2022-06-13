@@ -24,7 +24,7 @@ const RootStack = () => {
 
     return (
         <NavigationContainer>
-            { isSignedIn ? 
+            {/* { isSignedIn ?  */}
                 <ApolloProvider client={client}>
                     <Stack.Navigator>
                         <Stack.Screen name='MainTabs' component={AppTabs} options={{ headerShown: false }}/>
@@ -33,9 +33,10 @@ const RootStack = () => {
                         <Stack.Screen name='NewGroup' component={NewGroupScreen} options={{ headerShown: false }}/>
                         <Stack.Screen name='GroupScreen' component={GroupScreen} options={{ headerShown: false }}/>
                     </Stack.Navigator> 
-                </ApolloProvider> : 
+                </ApolloProvider> 
+                {/* : 
                 <AuthStack/>
-            }
+            } */}
         </NavigationContainer>
     )
 }
