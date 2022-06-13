@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import PlacesTabHeader from '../../components/headers/PlacesTabHeader'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
+import CreateHeader from '../../components/headers/CreateHeader'
 
 const NewPlaceScreen = () => {
   return (
     <PrimaryBackground>
-        <PlacesTabHeader/>
+        <CreateHeader title='New Place'/>
         <Text>New Place Screen</Text>
     </PrimaryBackground>
   )

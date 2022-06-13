@@ -8,7 +8,6 @@ const FeedScreen = ({ navigation }) => {
 
   const { user } = useAuthContext()
   const { data } = useGetUserQuery(user._id)
-
   
   return (
     <PrimaryBackground>

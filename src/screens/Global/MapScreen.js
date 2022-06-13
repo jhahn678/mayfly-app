@@ -3,15 +3,11 @@ import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GlobalTabHeader from '../../components/headers/GlobalTabHeader'
 
-const MapScreen = ({ navigation }) => {
-
-  const onIconPress = () => {
-    navigation.navigate('GlobalFeed')
-  }
+const MapScreen = ({}) => {
 
   return (
     <PrimaryBackground>
-      <GlobalTabHeader onIconPress={onIconPress}/>
+      <GlobalTabHeader/>
       <Text>MapScreen</Text>
     </PrimaryBackground>
   )

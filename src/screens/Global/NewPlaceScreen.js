@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
-import GlobalTabHeader from '../../components/headers/GlobalTabHeader'
+import CreateHeader from '../../components/headers/CreateHeader'
 
-const NewPlaceScreen = ({ navigation }) => {
+const NewPlaceScreen = ({}) => {
+
   return (
     <PrimaryBackground>
-      <GlobalTabHeader/>
+      <CreateHeader title='New Place'/>
       <Text>New Place Screen</Text>
     </PrimaryBackground>
   )
