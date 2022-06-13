@@ -9,7 +9,7 @@ const CatchesStack = () => {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name='AllCatches' component={CatchesScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name='CatchesList' component={CatchesScreen} options={{ headerShown: false }}/>
             <Stack.Screen name='CatchesMap' component={MapScreen} options={{ headerShown: false }}/>
             <Stack.Screen name='ViewCatch' component={ViewCatchScreen} options={{ headerShown: false }}/>
         </Stack.Navigator>

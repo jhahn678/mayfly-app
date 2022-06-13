@@ -4,7 +4,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
-const GlobalTabHeader = ({ onIconPress }) => {
+const GlobalTabHeader = ({}) => {
 
     const route = useRoute()
     const navigation = useNavigation()
@@ -18,7 +18,7 @@ const GlobalTabHeader = ({ onIconPress }) => {
                         name='list-outline'
                         size={36} 
                         style={{...globalStyles.fontShadow}}
-                        onPress={onIconPress}
+                        onPress={() => navigation.navigate('GlobalFeed')}
                     /> :
                     <IonIcon 
                         name='map-outline' 

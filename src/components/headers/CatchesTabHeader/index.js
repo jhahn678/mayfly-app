@@ -2,17 +2,31 @@ import { StyleSheet, Text, View } from 'react-native'
 import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
-const CatchTabHeader = () => {
+const CatchTabHeader = ({}) => {
 
+    const route = useRoute()
     const navigation = useNavigation()
 
     return (
         <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>Catches</Text>
-                <IonIcon name='map-outline' size={36} style={{...globalStyles.fontShadow}}/>
+                { route.name === 'CatchesMap' ?
+                    <IonIcon
+                        name='list-outline'
+                        size={36} 
+                        style={{...globalStyles.fontShadow}}
+                        onPress={() => navigation.navigate('CatchesList')}
+                    /> :
+                    <IonIcon 
+                        name='map-outline' 
+                        size={36} 
+                        style={{...globalStyles.fontShadow}}
+                        onPress={() => navigation.navigate('CatchesMap')}
+                    /> 
+                }
             </View>
         </BlurView>
     )

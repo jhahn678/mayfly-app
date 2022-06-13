@@ -12,7 +12,11 @@ const GroupsTabHeader = () => {
         <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text>
-                <Icon name='message-plus-outline' size={36} style={{...globalStyles.fontShadow}}/>
+                <Icon size={36} 
+                    name='message-plus-outline' 
+                    style={{...globalStyles.fontShadow}}
+                    onPress={() => navigation.navigate('NewGroup')}
+                />
             </View>
         </BlurView>
     )
