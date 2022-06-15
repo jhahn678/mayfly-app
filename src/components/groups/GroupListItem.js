@@ -15,7 +15,7 @@ const GroupListItem = ({ item }) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <BlurView style={styles.container} intensity={10}>
-                <Avatar source={{ uri: item.avatar.url }} rounded size={72} containerStyle={styles.avatar}/>
+                <Avatar source={{ uri: item.latest_message.user.details.avatar.url }} rounded size={72} containerStyle={styles.avatar}/>
                 <View style={styles.right}>
                     <View style={styles.header}>
                         <Text>{ item.name }</Text>
