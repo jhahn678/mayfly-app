@@ -3,7 +3,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native';
 
-const CreateHeader = ({ title, color }) => {
+const CreateHeader = ({ title, color, rightNode }) => {
 
     const navigation = useNavigation()
 
@@ -19,6 +19,9 @@ const CreateHeader = ({ title, color }) => {
                 <Text style={{...globalStyles.fontShadow, ...styles.title, color: color && color}}>
                     {title}
                 </Text>
+                <View style={styles.right}>
+                    {rightNode}
+                </View>
             </View>
         </View>
     )
@@ -49,5 +52,10 @@ const styles = StyleSheet.create({
     back: {
         color: '#353440',
         marginRight: 12
+    },
+    right: {
+        position: 'absolute',
+        top: -8,
+        right: 16
     }
 })
