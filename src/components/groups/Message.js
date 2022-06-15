@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     bubble: {
         maxWidth: '70%',
         minWidth: 80,
-        backgroundColor: '#3ea9e2',
+        backgroundColor: 'rgba(62, 169, 226, .5)',
         borderRadius: 20,
         borderBottomLeftRadius: 3,
         padding: 12,
@@ -76,24 +76,24 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 3,
-        backgroundColor: '#0eaaa7',
+        backgroundColor: 'rgba(14, 170, 167, .5)',
     },
     header:{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomColor: '#fefefe',
+        borderBottomColor: 'rgba(53, 52, 64, .5)',
         borderBottomWidth: .5,
         paddingBottom: 2
     },
     headerText: {
         fontSize: 12, 
         fontWeight: '300', 
-        color: '#fefefe',
+        color: 'rgb(53, 52, 64)',
     },
     body: {
         fontSize: 14,
-        color: '#fefefe',
+        color: 'rgb(53, 52, 64)',
         paddingTop: 4
     },
     dateFromUser: {
