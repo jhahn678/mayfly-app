@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -18,7 +17,7 @@ const GroupHeader = ({ title }) => {
                     style={{...globalStyles.fontShadow, ...styles.back}}
                     onPress={() => navigation.goBack()}
                 /> 
-                <Text style={{...globalStyles.fontShadow, ...styles.title}}>{title || 'GROUP'}</Text>
+                <Text style={{...globalStyles.fontShadow, ...styles.title}}>{title || 'Group name'}</Text>
             </View>
         </View>
     )
@@ -44,10 +43,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: '400',
-        color: '#FFFEF3'
     },
     back: {
-        color: '#FFFEF3',
         marginRight: 12
     }
 })

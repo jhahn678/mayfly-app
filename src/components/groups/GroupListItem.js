@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: 90,
         width: '95%',
-        backgroundColor: 'rgba(255, 254, 243, .5)',
         borderRadius: 15,
         overflow: 'hidden',
         marginBottom: 8,
@@ -74,11 +73,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         borderWidth: 1, 
-        borderColor: 'rgba(61, 76, 81, .3)'
+        borderColor: 'rgba(53, 52, 64, .3)',
+        backgroundColor: '#fefefe'
     },
     avatar: {
         borderWidth: 1, 
-        borderColor: 'rgba(61, 76, 81, .3)'
+        borderColor: 'rgba(53, 52, 64, .3)'
     },
     right: {
         display: 'flex',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'baseline',
         borderBottomWidth: 1, 
-        borderBottomColor: 'rgba(61, 76, 81, .3)'
+        borderBottomColor: 'rgba(53, 52, 64, .3)'
     },
     title: {
         fontWeight: '300',
