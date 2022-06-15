@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -10,7 +9,7 @@ const CatchTabHeader = ({}) => {
     const navigation = useNavigation()
 
     return (
-        <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
+        <View style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>Catches</Text>
                 { route.name === 'CatchesMap' ?
@@ -28,7 +27,7 @@ const CatchTabHeader = ({}) => {
                     /> 
                 }
             </View>
-        </BlurView>
+        </View>
     )
 }
 
@@ -36,9 +35,8 @@ export default CatchTabHeader
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'rgba(10, 53, 66, .6)', 
         width: '100%',
-        height: '13%',
+        height: '12%',
         display: 'flex',
         justifyContent: 'flex-end'
     },

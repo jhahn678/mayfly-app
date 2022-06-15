@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
-import GroupsTabHeader from '../../components/headers/GroupsTabHeader'
+import GroupHeader from '../../components/headers/GroupHeader'
 
 const GroupScreen = () => {
   return (
     <PrimaryBackground>
-        <GroupsTabHeader/>
-        <Text>Groups Screen</Text>
+      <GroupHeader/>
+        <Text style={{ fontSize: 36}}>GROUP SCREEN</Text>
     </PrimaryBackground>
   )
 }

@@ -1,15 +1,13 @@
-import { ImageBackground, StyleSheet} from 'react-native'
+import { ImageBackground, StyleSheet, View} from 'react-native'
 import image from '../../../assets/fish-background.png'
 
 const PrimaryBackground = ({ children, style }) => {
   return (
-    <ImageBackground 
-        source={image} 
-        resizeMode={'cover'} 
+    <View
         style={{ ...styles.container, ...style}}
     >
         {children}
-    </ImageBackground>
+    </View>
   )
 }
 
@@ -17,6 +15,6 @@ export default PrimaryBackground;
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
+        height: '100%'
     }
 })

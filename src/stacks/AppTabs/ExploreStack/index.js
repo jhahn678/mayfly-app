@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import FeedScreen from '../../../screens/Global/FeedScreen'
-import MapScreen from '../../../screens/Global/MapScreen'
+import FeedScreen from '../../../screens/Explore/FeedScreen'
+import MapScreen from '../../../screens/Explore/MapScreen'
 
-const GlobalStack = () => {
+const ExploreStack = () => {
 
     const Stack = createNativeStackNavigator()
 
@@ -16,6 +16,6 @@ const GlobalStack = () => {
     )
 }
 
-export default GlobalStack
+export default ExploreStack
 
 const styles = StyleSheet.create({})

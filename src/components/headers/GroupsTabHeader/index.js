@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { BlurView } from 'expo-blur';
 import FontelloIcon from '../../icons/Fontello'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native'
+import { BlurView } from 'expo-blur';
 
 const GroupsTabHeader = () => {
 
     const navigation = useNavigation()
 
     return (
-        <BlurView intensity={10} style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
+        <View style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text>
                 <FontelloIcon size={48} 
@@ -18,7 +18,7 @@ const GroupsTabHeader = () => {
                     onPress={() => navigation.navigate('NewGroup')}
                 />
             </View>
-        </BlurView>
+        </View>
     )
 }
 
@@ -26,9 +26,8 @@ export default GroupsTabHeader
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'rgba(10, 53, 66, .6)', 
         width: '100%',
-        height: '13%',
+        height: '12%',
         display: 'flex',
         justifyContent: 'flex-end'
     },
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 16,
         paddingRight:10,
-        paddingBottom: 2
+        paddingBottom: 4
     },
     title: {
         fontSize: 32,

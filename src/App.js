@@ -4,15 +4,15 @@ import { loadAsync } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import RootStack from './stacks';
 import { useEffect, useState } from 'react';
+import { Asset } from 'expo-asset'
 
 
 const theme = createTheme({
   lightColors: {
-    primary: '#0A3542',
-    secondary: '#F4E5BE',
-    brown: '#D19667',
-    red: '#BA532E',
-    green: '#4D4727',
+    primary: '#353440',
+    secondary: '#0eaaa7',
+    tertiary: '#3ea9e2',
+    white: 'fefefe',
     error: '#df2c0c'
   },
   
@@ -25,8 +25,9 @@ export default function App() {
   const prepareApp = async () => {
     try{
       await SplashScreen.preventAutoHideAsync()
+      await Asset.fromModule(require('../assets/fish-background.png')).downloadAsync()
       await loadAsync({ 
-        FontelloIcons: require('../assets/fonts/mayfly.ttf'),
+        mayfly: require('../assets/fonts/mayfly.ttf'),
       })
     }catch(err){
       console.warn(err)
@@ -46,8 +47,14 @@ export default function App() {
 
 
   useEffect(() => {
-    if(appIsReady) hideSplashScreen()
+    if(appIsReady) {
+      hideSplashScreen()
+    }
   },[appIsReady])
+
+  if(!appIsReady){
+    return null;
+  }
 
 
   return (
