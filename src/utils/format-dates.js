@@ -14,3 +14,18 @@ export const formatDateGroupList = (isoDate) => {
         return date.toLocaleDateString([], { day: 'numeric', month: 'long' } )
     }
 }
+
+export const formatTimeMessage = (isoDate) => {
+    const date = new Date(isoDate)
+    let hour = date.getHours()
+    let minutes = date.getMinutes()
+    let timeOfDay = 'am'
+    if(hour > 12) {
+        hour = hour - 12;
+        timeOfDay = 'pm'
+    }
+    if(minutes < 10){
+        minutes = `0${minutes}`
+    }
+    return `${hour}:${minutes} ${timeOfDay}`
+}
