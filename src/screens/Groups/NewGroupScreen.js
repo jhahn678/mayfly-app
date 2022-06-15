@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native'
-import { Avatar, Input } from '@rneui/themed'
-import { useState } from 'react'
+import { Avatar, FAB, Input } from '@rneui/themed'
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, FlatList } from 'react-native'
 import { globalStyles } from '../../styles/globalStyles'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
@@ -11,15 +11,46 @@ import ContactListItem from '../../components/groups/ContactListItem'
 
 const NewGroupScreen = () => {
 
-  const [selected, setSelected] = useState(0)
+  const theme = useTheme()
+
+  //Mock contacts from user
+  const [contacts, setContacts] = useState(fakeContacts)
+  const [filteredContacts, setFilteredContacts] = useState([])
+
+  useEffect(() => {
+      setFilteredContacts(contacts)
+  },[contacts])
+
+  const [selectedContacts, setSelectedContacts] = useState([])
   const [groupName, setGroupName] = useState('')
   const [search, setSearch] = useState('')
+
+  const handleSearch = (value) => {
+      setSearch(value)
+      setFilteredContacts(contacts.filter(c => (
+          c.details.firstName.startsWith(value) ||
+          c.details.lastName.startsWith(value) ||
+          c.details.username.startsWith(value)
+      )))
+  }
+
+  const handleNewGroup = () => {
+    //Create new group and navigate to it
+  }
   
-  const theme = useTheme()
 
   return (
     <PrimaryBackground style={styles.container}>
-        <CreateHeader title='New Group' color='white'/>
+        <CreateHeader title='New Group' color='white' 
+          rightNode={
+            <FAB disabled={selectedContacts.length === 0}
+              icon={<IonIcon name='return-down-forward' size={24}/>} 
+              style={{ ...styles.next, ...globalStyles.boxShadowBottom}} 
+              disabledStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)', opacity: .4 }}
+              onPress={handleNewGroup}
+            />
+          }
+        />
         <View style={styles.avatarSection}>
           <Avatar size={84} 
             icon={{ name: 'image-plus', type: 'material-community' }} 
@@ -28,23 +59,23 @@ const NewGroupScreen = () => {
           />
           <View style={styles.nameSection}>
             <TextInput placeholder='Group name'
-              placeholderTextColor='rgba(53, 52, 64, .5)'
+              placeholderTextColor='rgba(53, 52, 64, .4)'
               style={styles.input}
               value={groupName}
               onChangeText={setGroupName}
             />
-            <Text style={styles.contactsSelected}>{`${selected} contacts selected`}</Text>
+            <Text style={styles.contactsSelected}>{`${selectedContacts.length} contacts selected`}</Text>
           </View>
         </View>
         <View style={styles.main}>
             <Input placeholder='Contacts' containerStyle={styles.searchContacts}
               rightIcon={<IonIcon name='search-outline' size={24}/>}
-              value={search} onChangeText={setSearch}
+              value={search} onChangeText={value => handleSearch(value)}
               inputStyle={{ color: '#353440', fontSize: 18 }}
             />
             <FlatList
-              data={fakeContacts}
-              renderItem={({ item }) => <ContactListItem item={item}/>}
+              data={filteredContacts}
+              renderItem={({ item }) => <ContactListItem item={item} setSelectedContacts={setSelectedContacts}/>}
               keyExtractor={item => item._id}
               contentContainerStyle={styles.contactsList}
               ItemSeparatorComponent={() => <View style={{ height: 5 }}/>}
@@ -87,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(53, 52, 64, .3)',
-    color: '#fefefe',
+    color: 'rgba(53, 52, 64, .8)',
   },
   main: {
     height: '75%',
@@ -102,7 +133,7 @@ const styles = StyleSheet.create({
     width: '92%',
     alignSelf: 'center',
     paddingTop: 12,
-    fontSize: 24,
+    fontSize: 24
   },
   contactsList: {
     display: 'flex',

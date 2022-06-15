@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, FlatList } from 'react-native'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GroupsTabHeader from '../../components/headers/GroupsTabHeader'
 import GroupListItem from '../../components/groups/GroupListItem'
