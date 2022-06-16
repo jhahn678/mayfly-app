@@ -10,8 +10,8 @@ const CatchesStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name='CatchesList' component={CatchesScreen} options={{ headerShown: false }}/>
-            <Stack.Screen name='CatchesMap' component={MapScreen} options={{ headerShown: false }}/>
-            <Stack.Screen name='ViewCatch' component={ViewCatchScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name='CatchesMap' component={MapScreen} options={{ headerShown: false, presentation: 'fullScreenModal' }}/>
+            <Stack.Screen name='ViewCatch' component={ViewCatchScreen} options={{ headerShown: false, presentation: 'modal' }}/>
         </Stack.Navigator>
     )
 }

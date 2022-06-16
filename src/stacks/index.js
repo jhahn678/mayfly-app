@@ -4,9 +4,11 @@ import AppTabs from './AppTabs'
 import { useAuthContext } from "../store/context/auth";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GroupScreen from "../screens/Groups/GroupScreen";
+import GroupMapScreen from "../screens/Groups/GroupMapScreen";
 import NewGroupScreen from "../screens/Groups/NewGroupScreen";
 import NewPlaceScreen from "../screens/Explore/NewPlaceScreen";
 import NewCatchScreen from '../screens/Catches/NewCatchScreen'
+import CameraScreen from "../screens/CameraScreen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const RootStack = () => {
@@ -28,11 +30,15 @@ const RootStack = () => {
                 <ApolloProvider client={client}>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                         <Stack.Screen name='MainTabs' component={AppTabs}/>
-                        <Stack.Screen name='NewPlace' component={NewPlaceScreen}/>
-                        <Stack.Screen name='NewCatch' component={NewCatchScreen}/>
-                        <Stack.Screen name='NewGroup' component={NewGroupScreen}/>
                         <Stack.Screen name='GroupScreen' component={GroupScreen}/>
-                    </Stack.Navigator> 
+                        <Stack.Group screenOptions={{ presentation: 'fullScreenModal'}}>
+                            <Stack.Screen name='NewPlace' component={NewPlaceScreen}/>
+                            <Stack.Screen name='NewCatch' component={NewCatchScreen}/>
+                            <Stack.Screen name='NewGroup' component={NewGroupScreen}/>
+                            <Stack.Screen name='GroupMap' component={GroupMapScreen}/>
+                            <Stack.Screen name='Camera' component={CameraScreen}/>
+                        </Stack.Group>
+                    </Stack.Navigator>
                 </ApolloProvider> 
                 {/* : <AuthStack/>
             } */}

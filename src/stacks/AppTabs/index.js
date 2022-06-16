@@ -1,7 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import { globalStyles } from '../../styles/globalStyles';
 import ExploreStack from './ExploreStack'
 import PlacesStack from './PlacesStack'
 import CatchesStack from './CatchesStack'

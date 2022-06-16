@@ -10,7 +10,7 @@ const PlacesStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name='CatchesMap' component={PlacesMapsScreen} options={{ headerShown: false }}/>
-            <Stack.Screen name='CatchesList' component={PlacesListScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name='CatchesList' component={PlacesListScreen} options={{ headerShown: false, presentation: 'modal' }}/>
         </Stack.Navigator>
     )
 }

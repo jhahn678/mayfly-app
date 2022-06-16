@@ -1,26 +1,38 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native'
-import { globalStyles } from '../../styles/globalStyles'
-import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useState } from 'react'
+import { StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useTextInputAutosize } from '../../hooks/utils/useTextInputAutosize'
+import { useNavigation } from '@react-navigation/core'
+import { useCameraContext } from '../../store/context/camera'
+import ChatImage from './ChatImage'
 
 const MessageBar = () => {
 
-    const { onContentSizeChange, inputHeight } = useTextInputAutosize()
+    const navigation = useNavigation()
 
+    const { onContentSizeChange, inputHeight } = useTextInputAutosize()
     const [messageInput, setMessageInput] = useState('')
+    const sendMessage = () => console.log(messageInput)
+
+    const { image, clearImage } = useCameraContext()
+    const handleCamera = () => navigation.navigate('Camera')
 
     return (
-        <View style={{ ...styles.container, height: inputHeight + 28 }}>
-            <IonIcon name='camera-outline' size={32} color='#353440'/>
-            <TextInput multiline={true}
-                placeholder='Write message'
-                placeholderTextColor='rgba(53, 52, 64, .3)'
-                style={{...styles.input,height: inputHeight}}
-                value={messageInput} onChangeText={setMessageInput}
-                onContentSizeChange={(args) => onContentSizeChange(args)}
-            />
-            <IonIcon name='send-outline' size={24} style={{...styles.sendIcon }}/>
+        <View style={styles.container}>
+            { image && <ChatImage image={image} clearImage={clearImage}/> }
+            <View style={{ ...styles.inputContainer, height: inputHeight + 28 }}>
+                <IonIcon name='camera-outline' size={32} color='#353440' onPress={handleCamera}/>
+                <TextInput multiline={true}
+                    placeholder='Write message'
+                    placeholderTextColor='rgba(53, 52, 64, .3)'
+                    style={{...styles.input,height: inputHeight}}
+                    value={messageInput} onChangeText={setMessageInput}
+                    onContentSizeChange={(args) => onContentSizeChange(args)}
+                />
+                <TouchableOpacity onPress={() => sendMessage()}>
+                    <IonIcon name='send-outline' size={24} style={{...styles.sendIcon }}/>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -29,10 +41,14 @@ export default MessageBar
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         position: 'absolute',
         bottom: 0,
         borderTopColor: 'rgba(0,0,0,.3)',
-        borderTopWidth: .5,
+        backgroundColor: 'rgba(254, 254, 254, .8)',
+        borderTopWidth: .5
+    },
+    inputContainer: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -58,5 +74,13 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
         borderRadius: 20,
         overflow: 'hidden'
+    },
+    image: {
+        height: 132,
+        width: 164,
+        borderRadius: 20,
+        margin: 10,
+        marginRight: 8,
+        marginLeft: 8
     }
 })

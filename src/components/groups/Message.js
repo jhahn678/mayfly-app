@@ -10,7 +10,6 @@ const Message = ({ message }) => {
     const { user } = useAuthContext()    
 
 
-
     return (
         <View style={user._id === message.user._id ? styles.containerAuthor : styles.container}>
             { message.user._id!== user._id &&
@@ -65,7 +64,9 @@ const styles = StyleSheet.create({
     },
     bubble: {
         maxWidth: '70%',
-        backgroundColor: '#3ea9e2',
+        backgroundColor: 'rgba(53, 52, 64,.5)',
+        borderColor: 'rgba(255,255,255,.5)',
+        borderWidth: .5,
         borderRadius: 20,
         borderBottomLeftRadius: 3,
         padding: 16,
