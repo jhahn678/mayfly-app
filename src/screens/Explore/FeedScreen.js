@@ -16,7 +16,7 @@ const FeedScreen = ({}) => {
   const navigation = useNavigation()
   
   return (
-    <View style={{ height: '100%'}}>
+    <PrimaryBackground>
       <ExploreTabHeader/>
       { data && <Text>THE DATA IS HERE</Text>}
       { data && <Text>{data.getUser.details.fullName}</Text> }
@@ -25,7 +25,7 @@ const FeedScreen = ({}) => {
         onPress={() => navigation.navigate('NewCatch')}
         buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
       />
-    </View>
+    </PrimaryBackground>
   )
 }
 
