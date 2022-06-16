@@ -1,13 +1,16 @@
 import { ImageBackground, StyleSheet, View} from 'react-native'
-import image from '../../../assets/fish-background.png'
+import { LinearGradient } from 'expo-linear-gradient';
 
 const PrimaryBackground = ({ children, style }) => {
   return (
-    <View
-        style={{ ...styles.container, ...style}}
+    <LinearGradient
+      colors={['#0EAAA7','#24002D']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ ...styles.container, ...style}}
     >
         {children}
-    </View>
+    </LinearGradient>
   )
 }
 
