@@ -24,7 +24,7 @@ export const globalStyles = StyleSheet.create({
     },
     FAB: {
         position: 'absolute',
-        bottom: 112,
+        bottom: 96,
         right: 16,
     },
     FABshadow: {

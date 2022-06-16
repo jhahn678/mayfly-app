@@ -20,10 +20,10 @@ const PlacesMapScreen = () => {
           onPress={() => navigation.navigate('NewPlace')}
           buttonStyle={{ padding: 0 }}
         />
-        <FAB icon={<FontelloIcon name='current-location' size={36}/>} 
+        <FAB icon={<FontelloIcon name='current-location' size={32}/>} 
           style={{ ...styles.location, ...globalStyles.FABshadow }}
           onPress={() => {}}
-          buttonStyle={{ padding: 14 }}
+          buttonStyle={{ padding: 0 }}
         />
     </PrimaryBackground>
   )
@@ -34,7 +34,7 @@ export default PlacesMapScreen
 const styles = StyleSheet.create({
   location: {
     position: 'absolute',
-    bottom: 180,
+    bottom: 164,
     right: 16,
   }
 })

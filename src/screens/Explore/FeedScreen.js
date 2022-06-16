@@ -20,10 +20,10 @@ const FeedScreen = ({}) => {
       <ExploreTabHeader/>
       { data && <Text>THE DATA IS HERE</Text>}
       { data && <Text>{data.getUser.details.fullName}</Text> }
-      <FAB icon={<FontelloIcon name='fish' size={48}/>} 
+      <FAB icon={<FontelloIcon name='fish' size={36}/>} 
         style={{ ...globalStyles.FAB, ...globalStyles.FABshadow }}
         onPress={() => navigation.navigate('NewCatch')}
-        buttonStyle={{ paddingTop: 10, paddingLeft: 4 }}
+        buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
       />
     </View>
   )
