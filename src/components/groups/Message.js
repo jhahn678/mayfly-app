@@ -13,7 +13,7 @@ const Message = ({ message }) => {
 
     return (
         <View style={user._id === message.user._id ? styles.containerAuthor : styles.container}>
-            { message.user._id !== user._id &&
+            { message.user._id!== user._id &&
                 <Avatar 
                     source={{ uri: message.user.details.avatar.url }} 
                     size={36} rounded containerStyle={styles.avatar}
@@ -22,11 +22,15 @@ const Message = ({ message }) => {
             <View style={user._id === message.user._id ? {...styles.bubble, ...styles.bubbleAuthor} : styles.bubble}>
                 { user._id !== message.user._id &&
                     <View style={styles.header}>
-                        <Text style={{...styles.headerText}}>{message.user.details.fullName}</Text>
-                        <Text style={{...styles.headerText, paddingLeft: 8}}>{formatTimeMessage(message.createdAt)}</Text>
+                        <Text style={styles.headerText}>
+                            {message.user.details.fullName}
+                        </Text>
+                        <Text style={{...styles.headerText, paddingLeft: 16 }}>
+                            {formatTimeMessage(message.createdAt)}
+                        </Text>
                     </View>
                 }        
-                <Text style={styles.body}>{message.body}</Text>
+                <Text style={user._id === message.user._id ? styles.bodyAuthor : styles.body}>{message.body}</Text>
                 { user._id === message.user._id &&
                     <Text style={{...styles.headerText, ...styles.dateFromUser}}>
                         {formatTimeMessage(message.createdAt)}
@@ -61,43 +65,56 @@ const styles = StyleSheet.create({
     },
     bubble: {
         maxWidth: '70%',
-        minWidth: 80,
-        backgroundColor: 'rgba(62, 169, 226, .5)',
+        backgroundColor: '#3ea9e2',
         borderRadius: 20,
         borderBottomLeftRadius: 3,
-        padding: 12,
+        padding: 16,
         paddingTop: 8,
         paddingBottom: 16,
         marginLeft: 6
     },
     bubbleAuthor: {
-        padding: 12,
+        minWidth: 80,
+        padding: 16,
         paddingTop: 10,
         paddingBottom: 6,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 3,
-        backgroundColor: 'rgba(14, 170, 167, .5)',
+        backgroundColor: '#80CECD',
     },
     header:{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomColor: 'rgba(53, 52, 64, .5)',
+        borderBottomColor: '#fefefe',
         borderBottomWidth: .5,
         paddingBottom: 2
     },
     headerText: {
         fontSize: 12, 
         fontWeight: '300', 
-        color: 'rgb(53, 52, 64)',
+        color: '#fefefe',
+    },
+    headerTextAuthor: {
+        fontSize: 12, 
+        fontWeight: '300', 
+        color: 'black',
     },
     body: {
         fontSize: 14,
-        color: 'rgb(53, 52, 64)',
-        paddingTop: 4
+        color: '#fefefe',
+        paddingTop: 4,
+        fontWeight: '300'
+    },
+    bodyAuthor: {
+        fontSize: 14,
+        color: 'black',
+        paddingTop: 4,
+        fontWeight: '400'
     },
     dateFromUser: {
         alignSelf: 'flex-end',
-        paddingTop: 4
+        paddingTop: 4,
+        color: 'black',
     }
 })

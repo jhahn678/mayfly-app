@@ -1,21 +1,42 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import { BlurView } from 'expo-blur'
 import { Avatar, Badge } from "@rneui/themed";
 import { formatDateGroupList } from '../../utils/format-dates';
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/core';
+import { useEffect, useState } from 'react';
 
-const GroupListItem = ({ item }) => {
+const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
+
+    const [isSelected, setIsSelected] = useState(false)
+
+    useEffect(() => {
+        if(selectedItems.find(i => i === item._id)){
+            setIsSelected(true)
+        }else{
+            setIsSelected(false)
+        }
+    },[selectedItems])
 
     const navigation = useNavigation()
 
-    const onPress = ()  => navigation.navigate('GroupScreen', { _id: item._id})
+    const onPress = () => navigation.navigate('GroupScreen', { _id: item._id})
+
+    const onSelect = () => {
+        if(selectedItems.includes(item._id)){
+            setSelectedItems(items => items.filter(i => i !== item._id))
+        }else{
+            setSelectedItems(items => [...items, item._id])
+        }
+    }
 
     return (
-        <TouchableOpacity onPress={onPress}>
-            <BlurView style={styles.container} intensity={10}>
-                <Avatar source={{ uri: item.latest_message.user.details.avatar.url }} rounded size={72} containerStyle={styles.avatar}/>
+        <TouchableOpacity onPress={selectedItems.length > 0 ? onSelect : onPress} onLongPress={onSelect}>
+            <View style={isSelected ? {...styles.container, ...styles.selected} : styles.container}>
+                <Avatar rounded size={72}
+                    source={{ uri: item.latest_message.user.details.avatar.url }} 
+                    containerStyle={isSelected ? {...styles.avatar, ...styles.avatarSelected} : styles.avatar}
+                />
                 <View style={styles.right}>
                     <View style={styles.header}>
                         <Text>{ item.name }</Text>
@@ -33,8 +54,8 @@ const GroupListItem = ({ item }) => {
                         <Text style={{ fontWeight: '300', fontSize: 12 }}>{ item.latest_message.user.details.firstName }</Text>
                     </View>
                 </View>
-            </BlurView>
-            <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/>
+            </View>
+            { selectedItems.length === 0 && <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> }
             { !item &&
                 <EntypoIcon name='pin' size={20} 
                     style={{ 
@@ -65,18 +86,28 @@ const styles = StyleSheet.create({
     container: {
         alignSelf: 'center',
         height: 90,
-        width: '95%',
+        width: '97%',
         borderRadius: 15,
         overflow: 'hidden',
         marginBottom: 8,
         padding: 9,
         display: 'flex',
         flexDirection: 'row',
+        borderWidth: 1, 
+        borderColor: 'rgba(53, 52, 64, .3)',
         backgroundColor: '#fefefe'
+    },
+    selected: {
+        borderColor: '#0eaaa7',
+        borderWidth: 2, 
     },
     avatar: {
         borderWidth: 1, 
         borderColor: 'rgba(53, 52, 64, .3)'
+    },
+    avatarSelected: {
+        borderWidth: 2,
+        borderColor: '#0eaaa7'
     },
     right: {
         display: 'flex',

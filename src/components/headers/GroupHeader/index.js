@@ -38,7 +38,7 @@ export default GroupHeader
 const styles = StyleSheet.create({
     header: {
         width: '100%',
-        height: '13%',
+        height: '12%',
         display: 'flex',
         justifyContent: 'flex-end',
         borderBottomColor: '#353440',
