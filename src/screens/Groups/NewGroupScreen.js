@@ -11,8 +11,6 @@ import ContactListItem from '../../components/groups/ContactListItem'
 
 const NewGroupScreen = () => {
 
-  const theme = useTheme()
-
   //Mock contacts from user
   const [contacts, setContacts] = useState(fakeContacts)
   const [filteredContacts, setFilteredContacts] = useState([])
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(53, 52, 64, .3)',
-    color: 'rgba(53, 52, 64, .8)',
+    color: '#fefefe',
   },
   main: {
     height: '75%',
