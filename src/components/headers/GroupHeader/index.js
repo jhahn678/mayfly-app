@@ -26,7 +26,7 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers }) => {
                     name='map-outline' 
                     size={28} 
                     style={styles.mapIcon}
-                    onPress={() => navigation.navigate('CatchesMap')}
+                    onPress={() => navigation.navigate('GroupMap')}
                 /> 
             </View>
         </View>

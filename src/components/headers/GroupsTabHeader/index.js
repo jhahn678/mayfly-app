@@ -33,7 +33,7 @@ const GroupsTabHeader = ({ selectedItems }) => {
                         />
                     </View> : 
                     <FontelloIcon size={32} 
-                        name='new-chat' 
+                        name='new-chat' color='#fefefe'
                         style={{...globalStyles.fontShadow}}
                         onPress={() => navigation.navigate('NewGroup')}
                     />
@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     FAB: {
-        paddingLeft: 6
+        paddingLeft: 6,
     }
 })
