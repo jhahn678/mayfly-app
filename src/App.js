@@ -4,7 +4,8 @@ import { loadAsync } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import RootStack from './stacks';
 import { useEffect, useState } from 'react';
-import { Asset } from 'expo-asset'
+import { StatusBar } from 'expo-status-bar';
+import { CameraContextProvider } from './store/context/camera';
 
 
 const theme = createTheme({
@@ -25,7 +26,6 @@ export default function App() {
   const prepareApp = async () => {
     try{
       await SplashScreen.preventAutoHideAsync()
-      await Asset.fromModule(require('../assets/fish-background.png')).downloadAsync()
       await loadAsync({ 
         mayfly: require('../assets/fonts/mayfly.ttf'),
       })
@@ -51,7 +51,7 @@ export default function App() {
       hideSplashScreen()
     }
   },[appIsReady])
-
+  
   if(!appIsReady){
     return null;
   }
@@ -60,7 +60,10 @@ export default function App() {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <RootStack/>
+        <CameraContextProvider>
+          <StatusBar translucent={true} style='auto'/>
+          <RootStack/>
+        </CameraContextProvider>
       </ThemeProvider>
     </AuthProvider> 
   );
