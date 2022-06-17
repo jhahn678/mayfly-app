@@ -5,20 +5,21 @@ export const useToggleAnimation = ({ initialValue=1, animatedValue=0, duration, 
 
     const ref = useRef(new Animated.Value(initialValue)).current
     const [toggledOn, setToggledOn] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     useEffect(() => {
-        if(toggledOn) {
-        //Toggle off
-            Animated.timing(ref, { 
-                toValue: initialValue, 
-                duration: duration ? duration : durationOff, 
-                useNativeDriver: true
-            }).start()
-        }else{
+        if(!toggledOn) {
         //Toggle on
             Animated.timing(ref, { 
                 toValue: animatedValue, 
                 duration: duration ? duration : durationOn, 
+                useNativeDriver: true
+            }).start()
+        }else{
+        //Toggle off
+            Animated.timing(ref, { 
+                toValue: initialValue, 
+                duration: duration ? duration : durationOff, 
                 useNativeDriver: true
             }).start()
         }
