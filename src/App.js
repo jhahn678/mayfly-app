@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import RootStack from './stacks';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { CameraContextProvider } from './store/context/camera';
+import { ImageContextProvider } from './store/context/image';
 
 
 const theme = createTheme({
@@ -60,10 +60,10 @@ export default function App() {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <CameraContextProvider>
+        <ImageContextProvider>
           <StatusBar translucent={true} style='auto'/>
           <RootStack/>
-        </CameraContextProvider>
+        </ImageContextProvider>
       </ThemeProvider>
     </AuthProvider> 
   );
