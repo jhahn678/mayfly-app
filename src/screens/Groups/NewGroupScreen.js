@@ -8,6 +8,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import CreateHeader from '../../components/headers/CreateHeader'
 import { fakeContacts } from '../../../test-data/groups'
 import ContactListItem from '../../components/groups/ContactListItem'
+import { useImagePicker } from '../../hooks/utils/useImagePicker'
 
 const NewGroupScreen = () => {
 
@@ -32,6 +33,14 @@ const NewGroupScreen = () => {
       )))
   }
 
+  const openImagePicker = useImagePicker()
+  const [groupImage, setGroupImage] = useState(null)
+
+  const handlePickImage = async () => {
+      const { cancelled, type, ...image } = await openImagePicker()
+      if(cancelled === false) setGroupImage(image)
+  }
+
   const handleNewGroup = () => {
     //Create new group and navigate to it
   }
@@ -53,7 +62,7 @@ const NewGroupScreen = () => {
           <Avatar size={84} 
             icon={{ name: 'image-plus', type: 'material-community' }} 
             containerStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)'}} 
-            rounded
+            rounded source={{ uri: groupImage?.uri }} onPress={handlePickImage}
           />
           <View style={styles.nameSection}>
             <TextInput placeholder='Group name'

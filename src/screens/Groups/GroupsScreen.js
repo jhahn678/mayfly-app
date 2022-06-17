@@ -16,7 +16,7 @@ const GroupsScreen = () => {
   const [selectedItems, setSelectedItems] = useState([])
   
   const handleScrollToTop = () => {
-    flatListRef.current.scrollToIndex({ index: 0 })
+    flatListRef.current.scrollToOffset({ offset: 0 })
   }
 
   const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
@@ -41,22 +41,24 @@ const GroupsScreen = () => {
   },[showScrollToTop])
 
   return (
-    <PrimaryBackground style={{ display: 'flex'}}>
+    <PrimaryBackground style={{ display: 'flex', justifyContent: 'space-between'}}>
         <GroupsTabHeader selectedItems={selectedItems}/>
-        <FlatList
-          data={fakeGroups}
-          ref={flatListRef}
-          onScroll={e => onScroll(e)}
-          renderItem={({ item }) => (
-            <GroupListItem 
-              item={item} 
-              selectedItems={selectedItems}
-              setSelectedItems={setSelectedItems}
-            />
-          )}
-          keyExtractor={item => item._id}
-          contentContainerStyle={styles.list}
-        />
+        <View style={styles.main}>
+          <FlatList
+            data={fakeGroups}
+            ref={flatListRef}
+            onScroll={e => onScroll(e)}
+            renderItem={({ item }) => (
+              <GroupListItem 
+                item={item} 
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
+              />
+            )}
+            keyExtractor={item => item._id}
+            contentContainerStyle={styles.list}
+          />
+        </View>
         <Animated.View style={{ opacity: opacityRef }}>
           <FAB size='small' buttonStyle={{ height: 36, width: 36 }}
             icon={<IonIcon name='arrow-up' size={16} color='#fefefe'/>} 
@@ -72,10 +74,11 @@ export default GroupsScreen
 const styles = StyleSheet.create({
   list: {
     width: '100%',
-    paddingTop: 16,
     paddingBottom: 100,
+    paddingTop: 16,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#fefefe'
   },
   scrollUp: {
     position: 'absolute',
@@ -87,5 +90,13 @@ const styles = StyleSheet.create({
     shadowOpacity: .3,
     shadowOffset: { height: 2 },
     elevation: 400
+  },
+  main: {
+    width: '100%',
+    height: '80%',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    overflow: 'hidden',
+    backgroundColor: '#fefefe',
   }
 })

@@ -6,7 +6,7 @@ import { Camera, CameraType } from 'expo-camera'
 import { useNavigation } from '@react-navigation/core'
 import { useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
-import { useCameraContext } from '../store/context/camera'
+import { useImageContext } from '../store/context/image'
 
 const CameraScreen = () => {
 
@@ -18,7 +18,7 @@ const CameraScreen = () => {
     const [hasPermission, setHasPermission] = useState(null)
 
     const [flash, setFlash] = useState('off')
-    const { setImage } = useCameraContext()
+    const { setImages } = useImageContext()
 
     useEffect(() => {
         (async () => {
@@ -41,7 +41,7 @@ const CameraScreen = () => {
 
     const handleTakePicture = async () => {
         const image = await cameraRef.takePictureAsync()
-        setImage(image)
+        setImages([image])
         navigation.goBack()
     }
     
