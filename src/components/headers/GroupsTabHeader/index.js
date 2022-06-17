@@ -48,18 +48,18 @@ export default GroupsTabHeader
 const styles = StyleSheet.create({
     header: {
         width: '100%',
-        height: '11%',
+        height: '15%',
         display: 'flex',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     headerContent: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 16,
-        paddingRight:20,
-        paddingBottom: 4
+        paddingLeft: 20,
+        paddingRight:24,
+        paddingBottom: 24
     },
     title: {
         fontSize: 32

@@ -55,7 +55,7 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
                     </View>
                 </View>
             </View>
-            { selectedItems.length === 0 && <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> }
+            {/* <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> */}
             { !item &&
                 <EntypoIcon name='pin' size={20} 
                     style={{ 
@@ -87,15 +87,16 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: 90,
         width: '97%',
-        borderRadius: 15,
         overflow: 'hidden',
-        marginBottom: 8,
-        padding: 9,
+        marginBottom: 6,
+        marginTop: 6,
+        padding: 8,
         display: 'flex',
         flexDirection: 'row',
-        borderWidth: 1, 
-        borderColor: 'rgba(53, 52, 64, .3)',
-        backgroundColor: '#fefefe'
+        alignItems: 'center',
+        backgroundColor: '#fefefe',
+        borderBottomColor: 'rgba(53, 52, 64, .3)',
+        borderBottomWidth: .3
     },
     selected: {
         borderColor: '#0eaaa7',
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexGrow: 1,
         width: '80%',
-        marginLeft: 8,
-        paddingRight: 12
+        marginLeft: 12,
+        paddingRight: 16
     },
     header: {
         display: 'flex',

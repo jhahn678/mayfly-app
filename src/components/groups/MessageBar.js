@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-nati
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useTextInputAutosize } from '../../hooks/utils/useTextInputAutosize'
 import { useNavigation } from '@react-navigation/core'
-import { useCameraContext } from '../../store/context/camera'
+import { useImageContext } from '../../store/context/image'
 import ChatImage from './ChatImage'
 
 const MessageBar = () => {
@@ -14,12 +14,12 @@ const MessageBar = () => {
     const [messageInput, setMessageInput] = useState('')
     const sendMessage = () => console.log(messageInput)
 
-    const { image, clearImage } = useCameraContext()
+    const { images, removeImage } = useImageContext()
     const handleCamera = () => navigation.navigate('Camera')
 
     return (
         <View style={styles.container}>
-            { image && <ChatImage image={image} clearImage={clearImage}/> }
+            { images && images.map(i => <ChatImage key={i.uri} image={i} clearImage={() => removeImage(i.uri)}/>) }
             <View style={{ ...styles.inputContainer, height: inputHeight + 28 }}>
                 <IonIcon name='camera-outline' size={32} color='#353440' onPress={handleCamera}/>
                 <TextInput multiline={true}
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderTopColor: 'rgba(0,0,0,.3)',
         backgroundColor: 'rgba(254, 254, 254, .8)',
-        borderTopWidth: .5
+        borderTopWidth: .5,
     },
     inputContainer: {
         display: 'flex',
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#fefefe'
+        backgroundColor: '#fefefe',
     },
     input: {
         paddingLeft: 16,

@@ -1,10 +1,11 @@
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Image } from 'react-native'
+import { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-const ChatImage = ({ image, clearImage }) => {
+const ChatImage = ({ image, clearImage, height=150 }) => {
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, height: height, width: (height*(image.width / image.height)) || height}}>
             <Image source={{ uri: image.uri }} style={styles.image} resizeMode='cover'/>
             <Icon name='remove-circle' size={24} style={styles.remove} onPress={clearImage}/>
         </View>
@@ -15,8 +16,6 @@ export default ChatImage
 
 const styles = StyleSheet.create({
     container: {
-        height: 150,
-        width: 120,
         margin: 10,
         marginRight: 8,
         marginLeft: 8
@@ -29,6 +28,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -6,
         right: -6,
-        color: 'rgba(53, 52, 64, .9)'
+        color: '#fefefe',
+        backgroundColor: 'rgba(255,0,0,.5)',
+        borderRadius: 13,
+        paddingLeft: 2,
+        overflow: 'hidden'
     }
 })

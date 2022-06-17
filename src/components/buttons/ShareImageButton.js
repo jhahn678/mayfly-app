@@ -1,16 +1,18 @@
 import { StyleSheet } from 'react-native'
-import React from 'react'
 import { FAB } from '@rneui/themed'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../styles/globalStyles'
-import { useNavigation } from '@react-navigation/native'
+import { useImageContext } from '../../store/context/image'
+import { useImagePicker } from '../../hooks/utils/useImagePicker'
 
 const ShareImageButton = ({ groupId }) => {
 
-    const navigation = useNavigation()
+    const { setImages } = useImageContext()
+    const openImagePicker = useImagePicker()
 
-    const handleOnPress = () => {
-        // navigation.navigate()
+    const handleOnPress = async () => {
+        const { cancelled, type, ...image } = await openImagePicker()
+        if(cancelled === false) setImages(images => [...images, image])
     }
 
     return (
@@ -25,7 +27,4 @@ const ShareImageButton = ({ groupId }) => {
 export default ShareImageButton
 
 const styles = StyleSheet.create({
-    button: {
-        
-    }
 })
