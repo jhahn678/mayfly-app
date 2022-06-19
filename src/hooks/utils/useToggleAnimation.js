@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Animated } from 'react-native'
 
+
+
 export const useToggleAnimation = ({ initialValue=1, animatedValue=0, duration, durationOn=150, durationOff=150 }) => {
 
     const ref = useRef(new Animated.Value(initialValue)).current

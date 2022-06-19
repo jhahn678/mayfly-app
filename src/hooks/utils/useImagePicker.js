@@ -20,7 +20,7 @@ export const useImagePicker = () => {
             const res = await ImagePicker.requestMediaLibraryPermissionsAsync()
             setHasPermission(res.status === 'granted')
         }
-        return (await ImagePicker.launchImageLibraryAsync())
+        return (await ImagePicker.launchImageLibraryAsync({ base64: true, mediaTypes: 'Images' }))
     }
 
     return openImagePicker
