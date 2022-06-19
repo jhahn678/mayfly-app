@@ -25,7 +25,7 @@ const CameraScreen = () => {
             const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
         })()
-    })   
+    },[])   
 
     const handleFlipCamera = () => {
         setCameraType(type => type === CameraType.back ? CameraType.front : CameraType.back )
