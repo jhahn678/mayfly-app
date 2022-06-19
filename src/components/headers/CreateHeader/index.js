@@ -1,22 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native';
 
-const CreateHeader = ({ title, color, rightNode }) => {
+const CreateHeader = ({ title, color, containerStyle, rightNode }) => {
 
     const navigation = useNavigation()
 
     return (
-        <View style={{...globalStyles.boxShadowBottom, ...styles.header}}>
+        <View style={{...containerStyle, ...styles.header}}>
             <View style={styles.headerContent}>
                 <IonIcon 
                     name='md-return-up-back' 
                     size={32} 
-                    style={{...globalStyles.fontShadow, ...styles.back, color: color && color }}
+                    style={styles.back}
                     onPress={() => navigation.goBack()}
                 /> 
-                <Text style={{...globalStyles.fontShadow, ...styles.title, color: color && color}}>
+                <Text style={styles.title}>
                     {title}
                 </Text>
                 <View style={styles.right}>
@@ -47,11 +46,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '500',
-        color: '#353440'
+        color: '#fefefe'
     },
     back: {
         color: '#353440',
-        marginRight: 12
+        marginRight: 12,
+        color: '#fefefe'
     },
     right: {
         position: 'absolute',

@@ -11,12 +11,11 @@ const GroupsTabHeader = ({ selectedItems }) => {
     const navigation = useNavigation()
 
     return (
-        <View style={{ ...styles.header, ...globalStyles.boxShadowBottom }}>
+        <View style={styles.header}>
             <View style={styles.headerContent}>
-                { selectedItems.length === 0 ? 
-                    <Text style={{...styles.title, ...globalStyles.fontShadow }}>Groups</Text> :
-                    <Text style={styles.selected}>{selectedItems.length} Selected</Text>
-                }
+                    <Text style={{...styles.title}}>
+                        { selectedItems.length === 0 ? 'Groups' : `${selectedItems.length} Selected` }
+                    </Text>
                 { selectedItems.length > 0 ?
                     <View style={styles.buttonContainer}>
                         <FAB onPress={() => {}} size='small'
@@ -32,10 +31,9 @@ const GroupsTabHeader = ({ selectedItems }) => {
                             style={{...styles.FAB, ...globalStyles.FABshadow}}
                         />
                     </View> : 
-                    <FontelloIcon size={32} 
-                        name='new-chat' color='#fefefe'
-                        style={{...globalStyles.fontShadow}}
-                        onPress={() => navigation.navigate('NewGroup')}
+                    <FAB onPress={() => navigation.navigate('NewGroup')} 
+                        icon={<FontelloIcon size={24} name='new-chat' color='#fefefe'/>} 
+                        style={{...styles.headerButton, ...globalStyles.FABshadow}}
                     />
                 }
             </View>
@@ -57,20 +55,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 20,
+        paddingLeft: 24,
         paddingRight:24,
-        paddingBottom: 24
+        paddingBottom: 12
     },
     title: {
-        fontSize: 32
-    },
-    selected: {
         fontSize: 32,
-        fontWeight: '300'
+        color: '#fefefe',
+        fontWeight: '400',
     },
     buttonContainer: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    headerButton: {
+        borderColor: 'rgba(0,0,0,.1)',
+        borderWidth: .5
     },
     FAB: {
         paddingLeft: 6,
