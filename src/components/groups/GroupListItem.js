@@ -11,11 +11,8 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        if(selectedItems.find(i => i === item._id)){
-            setIsSelected(true)
-        }else{
-            setIsSelected(false)
-        }
+        selectedItems.find(i => i === item._id) ? 
+        setIsSelected(true) : setIsSelected(false)
     },[selectedItems])
 
     const navigation = useNavigation()
@@ -23,11 +20,9 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
     const onPress = () => navigation.navigate('GroupScreen', { _id: item._id})
 
     const onSelect = () => {
-        if(selectedItems.includes(item._id)){
-            setSelectedItems(items => items.filter(i => i !== item._id))
-        }else{
-            setSelectedItems(items => [...items, item._id])
-        }
+        selectedItems.includes(item._id) ?
+        setSelectedItems(items => items.filter(i => i !== item._id)) :
+        setSelectedItems(items => [...items, item._id])
     }
 
     return (
@@ -38,21 +33,14 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
                     containerStyle={isSelected ? {...styles.avatar, ...styles.avatarSelected} : styles.avatar}
                 />
                 <View style={styles.right}>
-                    <View style={styles.header}>
-                        <Text>{ item.name }</Text>
-                        <Text style={styles.date}>{ formatDateGroupList(item.updatedAt) }</Text>
-                    </View>
+                    <Text style={styles.title} numberOfLines={1} ellipsizeMode='tail'>{ item.name }</Text>
                     <View style={styles.main}>
-                        <Text style={styles.body}
-                            numberOfLines={2}
-                            ellipsizeMode='tail'
-                        >{ item.latest_message.body }
+                        <Text style={styles.body} numberOfLines={2} ellipsizeMode='tail'>
+                            <Text style={styles.name}>{`${item.latest_message.user.details.firstName}: `}</Text>
+                            { item.latest_message.body }
                         </Text>
                     </View>
-                    <View style={styles.footer}>
-                        <Text style={{ fontWeight: '200', fontSize: 10, paddingRight: 4, fontStyle: 'italic' }}>from</Text>
-                        <Text style={{ fontWeight: '300', fontSize: 12 }}>{ item.latest_message.user.details.firstName }</Text>
-                    </View>
+                    <Text style={styles.date}>{ formatDateGroupList(item.updatedAt) }</Text>
                 </View>
             </View>
             {/* <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> */}
@@ -84,69 +72,61 @@ export default GroupListItem
 
 const styles = StyleSheet.create({
     container: {
-        alignSelf: 'center',
-        height: 90,
-        width: '97%',
-        overflow: 'hidden',
-        marginBottom: 6,
-        marginTop: 6,
-        padding: 8,
+        width: '100%',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#fefefe',
+        // backgroundColor: 'rgba(14, 170, 167,.1)',
         borderBottomColor: 'rgba(53, 52, 64, .3)',
         borderBottomWidth: .3
     },
     selected: {
         borderColor: '#0eaaa7',
-        borderWidth: 2, 
     },
     avatar: {
         borderWidth: 1, 
         borderColor: 'rgba(53, 52, 64, .3)'
     },
     avatarSelected: {
-        borderWidth: 2,
-        borderColor: '#0eaaa7'
+        borderColor: '#0eaaa7',
+        borderWidth: 4
     },
     right: {
         display: 'flex',
-        flexGrow: 1,
+        justifyContent: 'space-between',
         width: '80%',
         marginLeft: 12,
-        paddingRight: 16
-    },
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'baseline',
-        borderBottomWidth: 1, 
-        borderBottomColor: 'rgba(53, 52, 64, .3)'
+        paddingRight: 24
     },
     title: {
-        fontWeight: '300',
-        fontSize: 12,
+        fontWeight: '400',
+        fontSize: 16,
+        paddingRight: 24
     },
     date: {
-        fontWeight: '200',
-        fontSize: 12,
-    },
-    main: {
-        flexGrow: 1,
-        width: '100%',
-        paddingRight: 8,
-        paddingTop: 4
-    },
-    body: {
+        textAlign: 'right',
         fontWeight: '200',
         fontSize: 12
     },
-    footer: {
+    main: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'baseline'
+        alignItems: 'center',
+        paddingRight: 6,
+        marginTop: 4,
+        marginBottom: 8
+    },
+    name: {
+        fontWeight: '400',
+        fontSize: 14,
+        marginRight: 12,
+        color: '#0eaaa7'
+    },
+    body: {
+        fontWeight: '200',
+        fontSize: 14,
     }
 })

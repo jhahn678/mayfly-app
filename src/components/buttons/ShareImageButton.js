@@ -5,7 +5,7 @@ import { globalStyles } from '../../styles/globalStyles'
 import { useImageContext } from '../../store/context/image'
 import { useImagePicker } from '../../hooks/utils/useImagePicker'
 
-const ShareImageButton = ({ groupId }) => {
+const ShareImageButton = () => {
 
     const { setImages } = useImageContext()
     const openImagePicker = useImagePicker()

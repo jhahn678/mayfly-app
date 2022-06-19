@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -7,17 +7,14 @@ const ContactListItem = ({ item, setSelectedContacts }) => {
 
     const [isSelected, setIsSelected] = useState(false)
 
-    const handleSelect = () => {
-        setIsSelected(s => {
-            if(s) setSelectedContacts(c => c.filter(i => i !== item._id))
-            if(!s) setSelectedContacts(c => [...c, item._id])
-            return !s
-        })
-    }
+    useEffect(() => {
+        if(isSelected) setSelectedContacts(c => [...c, item._id])
+        if(!isSelected) setSelectedContacts(c => c.filter(i => i !== item._id))
+    },[isSelected])
 
     return (
     <TouchableOpacity style={isSelected ? {...styles.container, borderColor: '#0eaaa7', borderWidth: 1.5 } : styles.container}
-        onPress={handleSelect}
+        onPress={() => setIsSelected(s => !s)}
     >
         <Avatar source={{ uri: item.details.avatar.url }} size={52} rounded containerStyle={{ marginLeft: 10 }}/>
         <View style={{ display: 'flex', paddingLeft: 8}}>

@@ -1,5 +1,4 @@
 import { StyleSheet, View, Image } from 'react-native'
-import { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const ChatImage = ({ image, clearImage, height=150 }) => {
@@ -18,7 +17,9 @@ const styles = StyleSheet.create({
     container: {
         margin: 10,
         marginRight: 8,
-        marginLeft: 8
+        marginLeft: 8,
+        maxWidth: 300,
+        minWidth: 100
     },
     image: {
         borderRadius: 20,
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
         top: -6,
         right: -6,
         color: '#fefefe',
-        backgroundColor: 'rgba(255,0,0,.5)',
+        backgroundColor: 'rgba(255,0,0,.3)',
         borderRadius: 13,
         paddingLeft: 2,
         overflow: 'hidden'
