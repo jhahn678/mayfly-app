@@ -1,8 +1,8 @@
 import { useContext, useState, createContext } from "react";
 
 const initialState = {
-    image: { height: 4000, width: 3000, uri: 'file:///data/user'},
-    setImage: (image) => {},
+    images: [{ height: 4000, width: 3000, uri: 'file:///data/user', base64: '443f4agq3' }],
+    setImages: (image) => {},
     removeImage: (uri) => {},
     clearImage: () => {}
 };
