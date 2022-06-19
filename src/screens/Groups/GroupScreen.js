@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { StyleSheet, View, FlatList, Animated, TouchableOpacity,  } from 'react-native'
+import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text} from 'react-native'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GroupHeader from '../../components/headers/GroupHeader'
 import { makeFakeGroup } from '../../../test-data/groups'
+import { formatTimeMessage } from '../../utils/format-dates'
 import MessageBar from '../../components/groups/MessageBar'
 import Message from '../../components/groups/Message'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -10,8 +11,14 @@ import NewCatchButton from '../../components/buttons/NewCatchButton'
 import NewPlaceButton from '../../components/buttons/NewPlaceButton'
 import ShareImageButton from '../../components/buttons/ShareImageButton'
 import { useToggleAnimation } from '../../hooks/utils/useToggleAnimation'
+import { Avatar } from '@rneui/themed'
+import { useRoute } from '@react-navigation/core'
+ 
 
-const GroupScreen = ({ route }) => {
+const GroupScreen = () => {
+
+  const route = useRoute()
+  // const groupId = route.params._id
 
   const { 
     ref: buttonTranslate, 
@@ -19,10 +26,8 @@ const GroupScreen = ({ route }) => {
     setToggledOn: setExpandButtons 
   } = useToggleAnimation({ initialValue: 300 })
 
+  const [data, setData] = useState(makeFakeGroup(20, 2))
 
-  const groupId = route.params._id
-  // Make a fetch for group
-  const [data, setData] = useState(makeFakeGroup(25, 8))
 
   return (
     <PrimaryBackground>
@@ -31,16 +36,25 @@ const GroupScreen = ({ route }) => {
         avatar={data.avatar.url} 
         numberOfUsers={data.users.length}
       />
-      <FlatList data={data.messages}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => <Message message={item}/>}
-        contentContainerStyle={styles.messagesContainer}
-      />
+
+      { data?.messages.length === 0 ? (
+        <View style={styles.newGroup}>
+          <Avatar source={{ uri: data.avatar.url }} containerStyle={styles.avatar} size={150} rounded/>
+          <Text style={styles.createdBy}>{data.created_by.details.fullName} created a new group</Text>
+          <Text style={styles.createdAt}>at {formatTimeMessage(data.createdAt)}</Text>
+        </View>  ):(
+        <FlatList data={data.messages}
+          keyExtractor={item => item._id}
+          renderItem={({ item }) => <Message message={item}/>}
+          contentContainerStyle={styles.messagesContainer}
+        />
+      )}
+      
       <View style={{...styles.buttonContainer }}>
         <Animated.View style={{...styles.actions, transform: [{ translateY: buttonTranslate }]}}>
           <NewCatchButton groupId={data._id}/>
           <NewPlaceButton groupId={data._id}/>
-          <ShareImageButton groupId={data._id}/>
+          <ShareImageButton/>
         </Animated.View>
         <TouchableOpacity onPress={() => setExpandButtons(e => !e)}
           style={{...styles.chevron, transform: [{ rotate: expandButtons ? '180deg' : '0deg' }]}}
@@ -48,6 +62,7 @@ const GroupScreen = ({ route }) => {
           <IonIcon name='chevron-down' size={28}/>
         </TouchableOpacity>
       </View>
+
       <MessageBar/>
     </PrimaryBackground>
   )
@@ -87,5 +102,22 @@ const styles = StyleSheet.create({
     shadowOpacity: .1,
     shadowOffset: { height: 4 },
     ShadowRadius: 12
+  },
+  newGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '10%'
+  },
+  createdBy: {
+    marginTop: 12,
+    fontSize: 18,
+    fontWeight: '300',
+    color: '#fefefe'
+  },
+  createdAt: {
+    fontSize: 14,
+    fontWeight: '300',
+    color: '#fefefe',
+    marginTop: 6,
   }
 })

@@ -1,4 +1,4 @@
-import { useTheme } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/core'
 import { Avatar, FAB, Input } from '@rneui/themed'
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, FlatList } from 'react-native'
@@ -9,8 +9,11 @@ import CreateHeader from '../../components/headers/CreateHeader'
 import { fakeContacts } from '../../../test-data/groups'
 import ContactListItem from '../../components/groups/ContactListItem'
 import { useImagePicker } from '../../hooks/utils/useImagePicker'
+import { uploadAvatarToCloudinary } from '../../utils/cloudinary'
 
 const NewGroupScreen = () => {
+
+  const navigation = useNavigation()
 
   //Mock contacts from user
   const [contacts, setContacts] = useState(fakeContacts)
@@ -37,22 +40,32 @@ const NewGroupScreen = () => {
   const [groupImage, setGroupImage] = useState(null)
 
   const handlePickImage = async () => {
-      const { cancelled, type, ...image } = await openImagePicker()
+      const { cancelled, ...image } = await openImagePicker()
       if(cancelled === false) setGroupImage(image)
   }
 
-  const handleNewGroup = () => {
-    //Create new group and navigate to it
+  const handleNewGroup = async () => {
+    //Create new group
+    if(groupImage){
+      try{
+        const { data } = await uploadAvatarToCloudinary(groupImage)
+        const avatar = { id: data.public_id, url: data.secure_url }
+      }catch(err){
+        console.error(err)
+      }
+        
+    }
+    // navigation.replace('GroupScreen')
   }
   
 
   return (
     <PrimaryBackground style={styles.container}>
-        <CreateHeader title='New Group' color='white' 
+        <CreateHeader title='New Group' 
           rightNode={
             <FAB disabled={selectedContacts.length === 0}
               icon={<IonIcon name='return-down-forward' size={24}/>} 
-              style={{ ...styles.next, ...globalStyles.boxShadowBottom}} 
+              style={{ ...styles.next, ...globalStyles.FABshadow}} 
               disabledStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)', opacity: .4 }}
               onPress={handleNewGroup}
             />

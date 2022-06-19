@@ -98,5 +98,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 32,
     overflow: 'hidden',
     backgroundColor: '#fefefe',
+    elevation: 400
   }
 })
