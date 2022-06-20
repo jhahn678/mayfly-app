@@ -7,12 +7,12 @@ import { useImagePicker } from '../../hooks/utils/useImagePicker'
 
 const ShareImageButton = () => {
 
-    const { setImages } = useImageContext()
+    const { setChatImages } = useImageContext()
     const openImagePicker = useImagePicker()
 
     const handleOnPress = async () => {
         const { cancelled, type, ...image } = await openImagePicker()
-        if(cancelled === false) setImages(images => [...images, image])
+        if(cancelled === false) setChatImages(images => [...images, image])
     }
 
     return (
