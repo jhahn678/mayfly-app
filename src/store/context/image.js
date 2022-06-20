@@ -1,26 +1,33 @@
 import { useContext, useState, createContext } from "react";
 
 const initialState = {
-    images: [{ height: 4000, width: 3000, uri: 'file:///data/user', base64: '443f4agq3' }],
-    setImages: (image) => {},
-    removeImage: (uri) => {},
-    clearImage: () => {}
+    catchImages: [{ height: 4000, width: 3000, uri: 'file:///data/user', base64: '443f4agq3' }],
+    setCatchImages: () => {},
+    placeImages: [{ height: 4000, width: 3000, uri: 'file:///data/user', base64: '443f4agq3' }],
+    setPlaceImages: () => {},
+    chatImages: [{ height: 4000, width: 3000, uri: 'file:///data/user', base64: '443f4agq3' }],
+    setChatImages: () => {},
 };
 
 const ImageContext = createContext(initialState)
 
 export const ImageContextProvider = ({ children }) => {
 
-    const [images, setImages] = useState([])
+    const [catchImages, setCatchImages] = useState([])
+    const [placeImages, setPlaceImages] = useState([])
+    const [chatImages, setChatImages] = useState([])
 
-    const removeImage = (uri) => {
-        setImages(images => images.filter(i => i.uri !== uri))
+    const removeChatImage = (uri) => {
+        setChatImages(images => images.filter(i => i.uri !== uri))
     }
 
-    const clearImages = () => setImages([])
 
     return (
-        <ImageContext.Provider value={{ images, setImages, removeImage, clearImages }}>
+        <ImageContext.Provider value={{ 
+            catchImages, setCatchImages, 
+            placeImages, setPlaceImages, 
+            chatImages, setChatImages, removeChatImage 
+        }}>
             {children}
         </ImageContext.Provider>
     )

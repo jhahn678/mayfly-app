@@ -7,10 +7,12 @@ import { useNavigation } from '@react-navigation/core'
 import { useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
 import { useImageContext } from '../store/context/image'
+import uuid from 'react-native-uuid'
 
 const CameraScreen = () => {
 
     const { width: screenWidth } = useWindowDimensions()
+
     const navigation = useNavigation()
 
     const [cameraRef, setCameraRef] = useState(null)
@@ -18,7 +20,7 @@ const CameraScreen = () => {
     const [hasPermission, setHasPermission] = useState(null)
 
     const [flash, setFlash] = useState('off')
-    const { setImages } = useImageContext()
+    const { setChatImages, setPlaceImages, setCatchImages } = useImageContext()
 
     useEffect(() => {
         (async () => {
@@ -41,7 +43,17 @@ const CameraScreen = () => {
 
     const handleTakePicture = async () => {
         const image = await cameraRef.takePictureAsync()
-        setImages([image])
+        const history = navigation.getState().routes
+        const navigatedFrom = history[history.length - 2].name
+        if(navigatedFrom === 'NewCatch'){
+            setCatchImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
+        }
+        if(navigatedFrom === 'NewPlace'){
+            setPlaceImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
+        }
+        if(navigatedFrom === 'GroupScreen'){
+            setChatImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
+        }
         navigation.goBack()
     }
     
