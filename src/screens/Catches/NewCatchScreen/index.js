@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Dimensions,
-TouchableOpacity, KeyboardAvoidingView, FlatList } from 'react-native'
+TouchableOpacity, KeyboardAvoidingView, FlatList, Image } from 'react-native'
 import uuid from 'react-native-uuid'
 import { useEffect, useState, useReducer } from 'react'
 import PrimaryBackground from '../../../components/backgrounds/PrimaryBackground'
@@ -14,10 +14,11 @@ import SelectMenu from '../../../components/inputs/SelectMenu'
 import { weightEnum, lengthEnum } from '../../../utils/select-enums'
 import { reducer, initialState } from './reducer'
 import FontelloIcon from '../../../components/icons/Fontello'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation, useRoute } from '@react-navigation/core'
 import { makeFakeGroupWithPlaces } from '../../../../test-data/groups'
 import { uploadImageToCloudinary } from '../../../utils/cloudinary'
 import FlatListImage from '../../../components/image/FlatListImage'
+import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
 
 
 const NewCatchScreen = () => {
@@ -25,7 +26,9 @@ const NewCatchScreen = () => {
   const { width: screenWidth } = Dimensions.get('screen')
   const [group] = useState(makeFakeGroupWithPlaces())
 
+  const route = useRoute()
   const navigation = useNavigation()
+  const navigateToMap = useNavigateToMap()
   const [formState, dispatch] = useReducer(reducer, initialState)
 
   const openImagePicker = useImagePicker()
@@ -118,7 +121,7 @@ const NewCatchScreen = () => {
         <View style={styles.addLocationContainer}>
 
           <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigation.navigate('Map', { group: group._id })}
+            onPress={() => navigateToMap({ group: group._id })}
           >
             <View style={styles.locationOptionIcon}>
               <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
@@ -127,7 +130,7 @@ const NewCatchScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigation.navigate('Map', { currentLocation: true, save: true })}
+            onPress={() => navigateToMap({ save: true, replace: true, currentLocation: true })}
           >
             <View style={styles.locationOptionIcon}>
               <FontelloIcon name='map' size={40} color='rgb(100,100,100)'/>
@@ -136,10 +139,13 @@ const NewCatchScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigation.navigate('Map', { currentLocation: true } )}
+            onPress={() => navigateToMap({ currentLocation: true, snapshot: true })}
           >
             <View style={styles.locationOptionIcon}>
-              <FontelloIcon name='pin-current-location' size={48} color='rgb(100,100,100)'/>
+              { route.params?.image ? 
+                <Image source={{ uri: route.params.image }} resizeMode='cover' style={styles.currentLocationImage}/> :
+                <FontelloIcon name='pin-current-location' size={48} color='rgb(100,100,100)'/>
+              }
             </View>
             <Text style={{ fontSize: 12, maxWidth: 100, textAlign: 'center' }}>Add my current location</Text>
           </TouchableOpacity>
@@ -151,12 +157,12 @@ const NewCatchScreen = () => {
         <Input placeholder='Describe your rig' value={formState?.rig.value}
           leftIcon={<FontelloIcon name='fishing-rod' color='rgb(100,100,100)' size={20}/>}
           onTextInput={value => dispatch({ type: 'RIG', value: value })}
-          containerStyle={styles.fullWidthInput} inputStyle={{ paddingLeft: 4}}
+          containerStyle={styles.fullWidthInput} inputStyle={{ paddingLeft: 4 }}
         />
         <Input placeholder='Species of fish' value={formState?.species.value}
           leftIcon={<FontelloIcon name='fish' color='rgb(100,100,100)' size={24}/>}
           onTextInput={value => dispatch({ type: 'SPECIES', value: value })}
-          containerStyle={styles.fullWidthInput} inputStyle={{ paddingLeft: 4}}
+          containerStyle={styles.fullWidthInput} inputStyle={{ paddingLeft: 4 }}
         />
         <KeyboardAvoidingView style={styles.measurements}>
           <Input inputStyle={{ paddingLeft: 4}} placeholder='Length'
@@ -166,7 +172,7 @@ const NewCatchScreen = () => {
           />
           <SelectMenu title='Length' array={lengthEnum}
             value={formState?.length.unit} style={styles.picker}
-            setValue={value => dispatch({ type: 'LENGTH_UNIT', value: value})}
+            setValue={value => dispatch({ type: 'LENGTH_UNIT', value: value })}
           />
           <Input placeholder='Weight' value={formState?.weight.value}
             leftIcon={<MCIcon name='scale' color='rgb(100,100,100)'/>}
@@ -175,7 +181,7 @@ const NewCatchScreen = () => {
           />
           <SelectMenu title='Weight' array={weightEnum} 
             value={formState?.weight.unit} style={styles.picker}
-            setValue={value => dispatch({ type: 'WEIGHT_UNIT', value: value})}
+            setValue={value => dispatch({ type: 'WEIGHT_UNIT', value: value })}
           />
         </KeyboardAvoidingView>
 
@@ -272,7 +278,12 @@ const styles = StyleSheet.create({
     shadowOpacity: .1,
     shadowRadius: 12,
     shadowOffset: { height: 1 },
-    elevation: 4
+    elevation: 4,
+  },
+  currentLocationImage: {
+    borderRadius: 50,
+    height: '100%',
+    width: '100%',
   },
   fullWidthInput: {
     width: '100%',

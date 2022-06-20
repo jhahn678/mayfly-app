@@ -4,7 +4,7 @@ export const initialState = {
     weight: { value: '', unit: 'LB' },
     rig: { value: '' },
     species: { value: '' },
-    place: { value: '', isValid: false },
+    place: { _id: '', coordinates: null, isValid: false },
     group: { value: '', isValid: false },
     images: [],
     form: { isValid: false }
@@ -46,9 +46,14 @@ export const reducer = (state, action) => {
         species.value = action.value;
         return { ...state, species }
     }
-    if(action.type === 'PLACE'){
+    if(action.type === 'PLACE_ID'){
         const { place } = state;
-        place.value = action.value;
+        place._id = action.value;
+        return { ...state, place }
+    }
+    if(action.type === 'COORDINATES'){
+        const { place } = state;
+        place.coordinates = action.value;
         return { ...state, place }
     }
     if(action.type === 'PLACE_VALID'){

@@ -3,13 +3,14 @@ import { useState, useRef, useEffect } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import CurrentLocationButton from '../components/buttons/CurrentLocationButton';
 import { useCurrentLocation } from '../hooks/utils/useCurrentLocation';
-import { useRoute } from '@react-navigation/core'
+import { useRoute, useNavigation } from '@react-navigation/core'
 import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 
 const MapScreen = () => {
 
+    const navigation = useNavigation()
     const route = useRoute()
     const mapRef = useRef()
     const [pinCoordinates, setPinCoordinates] = useState(null)
@@ -55,6 +56,28 @@ const MapScreen = () => {
 
 
 
+    const handleDone = async () => {
+        const history = navigation.getState().routes
+        const navigatedFrom = history[history.length - 2].name
+        const params = { coordinates: pinCoordinates }
+        if(route.params?.snapshot === true){
+            const options = { format: 'jpg' }
+            const res = await mapRef.current.takeSnapshot(options)
+            params.image = res;
+        }
+        //Check if params indicate we are saving this location and/or replacing route
+        if(route.params?.save === true && route.params?.replace === true){
+            navigation.replace('NewPlace', params)
+        }else if(route.params?.save === true){
+            navigation.navigate('NewPlace', params)
+        }else if(route.params?.replace === true){
+            navigation.replace(navigatedFrom, params)
+        }else{
+            navigation.navigate(navigatedFrom, params)
+        }
+    }
+
+
 
     return (
         <View style={styles.container}>
@@ -71,8 +94,8 @@ const MapScreen = () => {
                 }
             </MapView>
             <View style={styles.header}>
-                <GoBackFAB />
-                <CheckmarkFAB onPress={() => console.log('done')}/>
+                <GoBackFAB/>
+                <CheckmarkFAB onPress={handleDone}/>
             </View>
             <CurrentLocationButton style={styles.currentLocation} setLocation={setFocusedLocation}/>
             <View style={styles.zoom}>
