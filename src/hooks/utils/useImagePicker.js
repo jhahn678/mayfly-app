@@ -9,9 +9,7 @@ export const useImagePicker = () => {
     useEffect(() => {
         (async () => {
             const res = await ImagePicker.getMediaLibraryPermissionsAsync()
-            if(res.status === 'granted'){
-                setHasPermission(true)
-            }
+            setHasPermission(res.status === 'granted')
         })()
     })
 

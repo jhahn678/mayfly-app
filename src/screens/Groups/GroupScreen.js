@@ -13,10 +13,12 @@ import ShareImageButton from '../../components/buttons/ShareImageButton'
 import { useToggleAnimation } from '../../hooks/utils/useToggleAnimation'
 import { Avatar } from '@rneui/themed'
 import { useRoute } from '@react-navigation/core'
+import { useImageContext } from '../../store/context/image'
  
 
 const GroupScreen = () => {
 
+  const { setChatImages } = useImageContext()
   const route = useRoute()
   // const groupId = route.params._id
 
@@ -35,6 +37,7 @@ const GroupScreen = () => {
         name={data.name} 
         avatar={data.avatar.url} 
         numberOfUsers={data.users.length}
+        onGoBack={() => setChatImages([])}
       />
 
       { data?.messages.length === 0 ? (

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, Dimensions,
-TouchableOpacity, KeyboardAvoidingView, FlatList, Image } from 'react-native'
+TouchableOpacity, KeyboardAvoidingView, FlatList } from 'react-native'
+import uuid from 'react-native-uuid'
 import { useEffect, useState, useReducer } from 'react'
 import PrimaryBackground from '../../../components/backgrounds/PrimaryBackground'
 import CreateHeader from '../../../components/headers/CreateHeader'
@@ -16,9 +17,11 @@ import FontelloIcon from '../../../components/icons/Fontello'
 import { useNavigation } from '@react-navigation/core'
 import { makeFakeGroupWithPlaces } from '../../../../test-data/groups'
 import { uploadImageToCloudinary } from '../../../utils/cloudinary'
+import FlatListImage from '../../../components/image/FlatListImage'
+
 
 const NewCatchScreen = () => {
-
+  
   const { width: screenWidth } = Dimensions.get('screen')
   const [group] = useState(makeFakeGroupWithPlaces())
 
@@ -26,22 +29,30 @@ const NewCatchScreen = () => {
   const [formState, dispatch] = useReducer(reducer, initialState)
 
   const openImagePicker = useImagePicker()
-  const { images: imagesFromCamera, setImages: setImagesFromCamera } = useImageContext()
-  const [imagesFromPicker, setImagesFromPicker] = useState([])
+  const { catchImages: imagesFromCamera, setCatchImages } = useImageContext()
+  const [imagesFromGallery, setImagesFromGallery] = useState([])
 
 
   useEffect(() => {
-    const images = [...imagesFromPicker, ...imagesFromCamera]
+    const images = [...imagesFromGallery, ...imagesFromCamera]
     dispatch({ type: 'IMAGES', value: images })
-  },[imagesFromCamera, imagesFromPicker])
+  },[imagesFromCamera, imagesFromGallery])
 
   const handleAddImages = async () => {
     const { cancelled, ...image } = await openImagePicker()
-    if(!cancelled) setImagesFromPicker(i => [...i, image])
+    if(!cancelled) setImagesFromGallery(i => [
+      ...i, 
+      {...image, id: uuid.v4(), origin: 'GALLERY' }
+    ])
   }
 
   const removeImage = (imageIndex) => {
-    dispatch({ type: 'IMAGE_REMOVE', value: imageIndex })
+    if(formState.images[imageIndex].origin === 'CAMERA'){
+      setCatchImages(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
+    }
+    if(formState.images[imageIndex].origin === 'GALLERY'){
+      setImagesFromGallery(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
+    }
   }
   
   const handleComplete = async () => {
@@ -60,11 +71,12 @@ const NewCatchScreen = () => {
   return (
     <PrimaryBackground style={styles.container}>
 
-      <CreateHeader title='New Catch' rightNode={(
+      <CreateHeader title='New Catch' 
+        onGoBack={() => setCatchImages([])} rightNode={(
         <FAB disabled={!formState?.form.isValid}
           icon={<IonIcon name='return-down-forward' size={24} color='#fefefe'/>} 
-          style={{ ...styles.doneIcon, ...globalStyles.FABshadow}} 
-          disabledStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)', opacity: .4 }}
+          style={{ ...styles.doneIcon }} 
+          disabledStyle={{ backgroundColor: 'rgb(220,220,220,.2)', opacity: .2 }}
           onPress={handleComplete}
         />
       )}/>
@@ -79,8 +91,13 @@ const NewCatchScreen = () => {
             <MCIcon name='image-plus' size={64} color='#605856'/>
           </TouchableOpacity> :
           <FlatList horizontal={true} data={formState.images} style={styles.imageFlatList}
-            renderItem={({ item }) => <Image source={{ uri: item.uri }} resizeMode='cover' 
-            style={{ ...styles.sliderImage, width: (screenWidth*.9)}}/>}
+            renderItem={({ item, index }) => (
+              <FlatListImage image={item} 
+                clearImage={() => removeImage(index)}
+                style={{ height: 300, width: (screenWidth*.9)}}
+              />
+            )}
+            pagingEnabled={true}
             keyExtractor={item => item.uri}
           />
         }
@@ -99,25 +116,36 @@ const NewCatchScreen = () => {
 
 
         <View style={styles.addLocationContainer}>
-          <TouchableOpacity style={styles.locationOption}>
+
+          <TouchableOpacity style={styles.locationOption} 
+            onPress={() => navigation.navigate('Map', { group: group._id })}
+          >
             <View style={styles.locationOptionIcon}>
               <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
             </View>
             <Text style={{ fontSize: 12, maxWidth: 92, textAlign: 'center' }}>{group?.places.length} saved locations</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.locationOption}>
+
+          <TouchableOpacity style={styles.locationOption} 
+            onPress={() => navigation.navigate('Map', { currentLocation: true, save: true })}
+          >
             <View style={styles.locationOptionIcon}>
               <FontelloIcon name='map' size={40} color='rgb(100,100,100)'/>
             </View>
             <Text style={{ fontSize: 12, maxWidth: 100, textAlign: 'center' }}>Save a new location</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.locationOption}>
+
+          <TouchableOpacity style={styles.locationOption} 
+            onPress={() => navigation.navigate('Map', { currentLocation: true } )}
+          >
             <View style={styles.locationOptionIcon}>
               <FontelloIcon name='pin-current-location' size={48} color='rgb(100,100,100)'/>
             </View>
             <Text style={{ fontSize: 12, maxWidth: 100, textAlign: 'center' }}>Add my current location</Text>
           </TouchableOpacity>
+
         </View>
+
 
         <Text style={styles.subtitle}>Details</Text>
         <Input placeholder='Describe your rig' value={formState?.rig.value}
@@ -180,7 +208,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     alignSelf: 'center',
-    backgroundColor: 'rgba(0,0,0,.1)',
+    backgroundColor:'rgb(230,230,230)',
     borderRadius: 30,
     display: 'flex',
     justifyContent: 'center',
@@ -190,9 +218,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: '100%',
     borderRadius: 30
-  },
-  sliderImage: {
-    height: 300
   },  
   doneIcon: {
     marginRight: 8
@@ -217,7 +242,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(220,220,220,.7)'
+    backgroundColor: 'rgb(230,230,230)',
   },  
   addLocationContainer: {
     width: '100%',
@@ -242,7 +267,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(220,220,220,.7)'
+    backgroundColor: 'rgb(230,230,230)',
+    shadowColor: '#000',
+    shadowOpacity: .1,
+    shadowRadius: 12,
+    shadowOffset: { height: 1 },
+    elevation: 4
   },
   fullWidthInput: {
     width: '100%',
