@@ -5,6 +5,7 @@ import { useAuthContext } from "../store/context/auth";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GroupScreen from "../screens/Groups/GroupScreen";
 import GroupMapScreen from "../screens/Groups/GroupMapScreen";
+import MapScreen from "../screens/MapScreen";
 import NewGroupScreen from "../screens/Groups/NewGroupScreen";
 import NewPlaceScreen from "../screens/Explore/NewPlaceScreen";
 import NewCatchScreen from '../screens/Catches/NewCatchScreen'
@@ -35,6 +36,7 @@ const RootStack = () => {
                             <Stack.Screen name='NewPlace' component={NewPlaceScreen}/>
                             <Stack.Screen name='NewCatch' component={NewCatchScreen}/>
                             <Stack.Screen name='NewGroup' component={NewGroupScreen}/>
+                            <Stack.Screen name='Map' component={MapScreen}/>
                             <Stack.Screen name='GroupMap' component={GroupMapScreen}/>
                             <Stack.Screen name='Camera' component={CameraScreen}/>
                         </Stack.Group>
