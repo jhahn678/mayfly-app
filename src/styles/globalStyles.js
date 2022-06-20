@@ -13,14 +13,14 @@ export const globalStyles = StyleSheet.create({
         shadowOpacity: .1,
         shadowOffset: { height: 4 },
         shadowRadius: 12,
-        elevation: 400
+        elevation: 4
     },
     boxShadowTop: {
         shadowColor: 'black',
         shadowOpacity: .1,
         shadowOffset: { height: -4 },
         shadowRadius: 12,
-        elevation: 400
+        elevation: 4
     },
     FAB: {
         position: 'absolute',
@@ -32,6 +32,6 @@ export const globalStyles = StyleSheet.create({
         shadowOpacity: .3,
         shadowRadius: 12,
         shadowOffset: { height: 4 },
-        elevation: 400
+        elevation: 8
     }
 })

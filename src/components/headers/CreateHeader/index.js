@@ -2,9 +2,14 @@ import { StyleSheet, Text, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native';
 
-const CreateHeader = ({ title, color, containerStyle, rightNode }) => {
+const CreateHeader = ({ title, color, containerStyle, rightNode, onGoBack }) => {
 
     const navigation = useNavigation()
+
+    const handleGoBack = () => {
+        onGoBack && onGoBack()
+        navigation.goBack()
+    }
 
     return (
         <View style={{...containerStyle, ...styles.header}}>
@@ -13,7 +18,7 @@ const CreateHeader = ({ title, color, containerStyle, rightNode }) => {
                     name='md-return-up-back' 
                     size={32} 
                     style={styles.back}
-                    onPress={() => navigation.goBack()}
+                    onPress={handleGoBack}
                 /> 
                 <Text style={styles.title}>
                     {title}

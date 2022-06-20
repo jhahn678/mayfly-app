@@ -14,12 +14,12 @@ const MessageBar = () => {
     const [messageInput, setMessageInput] = useState('')
     const sendMessage = () => console.log(messageInput)
 
-    const { images, removeImage } = useImageContext()
+    const { chatImages, removeChatImage } = useImageContext()
     const handleCamera = () => navigation.navigate('Camera')
 
     return (
         <View style={styles.container}>
-            { images && images.map(i => <ChatImage key={i.uri} image={i} clearImage={() => removeImage(i.uri)}/>) }
+            { chatImages && chatImages.map(i => <ChatImage key={i.uri} image={i} clearImage={() => removeChatImage(i.uri)}/>) }
             <View style={{ ...styles.inputContainer, height: inputHeight + 28 }}>
                 <IonIcon name='camera-outline' size={32} color='#353440' onPress={handleCamera}/>
                 <TextInput multiline={true}

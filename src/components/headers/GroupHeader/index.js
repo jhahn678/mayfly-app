@@ -4,9 +4,14 @@ import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 
-const GroupHeader = ({ groupId, name, avatar, numberOfUsers }) => {
+const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
 
     const navigation = useNavigation()
+
+    const handleGoBack = () => {
+        onGoBack && onGoBack()
+        navigation.goBack()
+    }
 
     return (
         <View style={{...globalStyles.boxShadowBottom, ...styles.header}}>
@@ -15,7 +20,7 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers }) => {
                     name='md-return-up-back' 
                     size={28} 
                     style={{...globalStyles.fontShadow, ...styles.back}}
-                    onPress={() => navigation.goBack()}
+                    onPress={handleGoBack}
                 /> 
                 <Avatar source={{ uri: avatar }} size={52} rounded containerStyle={styles.avatar}/>
                 <View style={styles.group}>
