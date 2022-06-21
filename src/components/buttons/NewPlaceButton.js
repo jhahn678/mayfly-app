@@ -2,15 +2,15 @@ import { StyleSheet } from 'react-native'
 import React from 'react'
 import { FAB } from '@rneui/themed'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 import { globalStyles } from '../../styles/globalStyles'
-import { useNavigation } from '@react-navigation/native'
 
 const NewPlaceButton = ({ groupId }) => {
 
-    const navigation = useNavigation()
+    const navigateToMap = useNavigateToMap()
 
     const handleOnPress = () => {
-        navigation.navigate('NewPlace', { groupId })
+       navigateToMap({ groupId: groupId, snapshot: true, save: true, replace: true })
     }
 
     return (
