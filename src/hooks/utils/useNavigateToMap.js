@@ -9,12 +9,28 @@ import { useNavigation } from '@react-navigation/core'
 //userId: Loads user pins
 //replace: On save replace screen
 //save: On save redirect to New place screen
+//catches: show catches based on user/group ID; default false
+//places: show places based on user/group ID; default true
+//showToggle: show toggle box for places/catches
 
 export const useNavigateToMap = () => {
 
     const navigation = useNavigation()
 
-    const navigateToMap = ({ currentLocation=false, selectPlace=false, snapshot=false, save=false, replace=false, groupId=null, placeId=null, userId=null }) => {
+    const navigateToMap = ({ 
+        currentLocation=false, 
+        selectPlace=false, 
+        snapshot=false, 
+        save=false, 
+        replace=false, 
+        groupId=null, 
+        placeId=null, 
+        userId=null,
+        catches=false,
+        places=true,
+        showToggle=false
+
+    }) => {
         navigation.navigate('Map', { 
             currentLocation,
             selectPlace,
@@ -23,7 +39,10 @@ export const useNavigateToMap = () => {
             placeId,
             userId,
             replace,
-            save
+            save,
+            catches,
+            places,
+            showToggle
         })
     }
 

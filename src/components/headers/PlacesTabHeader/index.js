@@ -1,31 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
 
 const PlacesTabHeader = () => {
 
-    const navigation = useNavigation()
-    const route = useRoute()
+    const navigateToMap = useNavigateToMap()
 
     return (
         <View style={{ ...styles.header }}>
             <View style={styles.headerContent}>
                 <Text style={{...styles.title, ...globalStyles.fontShadow }}>My Places</Text>
-                { route.name === 'CatchesMap' ?
-                    <IonIcon
-                        name='list-outline'
-                        size={36} 
-                        style={{...globalStyles.fontShadow}}
-                        onPress={() => navigation.navigate('CatchesList')}
-                    /> :
-                    <IonIcon 
-                        name='map-outline' 
-                        size={36} 
-                        style={{...globalStyles.fontShadow}}
-                        onPress={() => navigation.navigate('CatchesMap')}
-                    /> 
-                }
+                <IonIcon name='map-outline' size={36} 
+                    style={{...globalStyles.fontShadow}}
+                    onPress={() => navigateToMap({ places: true })}
+                /> 
             </View>
         </View>
     )

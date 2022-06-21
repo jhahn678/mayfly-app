@@ -1,18 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
-import CreateHeader from '../../components/headers/CreateHeader'
+import CatchesTabHeader from '../../components/headers/CatchesTabHeader'
 
-const NewPlaceScreen = ({}) => {
-
+const CatchScreen = () => {
   return (
     <PrimaryBackground>
-      <CreateHeader title='New Place'/>
-      <Text>New Place Screen</Text>
+      <CatchesTabHeader/>
+      <Text>View catch screen</Text>
     </PrimaryBackground>
   )
 }
 
-export default NewPlaceScreen
+export default CatchScreen
 
 const styles = StyleSheet.create({})

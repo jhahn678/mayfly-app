@@ -23,11 +23,15 @@ const MapScreen = () => {
     const navigation = useNavigation()
     const route = useRoute()
     const mapRef = useRef()
+    const getCurrentLocation = useCurrentLocation()
 
     const [viewInstructionBubble, setViewInstructionBubble] = useState(false)
     const [showDoneButton, setShowDoneButton] = useState(false)
     const [pinCoordinates, setPinCoordinates] = useState(null)
-    const getCurrentLocation = useCurrentLocation()
+    const [focusedLocation, setFocusedLocation] = useState(null)
+    const [selectedPlaceId, setSelectedPlaceId] = useState(null) 
+    const [zoom, setZoom] = useState(14) 
+    
 
     //On map load we check route params for to see if map
     //should auto focus on current location
@@ -46,18 +50,13 @@ const MapScreen = () => {
         }
     } 
 
-
-    const [zoom, setZoom] = useState(14)
     const handleZoomIn = () => setZoom(z => z >= 19 ? z : z + 2)
     const handleZoomOut = () => setZoom(z => z <= 2 ? z : z - 2)
 
     useEffect(() => {
         mapRef.current.animateCamera({ zoom: zoom })
     },[zoom])   
-    
-    
-
-    const [focusedLocation, setFocusedLocation] = useState(null)    
+      
 
     useEffect(() => {
         if(focusedLocation){
@@ -71,8 +70,6 @@ const MapScreen = () => {
         }
     },[focusedLocation])
 
-
-    const [selectedPlaceId, setSelectedPlaceId] = useState(null)
 
     const handleOnPressPin = (placeId) => {
         if(route.params?.selectPlace){
@@ -122,7 +119,7 @@ const MapScreen = () => {
                 pitchEnabled={false} onMapReady={onMapReady} showsUserLocation={true}
                 onLongPress={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
             >
-                {pinCoordinates && 
+                { pinCoordinates && 
                     <Marker draggable
                     onDragEnd={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
                     coordinate={{ 
@@ -140,6 +137,17 @@ const MapScreen = () => {
                         longitude: sp.location.coordinates[0]
                     }}/>
                 ))}
+                {/* { catches.map(c => (
+                    <Marker key={c._id} pinColor='#3ea9e2'
+                    title={c.name || 'untitled'}
+                    description={`Added by ${c.user.details.firstName}`}
+                    onPress={() => handleOnPressPin(c._id)}
+                    coordinate={{
+                        latitude: c.location.coordinates[1],
+                        longitude: c.location.coordinates[0]
+                    }}
+                    />
+                ))} */}
             </MapView>
             <View style={styles.header}>
                 <GoBackFAB/>

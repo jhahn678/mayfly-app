@@ -6,7 +6,7 @@ import { FAB } from '@rneui/themed'
 import { globalStyles } from '../../styles/globalStyles'
 import { useNavigation } from '@react-navigation/core'
 
-const PlacesListScreen = () => {
+const PlacesScreen = () => {
 
   const navigation = useNavigation()
 
@@ -23,6 +23,6 @@ const PlacesListScreen = () => {
   )
 }
 
-export default PlacesListScreen
+export default PlacesScreen
 
 const styles = StyleSheet.create({})

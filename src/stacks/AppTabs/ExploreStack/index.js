@@ -9,9 +9,9 @@ const ExploreStack = () => {
     const Stack = createNativeStackNavigator()
 
     return (
-        <Stack.Navigator>
-            <Stack.Screen name='GlobalFeed' component={FeedScreen} options={{ headerShown: false }}></Stack.Screen>
-            <Stack.Screen name='GlobalMap' component={MapScreen} options={{ headerShown: false }}></Stack.Screen>
+        <Stack.Navigator screenOptions={{ headerShown: false}}>
+            <Stack.Screen name='GlobalMap' component={MapScreen}/>
+            <Stack.Screen name='GlobalFeed' component={FeedScreen}/>
         </Stack.Navigator>
     )
 }
