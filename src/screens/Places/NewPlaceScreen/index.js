@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList, Dimensions, Image, TextInput } from 'react-native'
 import { useEffect, useReducer, useState } from 'react'
 import PrimaryBackground from '../../../components/backgrounds/PrimaryBackground'
 import CreateHeader from '../../../components/headers/CreateHeader'
 import { useRoute, useNavigation } from '@react-navigation/core'
-import { FAB, Input } from '@rneui/themed'
+import { FAB, Input, CheckBox } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
@@ -14,9 +14,15 @@ import { globalStyles } from '../../../styles/globalStyles'
 import CameraFAB from '../../../components/buttons/CameraFAB'
 import GalleryFAB from '../../../components/buttons/GalleryFAB'
 import FlatListImage from '../../../components/image/FlatListImage'
+import AvatarChip from '../../../components/chip/AvatarChip'
+import { makeFakeGroup } from '../../../../test-data/groups'
+import AutoSizeInput from '../../../components/inputs/AutoSizeInput'
 
 
 const NewPlaceScreen = () => {
+
+  //Replace with group query
+  const [group] = useState(makeFakeGroup())
 
   const { width: screenWidth } = Dimensions.get('screen')
   const [formState, dispatch] = useReducer(reducer, initialState)
@@ -31,6 +37,9 @@ const NewPlaceScreen = () => {
     }
     if(route.params?.image){
       dispatch({ type: 'SNAPSHOT', value: route.params.image })
+    }
+    if(route.params?.groupId){
+      dispatch({ type: 'GROUP', value: route.params.groupId })
     }
   },[])
 
@@ -72,6 +81,12 @@ const NewPlaceScreen = () => {
       // { id: data.public_id, url: data.secure_url }
       // create new place
       setPlaceImages([])
+      const history = navigation.getState().routes
+      const navigatedFrom = history[history.length - 2].name
+      navigation.navigate(navigatedFrom, { 
+        placeId: 'NEW PLACE ID HERE', 
+        groupId: formState.group._id
+      })
     }catch(err){
       alert('Something went wrong!')
     }
@@ -81,7 +96,7 @@ const NewPlaceScreen = () => {
     <PrimaryBackground style={{ ...styles.container, ...globalStyles.boxShadowTop }}>
         <CreateHeader title='New Location' 
           onGoBack={() => setPlaceImages([])} rightNode={(
-          <FAB disabled={!formState?.form.isValid}
+          <FAB disabled={formState?.form.isValid}
             icon={<IonIcon name='return-down-forward' size={24} color='#fefefe'/>} 
             style={{ ...styles.doneIcon }} 
             disabledStyle={{ backgroundColor: 'rgba(220,220,220,.3)', opacity: .5 }}
@@ -94,9 +109,11 @@ const NewPlaceScreen = () => {
             inputStyle={styles.inputStyle} placeholder='Title'
             onTextInput={value => dispatch({ type: 'NAME', value: value })}
           />
+
+
           { formState?.images.length === 0 ?
             <View style={styles.iconContainer}>
-              <Image source={{ uri: formState?.snapshot.image }} resizeMode='cover' 
+              <Image source={{ uri: formState?.avatar.snapshot }} resizeMode='cover' 
                 style={{ height: '100%', width: '100%', borderRadius: 30 }} 
               />
             </View> :
@@ -113,6 +130,45 @@ const NewPlaceScreen = () => {
           }
           <GalleryFAB onPress={handleAddImageFromGallery} style={styles.galleryButton}/>
           <CameraFAB style={styles.cameraButton}/>
+
+
+          <View style={styles.checkboxContainer}>
+            <Text style={styles.subtitle}>Publish</Text>
+            { formState?.group._id ?
+              <AvatarChip avatarUri={group.avatar.url} style={{ marginLeft: 16 }} title={group.name}/> : <>
+              <CheckBox title="Public" checkedColor='#0eaaa7'
+                checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+                checked={formState?.publishType.value === 'PUBLIC'}
+                onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PUBLIC' })}
+                containerStyle={{ marginLeft: 32, width: 80 }} 
+                textStyle={{ marginRight: 0, marginLeft: 8 }}
+              />
+              <CheckBox title="Private" checkedColor='#0eaaa7'
+                checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+                checked={formState?.publishType.value === 'PRIVATE'}
+                onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PRIVATE' })}
+                containerStyle={{ width: 80 }} 
+                textStyle={{ marginRight: 0, marginLeft: 8 }}
+              />
+            </>}
+              <Text style={{ fontSize: 12, position: 'absolute', bottom: -12 }}>
+                { formState?.publishType.value === 'PUBLIC' ? 
+                  'This location will be shared on the public map' : 
+                  formState?.publishType.value === 'PRIVATE' ? 
+                  'Only you will be able to view this location' : 
+                  `This location will only be shared with ${group.name}`
+                }
+              </Text>
+          </View>
+
+
+          <AutoSizeInput value={formState?.description.value} placeholder='Description'
+            onChangeText={(value) => dispatch({ type: 'DESCRIPTION', value: value})}
+            containerStyle={styles.descriptionContainer} inputStyle={styles.descriptionInput}
+            title='Description'
+          />
+
+
         </ScrollView>
     </PrimaryBackground>
   )
@@ -173,5 +229,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 36,
     marginBottom: 16,
+  },
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginTop: 12,
+  },
+  avatarChip: {
+    marginTop: 36,
+    marginLeft: 8,
+    marginBottom: 16,
+    padding: 6,
+    borderRadius: 30,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgb(230,230,230)',
+  },
+  descriptionContainer: {
+    marginTop: 48
   }
 })

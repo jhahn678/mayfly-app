@@ -2,7 +2,7 @@ export const initialState = {
     name: { value: '' },
     description: { value: '' },
     location: { coordinates: { latitude: null, longitude: null } },
-    snapshot: { image: null },
+    avatar: { snapshot: null },
     images: [],
     publishType: { value: 'PUBLIC' },
     group: { _id: null },
@@ -26,9 +26,9 @@ export const reducer = (state, action) => {
         return { ...state, location }
     }
     if(action.type === 'SNAPSHOT'){
-        const { snapshot } = state;
-        snapshot.image = action.value;
-        return { ...state, snapshot }
+        const { avatar } = state;
+        avatar.snapshot = action.value;
+        return { ...state, avatar }
     }
     if(action.type === 'IMAGE'){
         return { ...state, images: action.value }
@@ -39,9 +39,10 @@ export const reducer = (state, action) => {
         return { ...state, images: array }
     }
     if(action.type === 'GROUP'){
-        const { group } = state;
-        group._id = action.value
-        return { ...state, group }
+        const { group, publishType } = state;
+        group._id = action.value;
+        publishType.value = 'SHARED'
+        return { ...state, group, publishType }
     }
     if(action.type === 'PUBLISH_TYPE'){
         const { publishType } = state;
