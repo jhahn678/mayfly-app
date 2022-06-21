@@ -15,7 +15,7 @@ const NewCatchButton = ({ groupId }) => {
 
     return (
         <FAB size='small' buttonStyle={styles.button}
-            icon={<FontelloIcon name='fish' size={18}/>}
+            icon={<FontelloIcon name='fish' size={20}/>}
             style={{...styles.FAB, ...globalStyles.FABshadow}}
             onPress={handleOnPress}
         />

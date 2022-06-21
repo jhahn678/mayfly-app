@@ -15,7 +15,7 @@ const NewPlaceButton = ({ groupId }) => {
 
     return (
         <FAB size='small' buttonStyle={styles.button}
-            icon={<Icon name='location-outline' size={18}/>}
+            icon={<Icon name='location-outline' size={20}/>}
             style={{...styles.FAB, ...globalStyles.FABshadow}}
             onPress={handleOnPress}
         />
