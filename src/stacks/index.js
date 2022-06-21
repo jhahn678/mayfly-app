@@ -7,7 +7,7 @@ import GroupScreen from "../screens/Groups/GroupScreen";
 import GroupMapScreen from "../screens/Groups/GroupMapScreen";
 import MapScreen from "../screens/MapScreen";
 import NewGroupScreen from "../screens/Groups/NewGroupScreen";
-import NewPlaceScreen from "../screens/Explore/NewPlaceScreen";
+import NewPlaceScreen from "../screens/Places/NewPlaceScreen";
 import NewCatchScreen from '../screens/Catches/NewCatchScreen'
 import CameraScreen from "../screens/CameraScreen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
