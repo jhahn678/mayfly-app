@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Dimensions,
-TouchableOpacity, KeyboardAvoidingView, FlatList, Image } from 'react-native'
+TouchableOpacity, KeyboardAvoidingView, FlatList} from 'react-native'
 import uuid from 'react-native-uuid'
 import { useEffect, useState, useReducer } from 'react'
 import PrimaryBackground from '../../../components/backgrounds/PrimaryBackground'
@@ -7,7 +7,6 @@ import CreateHeader from '../../../components/headers/CreateHeader'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Avatar, FAB, Input } from '@rneui/themed'
-import { globalStyles } from '../../../styles/globalStyles'
 import { useImagePicker } from '../../../hooks/utils/useImagePicker'
 import { useImageContext } from '../../../store/context/image'
 import SelectMenu from '../../../components/inputs/SelectMenu'
@@ -18,23 +17,44 @@ import { useNavigation, useRoute } from '@react-navigation/core'
 import { makeFakeGroupWithPlaces } from '../../../../test-data/groups'
 import { uploadImageToCloudinary } from '../../../utils/cloudinary'
 import FlatListImage from '../../../components/image/FlatListImage'
-import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
+import { CheckBox } from "@rneui/themed";
+import AddLocationPanel from '../../../components/catches/AddLocationPanel'
+import { useAuthContext } from '../../../store/context/auth'
+import CameraFAB from '../../../components/buttons/CameraFAB'
+import LocationPreview from '../../../components/catches/LocationPreview'
+import { globalStyles } from '../../../styles/globalStyles'
 
 
 const NewCatchScreen = () => {
   
+  const { user } = useAuthContext()
+  const [formState, dispatch] = useReducer(reducer, initialState)
   const { width: screenWidth } = Dimensions.get('screen')
+
+  //Replace with group query
   const [group] = useState(makeFakeGroupWithPlaces())
 
   const route = useRoute()
   const navigation = useNavigation()
-  const navigateToMap = useNavigateToMap()
-  const [formState, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    if(route?.params?.placeId){
+      dispatch({ type: 'PLACE_ID', value: route.params.placeId })
+    }
+    if(route?.params?.coordinates){
+      dispatch({ type: 'COORDINATES', value: route.params.coordinates })
+    }
+    if(route?.params?.image){
+      dispatch({ type: 'SNAPSHOT', value: route.params.image })
+    }
+    if(route?.params?.groupId){
+      dispatch({ type: 'GROUP', value: route.params.groupId })
+    }
+  },[route])
 
   const openImagePicker = useImagePicker()
   const { catchImages: imagesFromCamera, setCatchImages } = useImageContext()
   const [imagesFromGallery, setImagesFromGallery] = useState([])
-
 
   useEffect(() => {
     const images = [...imagesFromGallery, ...imagesFromCamera]
@@ -66,6 +86,7 @@ const NewCatchScreen = () => {
           return { id: data.public_id, url: data.secure_url }
         })
         // create new catch
+        setCatchImages([])
       }catch(err){
         alert('Something went wrong!')
       }
@@ -79,12 +100,12 @@ const NewCatchScreen = () => {
         <FAB disabled={!formState?.form.isValid}
           icon={<IonIcon name='return-down-forward' size={24} color='#fefefe'/>} 
           style={{ ...styles.doneIcon }} 
-          disabledStyle={{ backgroundColor: 'rgb(220,220,220,.2)', opacity: .2 }}
+          disabledStyle={{ backgroundColor: 'rgba(220,220,220,.3)', opacity: .5 }}
           onPress={handleComplete}
         />
       )}/>
 
-      <ScrollView style={styles.list} contentContainerStyle={{ padding: '5%' }}>
+      <ScrollView style={{ ...styles.list, ...globalStyles.boxShadowTop }} contentContainerStyle={{ padding: '5%' }}>
         <Input containerStyle={styles.titleInput} value={formState?.title.value}
           inputStyle={styles.inputStyle} placeholder='Title'
           onTextInput={value => dispatch({ type: 'TITLE', value: value })}
@@ -104,53 +125,59 @@ const NewCatchScreen = () => {
             keyExtractor={item => item.uri}
           />
         }
-        <FAB icon={<IonIcon name='camera' size={24} color='#fefefe'/>} 
-          style={{ ...styles.cameraButton, ...globalStyles.FABshadow}} 
-          onPress={() => navigation.navigate('Camera')}
-        />
+        <CameraFAB style={styles.cameraButton}/>
+
+
+
+        { !formState?.group._id &&
+          <View style={styles.checkboxContainer}>
+            <Text style={styles.subtitle}>Publish</Text>
+            <CheckBox title="Public" checkedColor='#0eaaa7'
+              checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+              checked={formState?.publishType.value === 'PUBLIC'}
+              onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PUBLIC' })}
+              containerStyle={{ marginLeft: 32, width: 80 }} 
+              textStyle={{ marginRight: 0, marginLeft: 8 }}
+            />
+            <CheckBox title="Private" checkedColor='#0eaaa7'
+              checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+              checked={formState?.publishType.value === 'PRIVATE'}
+              onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PRIVATE' })}
+              containerStyle={{ width: 80 }} 
+              textStyle={{ marginRight: 0, marginLeft: 8 }}
+            />
+            <Text style={{ fontSize: 12, position: 'absolute', bottom: -8 }}>
+              { formState?.publishType.value === 'PUBLIC' ? 
+                'Your catch will be saved and posted publicly' : 
+                'Your catch will only be saved to your catch log'
+              }
+            </Text>
+          </View>
+        }
+
 
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.subtitle}>Add a location</Text>
-          <View style={styles.avatarChip}>
-            <Avatar source={{ uri: group.avatar.url }} size={24} rounded/>
-            <Text style={{ fontSize: 12, paddingHorizontal: 4 }}>{group.name}</Text>
-          </View>
+          { formState?.group._id &&
+            <View style={styles.avatarChip}>
+              <Avatar source={{ uri: group.avatar.url }} size={24} rounded/>
+              <Text style={{ fontSize: 12, paddingHorizontal: 4 }}>{group.name}</Text>
+            </View>
+          }
         </View>
-
-
-        <View style={styles.addLocationContainer}>
-
-          <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigateToMap({ group: group._id })}
-          >
-            <View style={styles.locationOptionIcon}>
-              <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
-            </View>
-            <Text style={{ fontSize: 12, maxWidth: 92, textAlign: 'center' }}>{group?.places.length} saved locations</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigateToMap({ save: true, replace: true, currentLocation: true })}
-          >
-            <View style={styles.locationOptionIcon}>
-              <FontelloIcon name='map' size={40} color='rgb(100,100,100)'/>
-            </View>
-            <Text style={{ fontSize: 12, maxWidth: 100, textAlign: 'center' }}>Save a new location</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.locationOption} 
-            onPress={() => navigateToMap({ currentLocation: true, snapshot: true })}
-          >
-            <View style={styles.locationOptionIcon}>
-              { route.params?.image ? 
-                <Image source={{ uri: route.params.image }} resizeMode='cover' style={styles.currentLocationImage}/> :
-                <FontelloIcon name='pin-current-location' size={48} color='rgb(100,100,100)'/>
-              }
-            </View>
-            <Text style={{ fontSize: 12, maxWidth: 100, textAlign: 'center' }}>Add my current location</Text>
-          </TouchableOpacity>
-
-        </View>
+        { (formState?.place._id || formState?.place.coordinates) ? (
+              <LocationPreview placeId={formState.place._id} 
+                coordinates={formState.place.coordinates}
+                snapshot={formState.place.snapshot}
+                onRemove={() => dispatch({ type: 'RESET_PLACE'})}
+              />
+            ) : (
+              formState?.group._id ?
+              <AddLocationPanel groupId={group._id} numberOfSavedLocations={group.places.length}/> :
+              <AddLocationPanel userId={group._id} numberOfSavedLocations={group.places.length}/>
+            )
+        }
+  
 
 
         <Text style={styles.subtitle}>Details</Text>
@@ -239,6 +266,12 @@ const styles = StyleSheet.create({
     marginTop: 36,
     marginBottom: 16,
   },
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginTop: 12,
+  },
   avatarChip: {
     marginTop: 36,
     marginLeft: 8,
@@ -249,41 +282,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgb(230,230,230)',
-  },  
-  addLocationContainer: {
-    width: '100%',
-    height: 100,
-    marginTop: 16,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around'
-  },
-  locationOption: {
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  locationOptionIcon: {
-    marginBottom: 4,
-    borderRadius: 50,
-    height: 76,
-    width: 76,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(230,230,230)',
-    shadowColor: '#000',
-    shadowOpacity: .1,
-    shadowRadius: 12,
-    shadowOffset: { height: 1 },
-    elevation: 4,
-  },
-  currentLocationImage: {
-    borderRadius: 50,
-    height: '100%',
-    width: '100%',
   },
   fullWidthInput: {
     width: '100%',

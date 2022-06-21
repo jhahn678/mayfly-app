@@ -4,8 +4,9 @@ export const initialState = {
     weight: { value: '', unit: 'LB' },
     rig: { value: '' },
     species: { value: '' },
-    place: { _id: '', coordinates: null, isValid: false },
-    group: { value: '', isValid: false },
+    publishType: { value: 'PUBLIC' },
+    place: { _id: null, coordinates: null, snapshot: null },
+    group: { _id: null },
     images: [],
     form: { isValid: false }
 }
@@ -46,6 +47,11 @@ export const reducer = (state, action) => {
         species.value = action.value;
         return { ...state, species }
     }
+    if(action.type === 'PUBLISH_TYPE'){
+        const { publishType } = state;
+        publishType.value = action.value;
+        return { ...state, publishType }
+    }
     if(action.type === 'PLACE_ID'){
         const { place } = state;
         place._id = action.value;
@@ -56,19 +62,21 @@ export const reducer = (state, action) => {
         place.coordinates = action.value;
         return { ...state, place }
     }
-    if(action.type === 'PLACE_VALID'){
+    if(action.type === 'SNAPSHOT'){
         const { place } = state;
-        place.value = action.value
+        place.snapshot = action.value;
+        return { ...state, place }
+    }
+    if(action.type === 'RESET_PLACE'){
+        const { place } = state;
+        place.snapshot = null;
+        place._id = null;
+        place.coordinates = null;
         return { ...state, place }
     }
     if(action.type === 'GROUP'){
         const { group } = state;
-        group.value = action.value;
-        return { ...state, group }
-    }
-    if(action.type === 'GROUP_VALID'){
-        const { group } = state;
-        group.value = action.value;
+        group._id = action.value;
         return { ...state, group }
     }
     if(action.type === 'IMAGES'){
@@ -80,9 +88,18 @@ export const reducer = (state, action) => {
         return { ...state, images: array }
     }
     if(action.type === 'FORM_VALID'){
-        const { form } = state;
-        form.isValid = action.value;
-        return { ...state, form }
+        const { form, title, length, weight, rig, species, images, group, place, publishType } = state;
+        if(publishType.value === 'PUBLIC'){
+            if(title.value.length > 2 || length.value.length > 0 || weight.value.length > 0 ||
+            rig.value.length > 2 || species.length > 2 || images.length > 0 || group._id || 
+            place.coordinates || place._id){
+                form.isValid = true;
+                return { ...state, form }
+            }
+        }else{
+            form.isValid = true;
+            return { ...state, form }
+        }
     }
     return { ...state }
 }
