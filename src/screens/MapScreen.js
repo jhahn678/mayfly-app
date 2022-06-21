@@ -8,8 +8,17 @@ import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import FadeAnimation from '../components/animations/FadeAnimation'
+import { makeFakePlaces } from '../../test-data/groups';
 
 const MapScreen = () => {
+
+    const [savedPlaces, setSavedPlaces] = useState([])
+    useEffect(() => {
+        setSavedPlaces(makeFakePlaces(10))
+    },[])
+
+
+
 
     const navigation = useNavigation()
     const route = useRoute()
@@ -32,7 +41,7 @@ const MapScreen = () => {
         if(route.params?.save && !route.params?.currentLocation){
             setViewInstructionBubble(true)
         }
-        if(route.params?.save || route.params?.currentLocation){
+        if(route.params?.save || route.params?.currentLocation || route.params?.selectPlace){
             setShowDoneButton(true)
         }
     } 
@@ -57,17 +66,37 @@ const MapScreen = () => {
                     latitude: focusedLocation.latitude, 
                     longitude: focusedLocation.longitude
                 },
-                zoom: 18
+                zoom: 16
             })
         }
     },[focusedLocation])
 
+
+    const [selectedPlaceId, setSelectedPlaceId] = useState(null)
+
+    const handleOnPressPin = (placeId) => {
+        if(route.params?.selectPlace){
+            return setSelectedPlaceId(placeId)
+        }
+
+        const params = { placeId: placeId }
+        if(route.params?.groupId){
+            params.groupId = route.params.groupId
+        }
+        navigation.navigate('PlaceScreen', { placeId: placeId })
+    }
 
 
     const handleDone = async () => {
         const history = navigation.getState().routes
         const navigatedFrom = history[history.length - 2].name
         const params = { coordinates: pinCoordinates }
+        if(route.params?.groupId){
+            params.groupId = route.params.groupId
+        }
+        if(route.params?.selectPlace === true){
+            params.placeId
+        }
         if(route.params?.snapshot === true){
             const options = { format: 'jpg' }
             const res = await mapRef.current.takeSnapshot(options)
@@ -90,23 +119,36 @@ const MapScreen = () => {
     return (
         <View style={styles.container}>
             <MapView style={styles.map} provider={PROVIDER_GOOGLE} ref={mapRef} 
-                pitchEnabled={false} onMapReady={onMapReady} 
+                pitchEnabled={false} onMapReady={onMapReady} showsUserLocation={true}
                 onLongPress={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
             >
                 {pinCoordinates && 
                     <Marker draggable
                     onDragEnd={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
                     coordinate={{ 
-                        latitude: pinCoordinates.latitude, 
+                        latitude: pinCoordinates.latitude,
                         longitude: pinCoordinates.longitude
                     }}/> 
                 }
+                { savedPlaces.map(sp => (
+                    <Marker key={sp._id} pinColor='#0EAAA7'
+                    title={sp.name || 'untitled'} 
+                    description={`Added by ${sp.user.details.firstName}`} 
+                    onPress={() => handleOnPressPin(sp._id)}
+                    coordinate={{ 
+                        latitude: sp.location.coordinates[1],
+                        longitude: sp.location.coordinates[0]
+                    }}/>
+                ))}
             </MapView>
             <View style={styles.header}>
                 <GoBackFAB/>
                 { showDoneButton && 
                     <CheckmarkFAB onPress={handleDone} 
-                        disabled={(route.params?.save || route.params?.currentLocation) && !pinCoordinates}
+                        disabled={
+                            ((route.params?.save || route.params?.currentLocation) && !pinCoordinates) ||
+                            (route.params?.selectPlace && !selectedPlaceId)
+                        }
                     /> 
                 }
             </View>

@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core'
 
 
 //currentLocation: Navigates to map and autofocuses on current location
+//selectPlace: Map pins will be in select mode, instead of redirecting
 //snapshot: Passes snapshot of map after saving
 //groupId: Loads group pins
 //placeId: Loads place pins
@@ -13,9 +14,10 @@ export const useNavigateToMap = () => {
 
     const navigation = useNavigation()
 
-    const navigateToMap = ({ currentLocation=false, snapshot=false, save=false, replace=false, groupId=null, placeId=null, userId=null }) => {
+    const navigateToMap = ({ currentLocation=false, selectPlace=false, snapshot=false, save=false, replace=false, groupId=null, placeId=null, userId=null }) => {
         navigation.navigate('Map', { 
             currentLocation,
+            selectPlace,
             snapshot,
             groupId,
             placeId,

@@ -15,7 +15,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
 
         { groupId && (
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ group: groupId })}
+                onPress={() => navigateToMap({ groupId: groupId, selectPlace: true })}
             >
                 <View style={styles.locationOptionIcon}>
                 <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
@@ -28,7 +28,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
         )}
         { userId && (
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ user: userId })}
+                onPress={() => navigateToMap({ userId: userId, selectPlace: true })}
             >
                 <View style={styles.locationOptionIcon}>
                 <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
