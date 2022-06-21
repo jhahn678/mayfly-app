@@ -6,7 +6,7 @@ import PrimaryBackground from '../../../components/backgrounds/PrimaryBackground
 import CreateHeader from '../../../components/headers/CreateHeader'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { Avatar, FAB, Input } from '@rneui/themed'
+import { FAB, Input } from '@rneui/themed'
 import { useImagePicker } from '../../../hooks/utils/useImagePicker'
 import { useImageContext } from '../../../store/context/image'
 import SelectMenu from '../../../components/inputs/SelectMenu'
@@ -23,6 +23,7 @@ import { useAuthContext } from '../../../store/context/auth'
 import CameraFAB from '../../../components/buttons/CameraFAB'
 import LocationPreview from '../../../components/catches/LocationPreview'
 import { globalStyles } from '../../../styles/globalStyles'
+import AvatarChip from '../../../components/chip/AvatarChip'
 
 
 const NewCatchScreen = () => {
@@ -33,21 +34,20 @@ const NewCatchScreen = () => {
 
   //Replace with group query
   const [group] = useState(makeFakeGroupWithPlaces())
-
-  const route = useRoute()
   const navigation = useNavigation()
+  const route = useRoute()
 
   useEffect(() => {
-    if(route?.params?.placeId){
+    if(route.params?.placeId){
       dispatch({ type: 'PLACE_ID', value: route.params.placeId })
     }
-    if(route?.params?.coordinates){
+    if(route.params?.coordinates){
       dispatch({ type: 'COORDINATES', value: route.params.coordinates })
     }
-    if(route?.params?.image){
+    if(route.params?.image){
       dispatch({ type: 'SNAPSHOT', value: route.params.image })
     }
-    if(route?.params?.groupId){
+    if(route.params?.groupId){
       dispatch({ type: 'GROUP', value: route.params.groupId })
     }
   },[route])
@@ -87,6 +87,7 @@ const NewCatchScreen = () => {
         })
         // create new catch
         setCatchImages([])
+        navigation.goBack()
       }catch(err){
         alert('Something went wrong!')
       }
@@ -107,8 +108,7 @@ const NewCatchScreen = () => {
 
       <ScrollView style={{ ...styles.list, ...globalStyles.boxShadowTop }} contentContainerStyle={{ padding: '5%' }}>
         <Input containerStyle={styles.titleInput} value={formState?.title.value}
-          inputStyle={styles.inputStyle} placeholder='Title'
-          onTextInput={value => dispatch({ type: 'TITLE', value: value })}
+          placeholder='Title' onTextInput={value => dispatch({ type: 'TITLE', value: value })}
         />
         { formState?.images.length === 0 ?
           <TouchableOpacity style={styles.iconContainer} onPress={handleAddImages}>
@@ -128,29 +128,28 @@ const NewCatchScreen = () => {
         <CameraFAB style={styles.cameraButton}/>
 
 
-
         { !formState?.group._id &&
           <View style={styles.checkboxContainer}>
             <Text style={styles.subtitle}>Publish</Text>
-            <CheckBox title="Public" checkedColor='#0eaaa7'
-              checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
-              checked={formState?.publishType.value === 'PUBLIC'}
-              onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PUBLIC' })}
-              containerStyle={{ marginLeft: 32, width: 80 }} 
-              textStyle={{ marginRight: 0, marginLeft: 8 }}
-            />
-            <CheckBox title="Private" checkedColor='#0eaaa7'
-              checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
-              checked={formState?.publishType.value === 'PRIVATE'}
-              onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PRIVATE' })}
-              containerStyle={{ width: 80 }} 
-              textStyle={{ marginRight: 0, marginLeft: 8 }}
-            />
-            <Text style={{ fontSize: 12, position: 'absolute', bottom: -8 }}>
-              { formState?.publishType.value === 'PUBLIC' ? 
-                'Your catch will be saved and posted publicly' : 
-                'Your catch will only be saved to your catch log'
-              }
+              <CheckBox title="Public" checkedColor='#0eaaa7'
+                checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+                checked={formState?.publishType.value === 'PUBLIC'}
+                onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PUBLIC' })}
+                containerStyle={{ marginLeft: 32, width: 80 }} 
+                textStyle={{ marginRight: 0, marginLeft: 8 }}
+              />
+              <CheckBox title="Private" checkedColor='#0eaaa7'
+                checkedIcon="dot-circle-o" uncheckedIcon="circle-o"
+                checked={formState?.publishType.value === 'PRIVATE'}
+                onPress={() => dispatch({ type: 'PUBLISH_TYPE', value: 'PRIVATE' })}
+                containerStyle={{ width: 80 }} 
+                textStyle={{ marginRight: 0, marginLeft: 8 }}
+              />
+              <Text style={{ fontSize: 12, position: 'absolute', bottom: -8 }}>
+                { formState?.publishType.value === 'PUBLIC' ? 
+                  'Your catch will be saved and posted publicly' : 
+                  'Your catch will only be saved to your catch log'
+                }
             </Text>
           </View>
         }
@@ -159,10 +158,7 @@ const NewCatchScreen = () => {
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.subtitle}>Add a location</Text>
           { formState?.group._id &&
-            <View style={styles.avatarChip}>
-              <Avatar source={{ uri: group.avatar.url }} size={24} rounded/>
-              <Text style={{ fontSize: 12, paddingHorizontal: 4 }}>{group.name}</Text>
-            </View>
+            <AvatarChip avatarUri={group.avatar.url} title={group.name} style={styles.avatarChip}/>
           }
         </View>
         { (formState?.place._id || formState?.place.coordinates) ? (
@@ -276,12 +272,6 @@ const styles = StyleSheet.create({
     marginTop: 36,
     marginLeft: 8,
     marginBottom: 16,
-    padding: 6,
-    borderRadius: 30,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgb(230,230,230)',
   },
   fullWidthInput: {
     width: '100%',
