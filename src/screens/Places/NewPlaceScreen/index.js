@@ -29,7 +29,6 @@ const NewPlaceScreen = () => {
 
   const route = useRoute()
   const navigation = useNavigation()
-  const navigateToMap = useNavigateToMap()
 
   useEffect(() => {
     if(route.params?.coordinates){
