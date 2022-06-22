@@ -8,13 +8,19 @@ import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import FadeAnimation from '../components/animations/FadeAnimation'
-import { makeFakePlaces } from '../../test-data/groups';
+import { makeFakePlaces, makeFakeCatches } from '../../test-data/groups';
 
 const MapScreen = () => {
 
     const [savedPlaces, setSavedPlaces] = useState([])
+    const [catches, setCatches] = useState([])
     useEffect(() => {
-        setSavedPlaces(makeFakePlaces(10))
+        if(route.params?.places === true){
+            setSavedPlaces(makeFakePlaces(10))
+        }
+        if(route.params?.catches === true){
+            setCatches(makeFakeCatches(20))
+        }
     },[])
 
 
@@ -65,22 +71,22 @@ const MapScreen = () => {
                     latitude: focusedLocation.latitude, 
                     longitude: focusedLocation.longitude
                 },
-                zoom: 16
+                zoom: 16,
             })
         }
     },[focusedLocation])
 
 
-    const handleOnPressPin = (placeId) => {
+    const handleOnPressPin = ({ catchId, placeId }) => {
         if(route.params?.selectPlace){
             return setSelectedPlaceId(placeId)
         }
-
-        const params = { placeId: placeId }
-        if(route.params?.groupId){
-            params.groupId = route.params.groupId
+        if(placeId){
+            navigation.navigate('Place', { placeId: placeId })
         }
-        navigation.navigate('PlaceScreen', { placeId: placeId })
+        if(catchId){
+            navigation.navigate('Catch', { catchId: catchId })
+        }
     }
 
 
@@ -131,23 +137,23 @@ const MapScreen = () => {
                     <Marker key={sp._id} pinColor='#0EAAA7'
                     title={sp.name || 'untitled'} 
                     description={`Added by ${sp.user.details.firstName}`} 
-                    onPress={() => handleOnPressPin(sp._id)}
+                    onPress={() => handleOnPressPin({ placeId: sp._id})}
                     coordinate={{ 
                         latitude: sp.location.coordinates[1],
                         longitude: sp.location.coordinates[0]
                     }}/>
                 ))}
-                {/* { catches.map(c => (
+                { catches.map(c => c.place && (
                     <Marker key={c._id} pinColor='#3ea9e2'
                     title={c.name || 'untitled'}
                     description={`Added by ${c.user.details.firstName}`}
-                    onPress={() => handleOnPressPin(c._id)}
+                    onPress={() => handleOnPressPin({ catchId: c._id })}
                     coordinate={{
-                        latitude: c.location.coordinates[1],
-                        longitude: c.location.coordinates[0]
+                        latitude: c.place.location.coordinates[1],
+                        longitude: c.place.location.coordinates[0]
                     }}
                     />
-                ))} */}
+                ))}
             </MapView>
             <View style={styles.header}>
                 <GoBackFAB/>
