@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: 12
     },
     headerButton: {
         borderColor: 'rgba(0,0,0,.1)',
