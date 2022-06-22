@@ -54,7 +54,7 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems }) => {
                                     { name: 'shield', type: 'feather', size: 12 } : 
                                     { name: 'globe', type: 'entypo', size: 12 }
                                 } 
-                                containerStyle={{ width: 80, marginTop: 8 }} size='sm'
+                                containerStyle={{ width: 80, marginTop: 6 }} size='sm'
                                 titleStyle={{ fontSize: 10 }}
                             />
                         }
@@ -62,8 +62,8 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems }) => {
 
                     <View>
                         <View style={{ display: 'flex', alignItems: 'baseline', flexDirection: 'row'}}>
-                            <Text style={{ fontWeight: '300', fontSize: 12}}>near </Text>
-                            <Text>{item.locality}</Text>
+                            <Text style={{ fontWeight: '300', fontSize: 10}}>near </Text>
+                            <Text numberOfLines={1} style={{ fontWeight: '300'}}>{item.locality}</Text>
                         </View>
                         <Text style={styles.catches}>
                             {`${item.catches.length} ${item.catches.length === 1 ? 'catch' : 'catches'}`}
@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
     catches: {
         fontSize: 14,
         fontStyle: 'italic',
-        marginTop: 8
+        marginTop: 4
     }
 })

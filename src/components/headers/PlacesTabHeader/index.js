@@ -36,7 +36,7 @@ const PlacesTabHeader = ({ selectedItems }) => {
                         />
                     }
                 </View> : 
-                <FAB onPress={() => navigateToMap()} 
+                <FAB onPress={() => navigateToMap({})} 
                     icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>} 
                     style={{...styles.headerButton, ...globalStyles.FABshadow}}
                 />
