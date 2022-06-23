@@ -1,24 +1,19 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Chip } from '@rneui/themed'
-import { useNavigation } from '@react-navigation/core'
 import AvatarChip from '../chip/AvatarChip'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 
-const PlacesListItem = ({ item, selectedItems, setSelectedItems }) => {
+const PlacesListItem = ({ item, selectedItems, setSelectedItems, showPlace }) => {
 
-    const navigation = useNavigation()
-    
+    const navigateToMap = useNavigateToMap()
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
         selectedItems.includes(item._id) ?
         setIsSelected(true) : setIsSelected(false)
     },[selectedItems])
-
-    const onPress = () => {
-        navigation.navigate('Place', { placeId: item._id })
-    }
 
     const onSelect = () => {
         setSelectedItems(items => {
@@ -33,7 +28,7 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems }) => {
 
 
     return (
-        <TouchableOpacity onPress={selectedItems.length > 0 ? onSelect : onPress} onLongPress={onSelect}>
+        <TouchableOpacity onPress={selectedItems.length > 0 ? onSelect : showPlace} onLongPress={onSelect}>
             <View style={styles.container}>
                 <View style={isSelected ? {...styles.imageContainer, borderColor: '#0eaaa7', borderWidth: 3} : styles.imageContainer}>
                     <Image source={{ uri: item.avatar.url }} resizeMode='cover' 
@@ -44,33 +39,31 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems }) => {
                 <View style={isSelected ? {...styles.right, ...styles.rightSelected} : styles.right}>
                     <View>
                         <Text style={item.name ? styles.name : styles.untitled} numberOfLines={1}>{item.name || 'untitled'}</Text>
+                        <Text numberOfLines={1} style={{ fontWeight: '300', marginTop: 8}}>{item.locality}</Text>
+                    </View>
+
+                    <View>
                         { item.publish_type === 'SHARED' ? 
                             <AvatarChip avatarUri={item.group?.avatar.url} 
                                 avatarSize={12} title={item.group?.name} 
                                 style={{ marginTop: 4, maxWidth: '100%' }}
                             /> :
-                            <Chip title={item.publish_type} type='outline' 
+                            <Chip title={item.publish_type} type='outline'  
                                 icon={item.publish_type === 'PRIVATE' ? 
                                     { name: 'shield', type: 'feather', size: 12 } : 
                                     { name: 'globe', type: 'entypo', size: 12 }
                                 } 
-                                containerStyle={{ width: 80, marginTop: 6 }} size='sm'
-                                titleStyle={{ fontSize: 10 }}
+                                containerStyle={{ width: 80, marginTop: 6 }} size='sm' disabled
+                                titleStyle={{ fontSize: 10 }} disabledTitleStyle={{ color: 'black'}}
+                                disabledStyle={{ borderColor: 'black'}}
                             />
                         }
                     </View>
 
-                    <View>
-                        <View style={{ display: 'flex', alignItems: 'baseline', flexDirection: 'row'}}>
-                            <Text style={{ fontWeight: '300', fontSize: 10}}>near </Text>
-                            <Text numberOfLines={1} style={{ fontWeight: '300'}}>{item.locality}</Text>
-                        </View>
-                        <Text style={styles.catches}>
-                            {`${item.catches.length} ${item.catches.length === 1 ? 'catch' : 'catches'}`}
-                        </Text>
-                    </View>
-
                 </View>
+                <IonIcon size={16} name='map-outline' style={styles.showOnMap} 
+                    onPress={() => navigateToMap({ placeId: item._id })}
+                />
             </View>
         </TouchableOpacity>
     )
@@ -80,7 +73,7 @@ export default PlacesListItem
 
 const styles = StyleSheet.create({
     container: {
-        height: 150,
+        height: 120,
         width: '100%',
         paddingHorizontal: 8,
         paddingVertical: 12,
@@ -131,5 +124,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontStyle: 'italic',
         marginTop: 4
+    },
+    showOnMap: {
+        position: 'absolute', 
+        top: 8, 
+        right: 8,
+        backgroundColor: 'rgb(220, 220, 220)',
+        padding: 6,
+        borderRadius: 14,
+        overflow: 'hidden',
+        elevation: 4,
+        shadowColor: 'black',
+        shadowOffset: { height: 1},
+        shadowRadius: 2,
+        shadowOpacity: .1
     }
 })
