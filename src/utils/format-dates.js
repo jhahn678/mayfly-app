@@ -1,31 +1,13 @@
+import moment from 'moment'
+
 export const formatDateGroupList = (isoDate) => {
-    const date = new Date(isoDate)
-    const today = new Date().toDateString()
-    const yesterday = new Date(Date.now() - (1000*60*60*24)).toDateString()
-    if (date.toDateString() === today){
-        //this is today
-        return `Today ${date.toLocaleTimeString([], { timeStyle: 'short' })}`
-    }
-    else if(date.toDateString() === yesterday){
-        //date is yesterday
-        return `Yesterday ${date.toLocaleTimeString([], { timeStyle: 'short' })}`
-    }
-    else{
-        return date.toLocaleDateString([], { day: 'numeric', month: 'long' } )
-    }
+    return moment(isoDate).calendar()
 }
 
 export const formatTimeMessage = (isoDate) => {
-    const date = new Date(isoDate)
-    let hour = date.getHours()
-    let minutes = date.getMinutes()
-    let timeOfDay = 'am'
-    if(hour === 0) hour = 12;
-    if(hour > 12) {
-        hour = hour - 12;
-        timeOfDay = 'pm'
-    }
-    if(minutes < 10) minutes = `0${minutes}`
-    
-    return `${hour}:${minutes} ${timeOfDay}`
+    return moment(isoDate).format('h:mm a')
 }
+
+export const formatCreatedAt = (isoDate) => {
+    return moment(isoDate).format('M/D/YYYY [at] h:mm a')
+}   
