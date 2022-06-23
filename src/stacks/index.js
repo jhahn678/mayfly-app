@@ -12,6 +12,7 @@ import CameraScreen from "../screens/CameraScreen";
 import PlaceScreen from "../screens/Places/PlaceScreen";
 import CatchScreen from "../screens/Catches/CatchesScreen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { StatusBar } from "expo-status-bar";
 
 
 
@@ -32,6 +33,7 @@ const RootStack = () => {
         <NavigationContainer>
             {/* { isSignedIn ?  */}
                 <ApolloProvider client={client}>
+                    <StatusBar style='auto'/>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                         <Stack.Screen name='MainTabs' component={AppTabs}/>
                         <Stack.Screen name='GroupScreen' component={GroupScreen}/>
@@ -42,7 +44,7 @@ const RootStack = () => {
                             <Stack.Screen name='Map' component={MapScreen}/>
                             <Stack.Screen name='Camera' component={CameraScreen}/>
                         </Stack.Group>
-                        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                        <Stack.Group screenOptions={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}>
                             <Stack.Screen name='Place' component={PlaceScreen}/>
                             <Stack.Screen name='Catch' component={CatchScreen}/>
                         </Stack.Group>
