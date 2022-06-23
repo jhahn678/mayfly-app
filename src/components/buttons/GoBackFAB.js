@@ -13,7 +13,7 @@ const GoBackFAB = ({ size='small', style, onPress }) => {
     }
 
     return (
-        <FAB icon={<Icon name='return-up-back' size={18} color='#rgb(120,120,120)'/>} 
+        <FAB icon={<Icon name='return-up-back' size={18} color='rgb(120,120,120)'/>} 
             onPress={handlePress} size={size} color='rgb(220,220,220)'
             style={{ ...styles.button, ...style}}
         />
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: .3,
         shadowRadius: 12,
-        shadowOffset: { height: 1 }
+        shadowOffset: { height: 1 },
     }
 })
