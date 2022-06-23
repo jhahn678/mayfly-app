@@ -1,83 +1,95 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import { useState, useEffect } from 'react'
-import { Chip } from '@rneui/themed'
+import { Chip, Icon } from '@rneui/themed'
 import AvatarChip from '../../components/chip/AvatarChip'
 import GoBackFAB from '../../components/buttons/GoBackFAB'
 import MapFAB from '../../components/buttons/MapFAB'
-import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 import { makeFakePlaces } from '../../../test-data/groups'
 import { formatCreatedAt } from '../../utils/format-dates'
+import CatchListItem from '../../components/places/CatchListItem'
+import { useAuthContext } from '../../store/context/auth'
+import { useNavigation, useRoute } from '@react-navigation/core'
 
 const PlaceScreen = () => {
 
+  const { user } = useAuthContext()
+  const navigation = useNavigation()
+  const route = useRoute()
   const [place] = useState(makeFakePlaces(1)[0])
-  
-  const navigateToMap = useNavigateToMap()
+
+  useEffect(() => {
+    if(route.params?.placeId){
+      //fetch place
+    }
+  },[route])
+
+  const handleEdit = () => {
+    navigation.navigate('NewPlace', { placeId: place._id })
+  }
   
 
   return (
-    <>
-    <GoBackFAB style={{ position: 'absolute', top: 48, left: 16, zIndex: 500}}/>
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Image source={{ uri: place.avatar.url }} style={styles.avatar}resizeMode='cover'/>
-        <MapFAB style={styles.mapButton} mapOptions={{ placeId: place._id}}/>
-      </View>
+    <View>
+      <GoBackFAB style={{ position: 'absolute', top: 48, left: 16, zIndex: 500}}/>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View style={styles.avatarContainer}>
+          <Image source={{ uri: place.avatar.url }} style={styles.avatar} resizeMode='cover'/>
+          <MapFAB style={styles.mapButton} mapOptions={{ placeId: place._id}}/>
+        </View>
 
-      <Text numberOfLines={1} style={styles.name}>{place.name}</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: 16 }}>
+          { user._id === place._id && <Icon type='ionicon' name='pencil' raised size={12} onPress={handleEdit}/> }
+          <Text numberOfLines={1} style={styles.name}>{place.name}</Text>
+        </View>
 
-      <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', marginTop: 4}}>
-        { place.publish_type === 'SHARED' ?
-          <AvatarChip avatarUri={place.group.avatar.url}/> :
-          <Chip title={place.publish_type} type='outline'  
-            icon={place.publish_type === 'PRIVATE' ? 
-                { name: 'shield', type: 'feather', size: 12 } : 
-                { name: 'globe', type: 'entypo', size: 12 }
-            } 
-            containerStyle={{ width: 80, marginTop: 6 }} size='sm' disabled
-            titleStyle={{ fontSize: 10 }} disabledTitleStyle={{ color: 'black'}}
-            disabledStyle={{ borderColor: 'black'}}
-          />
-        }
-        <Text style={styles.date}>{formatCreatedAt(place.createdAt)}</Text>
-      </View>
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', marginTop: 4}}>
+          { place.publish_type === 'SHARED' ?
+            <AvatarChip avatarUri={place.group.avatar.url}/> :
+            <Chip title={place.publish_type} type='outline'  
+              icon={place.publish_type === 'PRIVATE' ? 
+                  { name: 'shield', type: 'feather', size: 12 } : 
+                  { name: 'globe', type: 'entypo', size: 12 }
+              } 
+              containerStyle={{ width: 80, marginTop: 6, backgroundColor: '#EBF6F6' }} size='sm' disabled
+              titleStyle={{ fontSize: 10 }} disabledTitleStyle={{ color: 'black'}}
+              disabledStyle={{ borderColor: 'black'}}
+            />
+          }
+          <Text style={styles.date}>{formatCreatedAt(place.createdAt)}</Text>
+        </View>
 
-      <Text style={styles.description}>
-        <Text style={{ fontWeight: '300', fontStyle: 'italic'}}>Description: </Text>
-        {place.description}
-      </Text>
+        <Text style={styles.description}>
+          <Text style={{ fontWeight: '300', fontStyle: 'italic'}}>Description: </Text>
+          {place.description}
+        </Text>
 
-      <View style={styles.catches}>
-        { place.catches.length === 0 ?
-          <Text style={{ paddingVertical: 16, fontStyle: 'italic'}}>No catches logged here yet</Text> : 
-          <>
-            <Text style={{ paddingVertical: 8, fontStyle: 'italic'}}>{place.catches.length} catches logged</Text>
-            { place.catches.map(c => (
-              <View style={styles.catchListItem} key={c._id}>
+        <View style={styles.catches}>
+          { place.catches.length === 0 ?
+            <Text style={{ paddingVertical: 16, fontStyle: 'italic'}}>No catches logged here yet</Text> : 
+            <>
+              <Text style={{ paddingVertical: 12, fontStyle: 'italic'}}>{place.catches.length} catches logged</Text>
+              { place.catches.map(c => <CatchListItem key={c._id} data={c}/>)}
+            </>
+          }
+        </View>
 
-              </View>
-            ))}
-          </>
-        }
-      </View>
-
-    </ScrollView>
-    </>
+      </ScrollView>
+    </View>
   )
 }
 
 export default PlaceScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    height: '100%',
+  contentContainer: {
     width: '100%',
+    display: 'flex',
     alignItems: 'center',
     padding: 24,
-    paddingTop: 64,
+    paddingTop: 64
   },
   avatarContainer: {
-    height: '40%',
+    height: 350,
     width: '100%',
   },
   avatar: {
@@ -88,10 +100,14 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 28,
     fontWeight: '500',
-    paddingTop: 16,
     maxWidth: '100%',
-    paddingHorizontal: 12
+    paddingRight: 12,
   },
+  edit:{
+    padding: 4,
+    borderRadius: 16,
+    backgroundColor: 'rgb(220,220,220)'
+  },  
   date: { 
     paddingLeft: 16, 
     fontWeight: '300',
@@ -110,7 +126,7 @@ const styles = StyleSheet.create({
   catches: {
     borderTopColor: 'rgba(0,0,0,.2)',
     borderTopWidth: 1,
-    width: '100%'
+    width: '100%',
   },
   catchListItem: {
     height: 200

@@ -50,12 +50,12 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems, showPlace }) =>
                             /> :
                             <Chip title={item.publish_type} type='outline'  
                                 icon={item.publish_type === 'PRIVATE' ? 
-                                    { name: 'shield', type: 'feather', size: 12 } : 
-                                    { name: 'globe', type: 'entypo', size: 12 }
+                                    { name: 'shield', type: 'feather', size: 12, color: 'rgb(60,60,60)' } : 
+                                    { name: 'globe', type: 'entypo', size: 12, color: 'rgb(60,60,60)' }
                                 } 
-                                containerStyle={{ width: 80, marginTop: 6 }} size='sm' disabled
-                                titleStyle={{ fontSize: 10 }} disabledTitleStyle={{ color: 'black'}}
-                                disabledStyle={{ borderColor: 'black'}}
+                                containerStyle={{ width: 80, marginTop: 6, backgroundColor: '#EBF6F6' }} size='sm' disabled
+                                titleStyle={{ fontSize: 10 }} disabledTitleStyle={{ color: 'rgb(60,60,60)'}}
+                                disabledStyle={{ borderColor: 'rgb(120,120,120)'}}
                             />
                         }
                     </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         top: 8, 
         right: 8,
-        backgroundColor: 'rgb(220, 220, 220)',
+        backgroundColor: '#EBF6F6',
         padding: 6,
         borderRadius: 14,
         overflow: 'hidden',
