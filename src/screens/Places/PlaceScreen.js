@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import { useState, useEffect } from 'react'
-import { Chip, Icon } from '@rneui/themed'
+import { Chip, Icon, FAB } from '@rneui/themed'
+import { globalStyles } from '../../styles/globalStyles'
 import AvatarChip from '../../components/chip/AvatarChip'
 import GoBackFAB from '../../components/buttons/GoBackFAB'
 import MapFAB from '../../components/buttons/MapFAB'
@@ -9,6 +10,7 @@ import { formatCreatedAt } from '../../utils/format-dates'
 import CatchListItem from '../../components/places/CatchListItem'
 import { useAuthContext } from '../../store/context/auth'
 import { useNavigation, useRoute } from '@react-navigation/core'
+import FontelloIcon from '../../components/icons/Fontello'
 
 const PlaceScreen = () => {
 
@@ -35,6 +37,11 @@ const PlaceScreen = () => {
         <View style={styles.avatarContainer}>
           <Image source={{ uri: place.avatar.url }} style={styles.avatar} resizeMode='cover'/>
           <MapFAB style={styles.mapButton} mapOptions={{ placeId: place._id}}/>
+          <FAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
+            style={{ ...styles.newCatch, ...globalStyles.FABshadow }}
+            onPress={() => navigation.navigate('NewCatch')}
+            buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
+          />
         </View>
 
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: 16 }}>
@@ -103,10 +110,15 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
     paddingRight: 12,
   },
-  edit:{
+  edit: {
     padding: 4,
     borderRadius: 16,
     backgroundColor: 'rgb(220,220,220)'
+  },  
+  newCatch: { 
+    position: 'absolute', 
+    right: -5, 
+    bottom: 64 
   },  
   date: { 
     paddingLeft: 16, 
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
   catches: {
     borderTopColor: 'rgba(0,0,0,.2)',
     borderTopWidth: 1,
-    width: '100%',
+    width: '100%'
   },
   catchListItem: {
     height: 200
