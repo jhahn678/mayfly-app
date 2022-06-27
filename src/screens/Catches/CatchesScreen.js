@@ -1,29 +1,85 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
+import { useState, useRef } from 'react'
 import { FAB } from '@rneui/themed'
+import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
+import CatchesListItem from '../../components/catches/CatchesListItem'
 import { globalStyles } from '../../styles/globalStyles'
 import FontelloIcon from '../../components/icons/Fontello'
 import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import CatchesTabHeader from '../../components/headers/CatchesTabHeader'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation, useRoute } from '@react-navigation/core'
+import { makeFakeCatches } from '../../../test-data/groups'
 
 const CatchesScreen = () => {
 
+  const [catches] = useState(makeFakeCatches(10))
+
+  const flatListRef = useRef()
+  const route = useRoute()
   const navigation = useNavigation()
 
+  const [showScrollToTop, setShowScrollToTop] = useState(false) 
+  const [selectedItems, setSelectedItems] = useState([])
+  
+  const handleScrollToTop = () => {
+    flatListRef.current.scrollToOffset({ offset: 0 })
+  }
+
+  const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
+    if(y > 600) return setShowScrollToTop(true)
+    if(y <= 600) return setShowScrollToTop(false)
+  }
+
   return (
-    <PrimaryBackground>
-      <CatchesTabHeader/>
-      <Text>Catches screen</Text>
-      <FAB icon={<FontelloIcon name='fish' size={36}/>} 
-        style={{ ...globalStyles.FAB, ...globalStyles.FABshadow }}
-        onPress={() => navigation.navigate('NewCatch')}
-        buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
-      />
+    <PrimaryBackground style={{ display: 'flex', justifyContent: 'space-between'}}>
+
+        <CatchesTabHeader selectedItems={selectedItems}/>
+        
+        <View style={styles.main}>
+          <FlatList data={catches} ref={flatListRef}
+            onScroll={e => onScroll(e)}
+            renderItem={({ item }) => (
+              <CatchesListItem item={item} 
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
+                showCatch={() => navigation.navigate('Catch', { catchId: item._id })}
+              />
+            )}
+            keyExtractor={item => item._id}
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+
+        <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
+
+        <FAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
+          style={{ ...globalStyles.FAB, ...globalStyles.FABshadow, bottom: 112 }}
+          onPress={() => navigation.navigate('NewCatch')}
+          buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
+        />
+
     </PrimaryBackground>
   )
 }
 
 export default CatchesScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  list: {
+    width: '100%',
+    paddingBottom: 100,
+    paddingTop: 16,
+    backgroundColor: '#fefefe'
+  },
+  main: {
+    width: '100%',
+    height: '80%',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    overflow: 'hidden',
+    backgroundColor: '#fefefe',
+    elevation: 20
+  }
+})
