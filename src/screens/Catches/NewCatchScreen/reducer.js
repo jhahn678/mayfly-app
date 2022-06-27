@@ -101,5 +101,23 @@ export const reducer = (state, action) => {
             return { ...state, form }
         }
     }
+    if(action.type === 'EDIT_CATCH'){
+        const { title, length, weight, rig, species, images, place, publishType } = state;
+        if(action.value?.title) title.value = action.value.title;
+        if(action.value?.length) {
+            length.value = action.value.length.value;
+            length.unit = action.value.length.unit;
+        }
+        if(action.value?.weight){
+            weight.value = action.value.weight.value;
+            weight.unit = action.value.weight.unit;
+        }
+        if(action.value?.rig) rig.value = action.value.rig;
+        if(action.value?.species) species.value = action.value.species;
+        if(action.value?.place) place.value = action.value.place;
+        if(action.value?.images) images = action.value.images;
+        if(action.value?.publish_type) publishType.value = action.value.publish_type;
+        return { ...state, title, length, weight, rig, species, images, place, publishType }
+    }
     return { ...state }
 }

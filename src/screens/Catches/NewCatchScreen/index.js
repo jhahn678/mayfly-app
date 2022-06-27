@@ -14,7 +14,7 @@ import { weightEnum, lengthEnum } from '../../../utils/select-enums'
 import { reducer, initialState } from './reducer'
 import FontelloIcon from '../../../components/icons/Fontello'
 import { useNavigation, useRoute } from '@react-navigation/core'
-import { makeFakeGroupWithPlaces } from '../../../../test-data/groups'
+import { makeFakeGroupWithPlaces, makeFakeCatches } from '../../../../test-data/groups'
 import { uploadImageToCloudinary } from '../../../utils/cloudinary'
 import FlatListImage from '../../../components/image/FlatListImage'
 import { CheckBox } from "@rneui/themed";
@@ -38,6 +38,12 @@ const NewCatchScreen = () => {
   const route = useRoute()
 
   useEffect(() => {
+    if(route.params?.catchId){
+      (async () => {
+        makeFakeCatches(1)[0]
+      })()
+      return;
+    }
     if(route.params?.placeId){
       dispatch({ type: 'PLACE_ID', value: route.params.placeId })
     }
