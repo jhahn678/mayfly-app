@@ -3,37 +3,37 @@ import { useState, useEffect } from 'react'
 import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 
-const ContactListItem = ({ item, setSelectedContacts }) => {
+const NewContactListItem = ({ item }) => {
 
-    const [isSelected, setIsSelected] = useState(false)
+    //Show icon for send request
+    //Sent + checkmark after sending
+    //bordder change after send
 
-    useEffect(() => {
-        if(isSelected){
-            setSelectedContacts && setSelectedContacts(c => [...c, item._id])
-            
-        }
-        if(!isSelected) {
-            setSelectedContacts && setSelectedContacts(c => c.filter(i => i !== item._id))
-        }
-    },[isSelected])
+    const [requestSent, setRequestSent] = useState(false)
+
+    const handleSendRequest = async () => {
+
+    }
 
     return (
-        <TouchableOpacity style={isSelected ? {...styles.container, borderColor: '#0eaaa7', borderWidth: 1.5 } : styles.container}
-            onPress={() => setIsSelected(s => !s)}
-        >
+        <View style={styles.container}>
             <Avatar source={{ uri: item.details.avatar.url }} size={52} rounded containerStyle={{ marginLeft: 10 }}/>
             <View style={{ display: 'flex', paddingLeft: 8}}>
                 <Text>{item.details.fullName}</Text>
                 <Text style={styles.username}>@{item.details.username}</Text>
             </View>
-            <View style={isSelected ? {...styles.select, ...styles.selected} : styles.select}>
-                { <IonIcon name='md-checkmark' size={24} style={styles.selectedIcon} />}
+            <View style={styles.select}>
+                { !requestSent ?
+                    <IonIcon name='person-add-outline' size={28} onPress={() => setRequestSent(true)}/> :
+                    <IonIcon name='checkmark-circle-outline' size={28} 
+                        onPress={() => setRequestSent(false)} color='green'/>
+                }
             </View>
-        </TouchableOpacity>
+        </View>
     )
 }
 
-export default ContactListItem
+export default NewContactListItem
 
 const styles = StyleSheet.create({ 
     container: {
@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'rgba(53, 52, 64, .3)',
-        borderRadius: 12
+        borderRadius: 12,
+        marginBottom: 6
     },
     username: {
         fontSize: 12,
@@ -52,13 +53,8 @@ const styles = StyleSheet.create({
         color: 'rgba(53, 52, 64, .6)'
     },
     select: {
-        height: 36, 
-        width: 36,
-        borderColor: 'rgba(53, 52, 64, .3)',
-        borderWidth: 1,
         position: 'absolute',
-        right: 12,
-        borderRadius: 50,
+        right: 24,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

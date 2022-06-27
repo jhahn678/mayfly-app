@@ -2,38 +2,49 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/core'
 
-const ContactListItem = ({ item, setSelectedContacts }) => {
-
+const ViewableContact = ({ item, selectedContacts, setSelectedContacts }) => {
+    
+    const navigation = useNavigation()
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        if(isSelected){
-            setSelectedContacts && setSelectedContacts(c => [...c, item._id])
-            
-        }
-        if(!isSelected) {
-            setSelectedContacts && setSelectedContacts(c => c.filter(i => i !== item._id))
-        }
-    },[isSelected])
+        selectedContacts.includes(item._id) ?
+        setIsSelected(true) : setIsSelected(false)
+    },[selectedContacts])
+
+    const onPress = () => {
+        // navigation.navigate('User')
+    }
+
+    const onSelect = () => {
+        setSelectedContacts(contacts => (
+            contacts.includes(item._id) ?
+            contacts.filter(c => c !== item._id) : 
+            [...contacts, item._id]
+        ))
+    }
 
     return (
         <TouchableOpacity style={isSelected ? {...styles.container, borderColor: '#0eaaa7', borderWidth: 1.5 } : styles.container}
-            onPress={() => setIsSelected(s => !s)}
+            onPress={selectedContacts.length > 0 ? onSelect : onPress} onLongPress={onSelect}
         >
             <Avatar source={{ uri: item.details.avatar.url }} size={52} rounded containerStyle={{ marginLeft: 10 }}/>
             <View style={{ display: 'flex', paddingLeft: 8}}>
                 <Text>{item.details.fullName}</Text>
                 <Text style={styles.username}>@{item.details.username}</Text>
             </View>
-            <View style={isSelected ? {...styles.select, ...styles.selected} : styles.select}>
-                { <IonIcon name='md-checkmark' size={24} style={styles.selectedIcon} />}
-            </View>
+            { selectedContacts.length > 0 && 
+                <View style={isSelected ? {...styles.select, ...styles.selected} : styles.select}>
+                    {isSelected && <IonIcon name='md-checkmark' size={24} style={styles.selectedIcon} />}
+                </View>
+            }
         </TouchableOpacity>
     )
 }
 
-export default ContactListItem
+export default ViewableContact;
 
 const styles = StyleSheet.create({ 
     container: {
