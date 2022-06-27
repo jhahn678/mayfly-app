@@ -17,7 +17,7 @@ const ShareImageButton = () => {
 
     return (
         <FAB size='small' buttonStyle={styles.button}
-            icon={<Icon name='images-outline' size={18}/>}
+            icon={<Icon name='images-outline' size={18} color='#fefefe'/>}
             style={{...styles.FAB, ...globalStyles.FABshadow}}
             onPress={handleOnPress}
         />
