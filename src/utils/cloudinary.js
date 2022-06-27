@@ -16,3 +16,7 @@ export const uploadImageToCloudinary = async ({ base64 }) => {
     })
     return res
 }
+
+export const removeImageFromCloudinary = async (id) => {
+    const res = axios
+}
