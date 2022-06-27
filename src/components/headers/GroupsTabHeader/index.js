@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { FAB } from '@rneui/themed'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const GroupsTabHeader = ({ selectedItems }) => {
 
@@ -31,10 +32,16 @@ const GroupsTabHeader = ({ selectedItems }) => {
                             style={{...styles.FAB, ...globalStyles.FABshadow}}
                         />
                     </View> : 
-                    <FAB onPress={() => navigation.navigate('NewGroup')} 
-                        icon={<FontelloIcon size={24} name='new-chat' color='#fefefe'/>} 
-                        style={{...styles.headerButton, ...globalStyles.FABshadow}}
-                    />
+                    <View style={{ flexDirection: 'row'}}>
+                        <FAB onPress={() => navigation.navigate('Contacts')} 
+                            icon={<MCIcon name='account-group-outline' size={24} color='#fefefe'/>}
+                            style={{...styles.headerButton, ...globalStyles.FABshadow, marginRight: 12 }}
+                        />
+                        <FAB onPress={() => navigation.navigate('NewGroup')} 
+                            icon={<FontelloIcon size={24} name='new-chat' color='#fefefe'/>} 
+                            style={{...styles.headerButton, ...globalStyles.FABshadow}}
+                        />
+                    </View>
                 }
             </View>
         </View>

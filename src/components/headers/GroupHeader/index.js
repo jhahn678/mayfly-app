@@ -10,6 +10,10 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
     const navigateToMap = useNavigateToMap()
     const navigation = useNavigation()
 
+    const handleGroupSettings = () => {
+        
+    }
+
     const handleGoBack = () => {
         onGoBack && onGoBack()
         navigation.goBack()
@@ -26,8 +30,11 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
                 /> 
                 <Avatar source={{ uri: avatar }} size={52} rounded containerStyle={styles.avatar}/>
                 <View style={styles.group}>
-                    <Text style={{...globalStyles.fontShadow, ...styles.title}}>{name}</Text>
-                    <Text style={{...globalStyles.fontShadow, ...styles.members}}>{numberOfUsers} members</Text> 
+                    <Text style={styles.title}>{name}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={styles.members}>{numberOfUsers} members</Text>
+                        <IonIcon name='settings-outline' size={16} style={{ marginLeft: 4}} onPress={handleGroupSettings}/>
+                    </View>
                 </View>
                 <IonIcon 
                     name='map-outline' 
@@ -73,7 +80,10 @@ const styles = StyleSheet.create({
         color: '#353440'
     },
     members: {
-        fontWeight: '300'
+        fontWeight: '300',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     back: {
         color: '#353440',
