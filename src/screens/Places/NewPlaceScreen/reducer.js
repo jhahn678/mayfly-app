@@ -2,7 +2,7 @@ export const initialState = {
     name: { value: '' },
     description: { value: '' },
     location: { coordinates: { latitude: null, longitude: null } },
-    avatar: { snapshot: null },
+    avatar: { unsaved: null, saved: null },
     images: [],
     publishType: { value: 'PUBLIC' },
     group: { _id: null },
@@ -27,10 +27,10 @@ export const reducer = (state, action) => {
     }
     if(action.type === 'SNAPSHOT'){
         const { avatar } = state;
-        avatar.snapshot = action.value;
+        avatar.unsaved = { base64: action.value }
         return { ...state, avatar }
     }
-    if(action.type === 'IMAGE'){
+    if(action.type === 'IMAGES'){
         return { ...state, images: action.value }
     }
     if(action.type === 'REMOVE_IMAGE'){
@@ -54,7 +54,7 @@ export const reducer = (state, action) => {
     if(action.type === 'FORM'){
         const { form, coordinates, avatar, name } = state;
         if(publishType.value === 'PUBLIC' && coordinates.longitude 
-            && coordinates.latitude && avatar.base64 && name.value.length > 0
+            && coordinates.latitude && name.value.length > 0 && (avatar.unsaved || avatar.saved)
         ){
             form.isValid = true;
         }
@@ -66,14 +66,17 @@ export const reducer = (state, action) => {
         return { ...state, form }
     }
     if(action.type === 'EDIT'){
-        const { name, description, location, avatar, images, publishType } = state;
+        const { name, description, location, avatar, group, publishType } = state;
         if(action.value?.name) name.value = action.value.name;
         if(action.value?.description) description.value = action.value.description;
         if(action.value?.location) location.coordinates = action.value.location.coordinates;
-        if(action.value?.avatar) avatar = {...action.value.avatar};
-        if(action.value?.media) images = [...action.value.media];
-        if(action.value?.publishType !== 'SHARED') publishType.value = action.value.publishType;
-        return { ...state, name, description, location, avatar, images, publishType }; 
+        if(action.value?.avatar) avatar.saved = action.value.avatar;
+        if(action.value?.publishType !== 'SHARED') publishType.value = action.value.publish_type;
+        if(action.value?.group) group._id = action.value.group;
+        return { ...state, name, description, location, group, avatar, publishType }; 
+    }
+    if(action.type === 'RESET'){
+        return {...initialState};
     }
     return {...state};
 }

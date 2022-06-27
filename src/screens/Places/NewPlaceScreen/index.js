@@ -13,22 +13,40 @@ import CameraFAB from '../../../components/buttons/CameraFAB'
 import GalleryFAB from '../../../components/buttons/GalleryFAB'
 import FlatListImage from '../../../components/image/FlatListImage'
 import AvatarChip from '../../../components/chip/AvatarChip'
-import { makeFakeGroup } from '../../../../test-data/groups'
+import { uploadImageToCloudinary } from '../../../utils/cloudinary'
+import { makeFakeGroup, makeFakePlaces } from '../../../../test-data/groups'
 import AutoSizeInput from '../../../components/inputs/AutoSizeInput'
+import uuid from 'react-native-uuid';
 
 
 const NewPlaceScreen = () => {
 
+
   //Replace with group query
   const [group] = useState(makeFakeGroup())
-
-  const { width: screenWidth } = Dimensions.get('screen')
-  const [formState, dispatch] = useReducer(reducer, initialState)
 
   const route = useRoute()
   const navigation = useNavigation()
 
+  const { width: screenWidth } = Dimensions.get('screen')
+  const [formState, dispatch] = useReducer(reducer, initialState)
+
+  const openImagePicker = useImagePicker()
+  const { placeImages: imagesFromCamera, setPlaceImages } = useImageContext()
+  const [imagesFromGallery, setImagesFromGallery] = useState([])
+  const [savedImages, setSavedImages] = useState([])
+
+  
   useEffect(() => {
+    if(route.params?.placeId){
+      // return (async () => {
+      //   //fetch place
+      // })()
+      const place = makeFakePlaces(1)[0]
+      dispatch({ type: 'EDIT', value: place })
+      const savedImages = place.media.map(m => ({ ...m, uri: m.url, origin: 'SAVED' }))
+      setSavedImages(savedImages)
+    }
     if(route.params?.coordinates){
       dispatch({ type: 'COORDINATES', value: route.params.coordinates })
     }
@@ -40,10 +58,8 @@ const NewPlaceScreen = () => {
     }
   },[])
 
-  const openImagePicker = useImagePicker()
-  const { placeImages: imagesFromCamera, setPlaceImages } = useImageContext()
-  const [imagesFromGallery, setImagesFromGallery] = useState([])
-
+  
+  
   const handleAddImageFromGallery = async () => {
     const { cancelled, ...image } = await openImagePicker()
     if(!cancelled) setImagesFromGallery(i => [
@@ -52,39 +68,61 @@ const NewPlaceScreen = () => {
     ])
   }
 
+  
   useEffect(() => {
-    const images = [...imagesFromGallery, ...imagesFromCamera]
+    const images = [...imagesFromGallery, ...imagesFromCamera, ...savedImages]
     dispatch({ type: 'IMAGES', value: images })
-  },[imagesFromCamera, imagesFromGallery])
+  },[imagesFromCamera, imagesFromGallery, savedImages])
 
+  
+  const removeImage = async (index) => {
+    if(formState.images[index].origin === 'CAMERA'){
+      setPlacesImages(images => images.filter(i => i.id !== formState.images[index].id ))
+    }
+    if(formState.images[index].origin === 'GALLERY'){
+      setImagesFromGallery(images => images.filter(i => i.id !== formState.images[index].id ))
+    }
+    if(formState.images[index].origin === 'SAVED'){
+      //REMOVE IMAGE FROM CLOUDINARY
+      setSavedImages(images => images.filter(i => i.id !== formState.images[index].id ))
+    }
+  }
 
-  const removeImage = (imageIndex) => {
-    if(formState.images[imageIndex].origin === 'CAMERA'){
-      setPlacesImages(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
-    }
-    if(formState.images[imageIndex].origin === 'GALLERY'){
-      setImagesFromGallery(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
-    }
+  const onGoBack = () => {
+    setPlaceImages([])
+    dispatch({ type: 'RESET' })
   }
 
   const handleComplete = async () => {
     try{
       //Upload snapshot?
-      const { images } = formState;
-      const uploadedImages = images.map(async (image) => {
-        const { data } = await uploadImageToCloudinary(image)
-        return { id: data.public_id, url: data.secure_url }
+      const { images, avatar } = formState;
+      let savedAvatar;
+      if(avatar.unsaved){
+        const { data: uploadedAvatar } = await uploadImageToCloudinary(avatar.unsaved)
+        savedAvatar = { id: uploadedAvatar.public_id, url: uploadedAvatar.secure_url }
+      }
+      const media = images.map(async (image) => {
+        if(image.origin !== 'SAVED'){
+          const { data } = await uploadImageToCloudinary(image)
+          return { id: data.public_id, url: data.secure_url }
+        }else{
+          return { id: image.id, url: image.url }
+        }
       })
-      // { id: data.public_id, url: data.secure_url }
-      // create new place
+      //savedAvatar, media
+      //create new place
+      const groupId = formState.group._id
       setPlaceImages([])
+      dispatch({ type: 'RESET' })
       const history = navigation.getState().routes
       const navigatedFrom = history[history.length - 2].name
       navigation.navigate(navigatedFrom, { 
         placeId: 'NEW PLACE ID HERE', 
-        groupId: formState.group._id
+        groupId: (groupId || null)
       })
     }catch(err){
+      console.log(err)
       alert('Something went wrong!')
     }
   }
@@ -92,7 +130,7 @@ const NewPlaceScreen = () => {
   return (
     <PrimaryBackground style={{ ...styles.container, ...globalStyles.boxShadowTop }}>
         <CreateHeader title='New Location' 
-          onGoBack={() => setPlaceImages([])} rightNode={(
+          onGoBack={onGoBack} rightNode={(
           <FAB disabled={formState?.form.isValid}
             icon={<IonIcon name='return-down-forward' size={24} color='#fefefe'/>} 
             style={{ ...styles.doneIcon }} 
@@ -110,8 +148,8 @@ const NewPlaceScreen = () => {
 
           { formState?.images.length === 0 ?
             <View style={styles.iconContainer}>
-              <Image source={{ uri: formState?.avatar.snapshot }} resizeMode='cover' 
-                style={{ height: '100%', width: '100%', borderRadius: 30 }} 
+              <Image source={{ uri: formState?.avatar.saved?.url || `data:image/jpg;base64,${formState?.avatar.unsaved?.base64}`}} 
+                resizeMode='cover' style={{ height: '100%', width: '100%', borderRadius: 30 }} 
               />
             </View> :
             <FlatList horizontal={true} data={formState.images} style={styles.imageFlatList}
@@ -131,7 +169,7 @@ const NewPlaceScreen = () => {
 
           <View style={styles.checkboxContainer}>
             <Text style={styles.subtitle}>Publish</Text>
-            { formState?.group._id ?
+            { formState.group._id  ?
               <AvatarChip avatarUri={group.avatar.url} style={{ marginLeft: 16 }} title={group.name}/> : <>
               <CheckBox title="Public" checkedColor='#0eaaa7'
                 checkedIcon="dot-circle-o" uncheckedIcon="circle-o"

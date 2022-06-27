@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { Icon } from '@rneui/themed'
 import GoBackFAB from '../../components/buttons/GoBackFAB'
 import MapFAB from '../../components/buttons/MapFAB'
+import EditFAB from '../../components/buttons/EditFAB'
 import { formatCreatedAt } from '../../utils/format-dates'
 import { useAuthContext } from '../../store/context/auth'
 import { useNavigation, useRoute } from '@react-navigation/core'
@@ -30,6 +31,9 @@ const CatchScreen = () => {
   return (
     <View>
       <GoBackFAB style={{ position: 'absolute', top: 48, left: 16, zIndex: 500}}/>
+      { user._id !== data.user._id &&
+        <EditFAB style={{ position: 'absolute', top: 48, right: 16, zIndex: 500}} onPress={handleEdit}/> 
+      }
       <ScrollView contentContainerStyle={styles.contentContainer}>
 
         <View style={styles.avatarContainer}>

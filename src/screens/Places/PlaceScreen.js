@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions, FlatList } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Chip, Icon, FAB } from '@rneui/themed'
 import { globalStyles } from '../../styles/globalStyles'
 import AvatarChip from '../../components/chip/AvatarChip'
 import GoBackFAB from '../../components/buttons/GoBackFAB'
 import MapFAB from '../../components/buttons/MapFAB'
+import EditFAB from '../../components/buttons/EditFAB'
 import { makeFakePlaces } from '../../../test-data/groups'
 import { formatCreatedAt } from '../../utils/format-dates'
 import CatchListItem from '../../components/places/CatchListItem'
@@ -18,6 +19,7 @@ const PlaceScreen = () => {
   const navigation = useNavigation()
   const route = useRoute()
   const [place] = useState(makeFakePlaces(1)[0])
+  const { width: screenWidth } = Dimensions.get('window')
 
   useEffect(() => {
     if(route.params?.placeId){
@@ -33,9 +35,21 @@ const PlaceScreen = () => {
   return (
     <View>
       <GoBackFAB style={{ position: 'absolute', top: 48, left: 16, zIndex: 500}}/>
+      { user._id === place.user._id &&
+        <EditFAB style={{ position: 'absolute', top: 48, right: 16, zIndex: 500}} onPress={handleEdit}/> 
+      }
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.avatarContainer}>
-          <Image source={{ uri: place.avatar.url }} style={styles.avatar} resizeMode='cover'/>
+        <View style={styles.imageContainer}>
+          { place.media.length === 0 ?
+            <Image source={{ uri: place.avatar.url }} style={styles.image} resizeMode='cover'/> :
+            <FlatList horizontal={true} data={place.media} style={styles.imageContainer}
+              renderItem={({ item }) => (
+                <Image source={{ uri: item.url }} style={{ ...styles.image, width: (screenWidth - 48)}}/>
+              )}
+              pagingEnabled={true}
+              keyExtractor={item => item.url}
+            />
+          }
           <MapFAB style={styles.mapButton} mapOptions={{ placeId: place._id}}/>
           <FAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
             style={{ ...styles.newCatch, ...globalStyles.FABshadow }}
@@ -95,14 +109,14 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 64
   },
-  avatarContainer: {
+  imageContainer: {
     height: 350,
     width: '100%',
+    borderRadius: 30,
   },
-  avatar: {
+  image: {
     height: '100%',
     width: '100%',
-    borderRadius: 30,
   },
   name: {
     fontSize: 28,

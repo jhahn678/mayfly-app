@@ -102,10 +102,10 @@ const MapScreen = () => {
             params.groupId = route.params.groupId
         }
         if(route.params?.selectPlace === true){
-            params.placeId
+            params.placeId = selectedPlaceId;
         }
         if(route.params?.snapshot === true){
-            const options = { format: 'jpg' }
+            const options = { format: 'jpg', width: 300, height: 300, quality: .5, result: 'base64' }
             const res = await mapRef.current.takeSnapshot(options)
             params.image = res;
         }

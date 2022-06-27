@@ -40,7 +40,9 @@ const NewCatchScreen = () => {
   useEffect(() => {
     if(route.params?.catchId){
       (async () => {
-        makeFakeCatches(1)[0]
+        const data = makeFakeCatches(1)[0]
+        dispatch({ type: 'EDIT', value: data })
+        setSavedImages(data.media.map(m => ({ ...m, uri: m.url, origin: 'SAVED' })))
       })()
       return;
     }
@@ -61,11 +63,12 @@ const NewCatchScreen = () => {
   const openImagePicker = useImagePicker()
   const { catchImages: imagesFromCamera, setCatchImages } = useImageContext()
   const [imagesFromGallery, setImagesFromGallery] = useState([])
+  const [savedImages, setSavedImages] = useState([])
 
   useEffect(() => {
-    const images = [...imagesFromGallery, ...imagesFromCamera]
+    const images = [...imagesFromGallery, ...imagesFromCamera, ...savedImages]
     dispatch({ type: 'IMAGES', value: images })
-  },[imagesFromCamera, imagesFromGallery])
+  },[imagesFromCamera, imagesFromGallery, savedImages])
 
   const handleAddImages = async () => {
     const { cancelled, ...image } = await openImagePicker()
@@ -75,15 +78,24 @@ const NewCatchScreen = () => {
     ])
   }
 
-  const removeImage = (imageIndex) => {
-    if(formState.images[imageIndex].origin === 'CAMERA'){
-      setCatchImages(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
+  const removeImage = (index) => {
+    if(formState.images[index].origin === 'CAMERA'){
+      setCatchImages(images => images.filter(i => i.id !== formState.images[index].id ))
     }
-    if(formState.images[imageIndex].origin === 'GALLERY'){
-      setImagesFromGallery(images => images.filter(i => i.id !== formState.images[imageIndex].id ))
+    if(formState.images[index].origin === 'GALLERY'){
+      setImagesFromGallery(images => images.filter(i => i.id !== formState.images[index].id ))
+    }
+    if(formState.images[index].origin === 'SAVED'){
+      //remove from cloudinary
+      setSavedImages(images => images.filter(i => i.id !== formState.images[index].id ))
     }
   }
   
+  const onGoBack = () => {
+    setCatchImages([])
+    dispatch({ type: 'RESET' })
+  }
+
   const handleComplete = async () => {
       try{
         const { images } = formState;
@@ -103,7 +115,7 @@ const NewCatchScreen = () => {
     <PrimaryBackground style={styles.container}>
 
       <CreateHeader title='New Catch' 
-        onGoBack={() => setCatchImages([])} rightNode={(
+        onGoBack={onGoBack} rightNode={(
         <FAB disabled={!formState?.form.isValid}
           icon={<IonIcon name='return-down-forward' size={24} color='#fefefe'/>} 
           style={{ ...styles.doneIcon }} 

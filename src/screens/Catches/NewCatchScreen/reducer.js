@@ -101,8 +101,8 @@ export const reducer = (state, action) => {
             return { ...state, form }
         }
     }
-    if(action.type === 'EDIT_CATCH'){
-        const { title, length, weight, rig, species, images, place, publishType } = state;
+    if(action.type === 'EDIT'){
+        const { title, length, weight, rig, species, place, publishType } = state;
         if(action.value?.title) title.value = action.value.title;
         if(action.value?.length) {
             length.value = action.value.length.value;
@@ -114,10 +114,18 @@ export const reducer = (state, action) => {
         }
         if(action.value?.rig) rig.value = action.value.rig;
         if(action.value?.species) species.value = action.value.species;
-        if(action.value?.place) place.value = action.value.place;
-        if(action.value?.images) images = action.value.images;
+        if(action.value?.place) place._id = action.value.place._id;
+        if(action.value?.location) {
+            place.coordinates = { 
+                longitude: action.value.location.coordinates[0], 
+                latitude: action.value.location.coordinates[1]
+            }
+        }
         if(action.value?.publish_type) publishType.value = action.value.publish_type;
-        return { ...state, title, length, weight, rig, species, images, place, publishType }
+        return { ...state, title, length, weight, rig, species, place, publishType }
+    }
+    if(action.type === 'RESET'){
+        return initialState;
     }
     return { ...state }
 }
