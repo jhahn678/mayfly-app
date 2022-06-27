@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   },  
   newCatch: { 
     position: 'absolute', 
-    right: -5, 
-    bottom: 64 
+    right: -8, 
+    bottom: 58 
   },  
   date: { 
     paddingLeft: 16, 
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
   },
   mapButton: {
     position: 'absolute',
-    right: -6,
-    bottom: -6
+    right: -8,
+    bottom: -8
   },
   catches: {
     borderTopColor: 'rgba(0,0,0,.2)',
