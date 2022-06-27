@@ -10,7 +10,7 @@ import NewPlaceScreen from "../screens/Places/NewPlaceScreen";
 import NewCatchScreen from '../screens/Catches/NewCatchScreen'
 import CameraScreen from "../screens/CameraScreen";
 import PlaceScreen from "../screens/Places/PlaceScreen";
-import CatchScreen from "../screens/Catches/CatchesScreen";
+import CatchScreen from "../screens/Catches/CatchScreen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { StatusBar } from "expo-status-bar";
 
