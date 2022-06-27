@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { makeFakePlaces } from '../../../test-data/groups'
 
-const LocationPreview = ({ placeId, coordinates, snapshot, style, onRemove }) => {
+const LocationPreview = ({ placeId, coordinates, snapshot, style, onRemove, isRemovable=true }) => {
 
-    const [place] = useState({ name: 'The first place' })
+    const [place] = useState(makeFakePlaces(1)[0])
     const [group] = useState({ name: 'Fishing amigos' })
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const LocationPreview = ({ placeId, coordinates, snapshot, style, onRemove }) =>
                 /> ):(
                 <Image source={{ uri: place?.avatar.url }} 
                     resizeMode='cover' 
-                    style={styles.avatar}
+                    style={styles.snapshot}
                 />
             )}
             { placeId ? 
@@ -37,8 +38,8 @@ const LocationPreview = ({ placeId, coordinates, snapshot, style, onRemove }) =>
                         </View>
                     </View>
                     <View>
-                        <Text>Latitude: {coordinates.latitude}</Text>
-                        <Text>Longitude: {coordinates.longitude}</Text>
+                        <Text>Latitude: {place.location.coordinates[1]}</Text>
+                        <Text>Longitude: {place.location.coordinates[0]}</Text>
                     </View>
                 </View> :
                 <View style={styles.details}>
@@ -49,7 +50,7 @@ const LocationPreview = ({ placeId, coordinates, snapshot, style, onRemove }) =>
                     </View>
                 </View>
             }
-            <Icon name='close' size={24} style={styles.remove} onPress={() => onRemove()}/>
+            { isRemovable && <Icon name='close' size={24} style={styles.remove} onPress={() => onRemove()}/> }
         </View>
     )
 }

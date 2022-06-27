@@ -2,16 +2,17 @@ import { StyleSheet, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const FlatListImage = ({ image, style, clearImage }) => {
-  return (
-    <View style={{...styles.container, ...style}}>
-        <Image source={{ uri: image.uri }} resizeMode='cover' 
-           style={styles.image}
-        />
-        { clearImage &&
-            <Icon name='remove-circle' size={28} style={styles.remove} onPress={clearImage}/>
-        }
-    </View>
-  )
+    console.log(image)
+    return (
+        <View style={{...styles.container, ...style}}>
+            <Image source={{ uri: image.uri }} resizeMode='cover' 
+            style={styles.image}
+            />
+            { clearImage &&
+                <Icon name='remove-circle' size={28} style={styles.remove} onPress={clearImage}/>
+            }
+        </View>
+    )
 }
 
 export default FlatListImage
