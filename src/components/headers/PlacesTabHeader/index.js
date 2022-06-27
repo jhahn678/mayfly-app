@@ -20,27 +20,27 @@ const PlacesTabHeader = ({ selectedItems }) => {
     return (
         <View style={{ ...styles.header }}>
             <View style={styles.headerContent}>
-            <Text style={{...styles.title }}>
-                {selectedItems.length > 0 ? `${selectedItems.length} selected` : 'My Locations'}
-            </Text>
-            { selectedItems.length > 0 ?
-                <View style={styles.buttonContainer}>
-                    <FAB onPress={handleDeletePlace}
-                        icon={<EntypoIcon name='trash' size={20} color='white'/>} 
+                <Text style={{...styles.title }}>
+                    {selectedItems.length > 0 ? `${selectedItems.length} selected` : 'My Locations'}
+                </Text>
+                { selectedItems.length > 0 ?
+                    <View style={styles.buttonContainer}>
+                        <FAB onPress={handleDeletePlace}
+                            icon={<EntypoIcon name='trash' size={20} color='white'/>} 
+                            style={globalStyles.FABshadow}
+                        />
+                        { selectedItems.length === 1 &&
+                            <FAB onPress={handleEditPlace}
+                                icon={<IonIcon name='pencil' size={20} color='white'/>} 
+                                style={{ ...globalStyles.FABshadow, marginLeft: 12 }}
+                            />
+                        }
+                    </View> : 
+                    <FAB onPress={() => navigateToMap({})} 
+                        icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>} 
                         style={globalStyles.FABshadow}
                     />
-                    { selectedItems.length === 1 &&
-                        <FAB onPress={handleEditPlace}
-                            icon={<IonIcon name='pencil' size={20} color='white'/>} 
-                            style={{ ...globalStyles.FABshadow, marginLeft: 12 }}
-                        />
-                    }
-                </View> : 
-                <FAB onPress={() => navigateToMap({})} 
-                    icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>} 
-                    style={{...styles.headerButton, ...globalStyles.FABshadow}}
-                />
-            }
+                }
             </View>
         </View>
     )
