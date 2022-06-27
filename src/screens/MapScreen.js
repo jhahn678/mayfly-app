@@ -177,7 +177,7 @@ const MapScreen = () => {
                 <FeatherIcon name='zoom-out' size={24} onPress={handleZoomOut}/>
             </View>
             { viewInstructionBubble && 
-                <FadeAnimation style={styles.bottom} fadeOut delay={5000}>
+                <FadeAnimation style={styles.bottom} fadeOut delay={8000}>
                     <Text style={styles.bubble}>Press and hold to place a marker</Text>
                 </FadeAnimation>
             }
