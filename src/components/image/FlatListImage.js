@@ -7,7 +7,9 @@ const FlatListImage = ({ image, style, clearImage }) => {
         <Image source={{ uri: image.uri }} resizeMode='cover' 
            style={styles.image}
         />
-        <Icon name='remove-circle' size={28} style={styles.remove} onPress={clearImage}/>
+        { clearImage &&
+            <Icon name='remove-circle' size={28} style={styles.remove} onPress={clearImage}/>
+        }
     </View>
   )
 }
