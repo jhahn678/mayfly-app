@@ -65,5 +65,15 @@ export const reducer = (state, action) => {
         }
         return { ...state, form }
     }
+    if(action.type === 'EDIT'){
+        const { name, description, location, avatar, images, publishType } = state;
+        if(action.value?.name) name.value = action.value.name;
+        if(action.value?.description) description.value = action.value.description;
+        if(action.value?.location) location.coordinates = action.value.location.coordinates;
+        if(action.value?.avatar) avatar = {...action.value.avatar};
+        if(action.value?.media) images = [...action.value.media];
+        if(action.value?.publishType !== 'SHARED') publishType.value = action.value.publishType;
+        return { ...state, name, description, location, avatar, images, publishType }; 
+    }
     return {...state};
 }
