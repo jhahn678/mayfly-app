@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
+import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap';
+import { useNavigation } from '@react-navigation/core';
 
 const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
 
+    const navigateToMap = useNavigateToMap()
     const navigation = useNavigation()
 
     const handleGoBack = () => {
@@ -31,7 +33,7 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
                     name='map-outline' 
                     size={28} 
                     style={styles.mapIcon}
-                    onPress={() => navigation.navigate('GroupMap')}
+                    onPress={() => navigateToMap({ groupId: groupId, showToggle: true, catches: true, places: true })}
                 /> 
             </View>
         </View>

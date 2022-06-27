@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { useState, useRef, useEffect } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { Switch } from '@rneui/themed';
 import CurrentLocationButton from '../components/buttons/CurrentLocationButton';
 import { useCurrentLocation } from '../hooks/utils/useCurrentLocation';
 import { useRoute, useNavigation } from '@react-navigation/core'
@@ -12,18 +13,21 @@ import { makeFakePlaces, makeFakeCatches } from '../../test-data/groups';
 
 const MapScreen = () => {
 
+    
     const [savedPlaces, setSavedPlaces] = useState([])
     const [catches, setCatches] = useState([])
+    const [showCatches, setShowCatches] = useState(false)
+    const [showPlaces, setShowPlaces] = useState(false)
     useEffect(() => {
         if(route.params?.places === true){
+            setShowPlaces(true)
             setSavedPlaces(makeFakePlaces(10))
         }
         if(route.params?.catches === true){
+            setShowCatches(true)
             setCatches(makeFakeCatches(20))
         }
     },[])
-
-
 
 
     const navigation = useNavigation()
@@ -133,8 +137,8 @@ const MapScreen = () => {
                         longitude: pinCoordinates.longitude
                     }}/> 
                 }
-                { savedPlaces.map(sp => (
-                    <Marker key={sp._id} pinColor='#0EAAA7'
+                { showPlaces && savedPlaces.map(sp => (
+                    <Marker key={sp._id} pinColor='#3ea9e2'
                     title={sp.name || 'untitled'} 
                     description={`Added by ${sp.user.details.firstName}`} 
                     onPress={() => handleOnPressPin({ placeId: sp._id})}
@@ -143,15 +147,15 @@ const MapScreen = () => {
                         longitude: sp.location.coordinates[0]
                     }}/>
                 ))}
-                { catches.map(c => c.place && (
-                    <Marker key={c._id} pinColor='#3ea9e2'
-                    title={c.name || 'untitled'}
-                    description={`Added by ${c.user.details.firstName}`}
-                    onPress={() => handleOnPressPin({ catchId: c._id })}
-                    coordinate={{
-                        latitude: c.place.location.coordinates[1],
-                        longitude: c.place.location.coordinates[0]
-                    }}
+                { showCatches && catches.map(c => c.place && (
+                    <Marker key={c._id} pinColor='#8AC926'
+                        title={c.name || 'untitled'}
+                        description={`Added by ${c.user.details.firstName}`}
+                        onPress={() => handleOnPressPin({ catchId: c._id })}
+                        coordinate={{
+                            latitude: c.place.location.coordinates[1],
+                            longitude: c.place.location.coordinates[0]
+                        }}
                     />
                 ))}
             </MapView>
@@ -176,6 +180,18 @@ const MapScreen = () => {
                 <FadeAnimation style={styles.bottom} fadeOut delay={5000}>
                     <Text style={styles.bubble}>Press and hold to place a marker</Text>
                 </FadeAnimation>
+            }
+            { route.params?.showToggle &&
+                <View style={styles.toggleBox}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Switch value={showCatches} onValueChange={() => setShowCatches(c => !c)}/>
+                        <Text>Catches</Text>
+                    </View>
+                    <View style={{ alignItems: 'center' }}>
+                        <Switch value={showPlaces} onValueChange={() => setShowPlaces(p => !p)}/>
+                        <Text>Places</Text>
+                    </View>
+                </View>
             }
         </View>
     )
@@ -237,5 +253,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(220,220,220,.6)',
         borderRadius: 20,
         overflow: 'hidden'
+    },
+    toggleBox: {
+        position: 'absolute',
+        right: 20,
+        bottom: 132,
+        height: 144,
+        width: 64,
+        paddingVertical: 16,
+        borderRadius: 16,
+        backgroundColor: 'rgba(220,220,220,.6)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 })
