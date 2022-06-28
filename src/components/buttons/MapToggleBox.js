@@ -17,11 +17,15 @@ const MapToggleBox = ({ showCatches, setShowCatches, showPlaces, setShowPlaces, 
             {showToggleBox &&
                 <FadeAnimation style={{...styles.toggleBox, style }} duration={200}>
                     <View style={{ alignItems: 'center' }}>
-                        <Switch value={showCatches} onValueChange={() => setShowCatches(c => !c)}/>
+                        <Switch value={showCatches} onValueChange={() => setShowCatches(c => !c)}
+                            trackColor={{ true: '#5a9500' }}
+                        />
                         <Text>Catches</Text>
                     </View>
                     <View style={{ alignItems: 'center' }}>
-                        <Switch value={showPlaces} onValueChange={() => setShowPlaces(p => !p)}/>
+                        <Switch value={showPlaces} onValueChange={() => setShowPlaces(p => !p)}
+                            trackColor={{ true: '#228ec7' }}
+                        />
                         <Text>Places</Text>
                     </View>
                 </FadeAnimation>
