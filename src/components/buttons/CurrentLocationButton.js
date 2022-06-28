@@ -1,18 +1,23 @@
 import { StyleSheet } from 'react-native'
-import { useEffect, useState } from 'react'
 import { FAB } from '@rneui/themed'
 import FontelloIcon from '../icons/Fontello'
 import { globalStyles } from '../../styles/globalStyles'
 import { useCurrentLocation } from '../../hooks/utils/useCurrentLocation'
 
-const CurrentLocationButton = ({ style, iconSize=32, setLocation }) => {
+const CurrentLocationButton = ({ style, iconSize=32, mapRef }) => {
 
     const getCurrentLocation = useCurrentLocation()
 
     const handleGetLocation = async () => {
         try{
             const res = await getCurrentLocation()
-            setLocation(res.coords)
+            mapRef.current.animateCamera({ 
+                center: { 
+                    latitude: res.coords.latitude, 
+                    longitude: res.coords.longitude
+                },
+                zoom: 16,
+            })
         }catch(err){
             console.error(err)
         }
