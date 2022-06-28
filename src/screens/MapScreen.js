@@ -10,6 +10,7 @@ import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import FadeAnimation from '../components/animations/FadeAnimation'
 import { makeFakePlaces, makeFakeCatches } from '../../test-data/groups';
+import MapToggleBox from '../components/buttons/MapToggleBox';
 
 const MapScreen = () => {
 
@@ -69,6 +70,7 @@ const MapScreen = () => {
       
 
     useEffect(() => {
+        //need focused location to start on place one if no current location
         if(focusedLocation){
             mapRef.current.animateCamera({ 
                 center: { 
@@ -182,16 +184,9 @@ const MapScreen = () => {
                 </FadeAnimation>
             }
             { route.params?.showToggle &&
-                <View style={styles.toggleBox}>
-                    <View style={{ alignItems: 'center' }}>
-                        <Switch value={showCatches} onValueChange={() => setShowCatches(c => !c)}/>
-                        <Text>Catches</Text>
-                    </View>
-                    <View style={{ alignItems: 'center' }}>
-                        <Switch value={showPlaces} onValueChange={() => setShowPlaces(p => !p)}/>
-                        <Text>Places</Text>
-                    </View>
-                </View>
+                <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
+                    showPlaces={showPlaces} setShowPlaces={setShowPlaces}
+                />
             }
         </View>
     )
