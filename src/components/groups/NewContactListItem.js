@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useState, useEffect } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react'
 import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 
@@ -12,7 +12,11 @@ const NewContactListItem = ({ item }) => {
     const [requestSent, setRequestSent] = useState(false)
 
     const handleSendRequest = async () => {
+        setRequestSent(true)
+    }
 
+    const handleCancelRequest = async () => {
+        setRequestSent(false)
     }
 
     return (
@@ -24,9 +28,9 @@ const NewContactListItem = ({ item }) => {
             </View>
             <View style={styles.select}>
                 { !requestSent ?
-                    <IonIcon name='person-add-outline' size={28} onPress={() => setRequestSent(true)}/> :
+                    <IonIcon name='person-add-outline' size={28} onPress={handleSendRequest}/> :
                     <IonIcon name='checkmark-circle-outline' size={28} 
-                        onPress={() => setRequestSent(false)} color='green'/>
+                        onPress={handleCancelRequest} color='green'/>
                 }
             </View>
         </View>
