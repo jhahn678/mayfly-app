@@ -1,9 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Avatar } from '@rneui/themed'
+import { useSendSMSInvite } from '../../hooks/utils/useSendSMSInvite'
 
 const  DeviceContactsListItem = ({ item }) => {
 
+    const { sendSMSInvite } = useSendSMSInvite()
     const [phoneNumber, setPhoneNumber] = useState('')
 
     useEffect(() => {
@@ -12,7 +14,7 @@ const  DeviceContactsListItem = ({ item }) => {
     },[])
 
     const handleInvite = async () => {
-
+        await sendSMSInvite(phoneNumber)
     }
 
     return (
