@@ -41,7 +41,7 @@ const Message = ({ message }) => {
     )
 }
 
-export default Message
+export default Message;
 
 const styles = StyleSheet.create({
     container: {
@@ -49,7 +49,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         paddingLeft: 8,
-        paddingTop: 8
+        paddingTop: 8,
+        elevation: 2,
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 2,
+        shadowOffset: { height: 2 }
     },  
     containerAuthor: {
         display: 'flex',
@@ -57,7 +62,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         paddingRight: 8,
-        paddingTop: 8
+        paddingTop: 8,
+        elevation: 2,
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 2,
+        shadowOffset: { height: 2 }
     },
     avatar: {
         borderWidth: .5,
@@ -73,7 +83,7 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 8,
         paddingBottom: 16,
-        marginLeft: 6
+        marginLeft: 6,
     },
     bubbleAuthor: {
         minWidth: 80,

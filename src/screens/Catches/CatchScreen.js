@@ -40,6 +40,7 @@ const CatchScreen = () => {
           <FlatList data={data.media}
             pagingEnabled={true} horizontal={true}
             keyExtractor={item => item.id}
+            style={{ borderRadius: 30, overflow: 'hidden' }}
             contentContainerStyle={{ height: '100%' }}
             renderItem={({ item }) => (
               <Image key={item.id} source={{ uri: item.url }} 
