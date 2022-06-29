@@ -10,10 +10,6 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
     const navigateToMap = useNavigateToMap()
     const navigation = useNavigation()
 
-    const handleGroupSettings = () => {
-        
-    }
-
     const handleGoBack = () => {
         onGoBack && onGoBack()
         navigation.goBack()
@@ -22,6 +18,7 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
     return (
         <View style={{...globalStyles.boxShadowBottom, ...styles.header}}>
             <View style={styles.headerContent}>
+
                 <IonIcon 
                     name='md-return-up-back' 
                     size={28} 
@@ -33,15 +30,23 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
                     <Text style={styles.title}>{name}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={styles.members}>{numberOfUsers} members</Text>
-                        <IonIcon name='settings-outline' size={16} style={{ marginLeft: 4}} onPress={handleGroupSettings}/>
                     </View>
                 </View>
+
+
+                <IonIcon 
+                    name='settings-outline' 
+                    size={28} 
+                    style={styles.settings} 
+                    onPress={() => navigation.navigate('GroupSettings')}
+                />
                 <IonIcon 
                     name='map-outline' 
                     size={28} 
                     style={styles.mapIcon}
                     onPress={() => navigateToMap({ groupId: groupId, showToggle: true, catches: true, places: true })}
                 /> 
+
             </View>
         </View>
     )
@@ -88,6 +93,12 @@ const styles = StyleSheet.create({
     back: {
         color: '#353440',
         marginRight: 12
+    },
+    settings: {
+        color: '#353440',
+        position: 'absolute',
+        right: 64,
+        top: 12
     },
     mapIcon: {
         color: '#353440',

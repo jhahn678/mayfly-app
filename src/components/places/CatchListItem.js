@@ -5,7 +5,7 @@ import { formatCreatedAt } from '../../utils/format-dates'
 import { useAuthContext } from '../../store/context/auth'
 
 
-const CatchListItem = ({ data }) => {
+const CatchListItem = ({ data, displayAsFirstName=false, style }) => {
 
     const { user } = useAuthContext()
     const navigation = useNavigation()
@@ -13,7 +13,7 @@ const CatchListItem = ({ data }) => {
 
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Catch', { catchId: data._id })}>
-            <View style={styles.container}>
+            <View style={{...styles.container, ...style }}>
                 <View>
                     { data.media.length > 0 ?
                         <Image source={{ uri: data.media[0].url }} resizeMode='cover' style={styles.image}/> :
@@ -25,9 +25,9 @@ const CatchListItem = ({ data }) => {
                 <View style={styles.details}>
                     <View>
                         <Text style={styles.user}>
-                            { user._id !== data.user._id ? 
+                            { user._id === data.user._id ? 
                                 'You logged a catch' : 
-                                `${data.user.details.username} logged a catch`
+                                `${displayAsFirstName ? data.user.details.firstName : data.user.details.username} logged a catch`
                             }
                         </Text>
                         <Text style={styles.title} numberOfLines={1}>{data.title || 'untitled'}</Text>

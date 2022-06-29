@@ -41,6 +41,7 @@ const GroupsScreen = () => {
             )}
             keyExtractor={item => item._id}
             contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
           />
         </View>
         
@@ -59,18 +60,19 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#fefefe',
+    backgroundColor: '#fefefe'
   },
   main: {
     width: '100%',
     height: '80%',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
+    overflow: 'hidden',
     backgroundColor: '#fefefe',
     elevation: 2,
     shadowColor: 'black',
     shadowRadius: 4,
     shadowOpacity: .3,
-    shadowOffset: { height: -4 }
+    shadowOffset: { height: -4 },
   }
 })

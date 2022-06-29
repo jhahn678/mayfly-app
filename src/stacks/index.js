@@ -14,6 +14,7 @@ import CatchScreen from "../screens/Catches/CatchScreen";
 import ContactsScreen from "../screens/Groups/ContactsScreen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { StatusBar } from "expo-status-bar";
+import GroupSettingsScreen from "../screens/Groups/GroupSettingsScreen";
 
 
 
@@ -42,6 +43,7 @@ const RootStack = () => {
                             <Stack.Screen name='NewPlace' component={NewPlaceScreen}/>
                             <Stack.Screen name='NewCatch' component={NewCatchScreen}/>
                             <Stack.Screen name='NewGroup' component={NewGroupScreen}/>
+                            <Stack.Screen name='GroupSettings' component={GroupSettingsScreen}/>
                             <Stack.Screen name='Map' component={MapScreen}/>
                             <Stack.Screen name='Camera' component={CameraScreen}/>
                             <Stack.Screen name='Place' component={PlaceScreen}/>

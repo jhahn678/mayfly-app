@@ -4,14 +4,16 @@ import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/core'
 
-const ViewableContact = ({ item, selectedContacts, setSelectedContacts }) => {
+const ViewableContact = ({ item, selectedContacts=null, setSelectedContacts, style }) => {
     
     const navigation = useNavigation()
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        selectedContacts.includes(item._id) ?
-        setIsSelected(true) : setIsSelected(false)
+        if(selectedContacts){
+            selectedContacts.includes(item._id) ?
+            setIsSelected(true) : setIsSelected(false)
+        }
     },[selectedContacts])
 
     const onPress = () => {
@@ -27,15 +29,17 @@ const ViewableContact = ({ item, selectedContacts, setSelectedContacts }) => {
     }
 
     return (
-        <TouchableOpacity style={isSelected ? {...styles.container, borderColor: '#0eaaa7', borderWidth: 1.5 } : styles.container}
-            onPress={selectedContacts.length > 0 ? onSelect : onPress} onLongPress={onSelect}
+        <TouchableOpacity 
+            style={isSelected ? {...styles.containerSelected, ...style} : {...styles.container, ...style}}
+            onPress={selectedContacts && selectedContacts.length > 0 ? onSelect : onPress} 
+            onLongPress={selectedContacts && onSelect}
         >
             <Avatar source={{ uri: item.details.avatar.url }} size={52} rounded containerStyle={{ marginLeft: 10 }}/>
             <View style={{ display: 'flex', paddingLeft: 8}}>
                 <Text>{item.details.fullName}</Text>
                 <Text style={styles.username}>@{item.details.username}</Text>
             </View>
-            { selectedContacts.length > 0 && 
+            { selectedContacts && selectedContacts.length > 0 && 
                 <View style={isSelected ? {...styles.select, ...styles.selected} : styles.select}>
                     {isSelected && <IonIcon name='md-checkmark' size={24} style={styles.selectedIcon} />}
                 </View>
@@ -55,6 +59,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'rgba(53, 52, 64, .3)',
+        borderRadius: 12
+    },
+    containerSelected: {
+        height: 68,
+        minWidth: '92%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: '#0eaaa7', 
+        borderWidth: 1.5,
         borderRadius: 12
     },
     username: {

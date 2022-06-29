@@ -65,7 +65,7 @@ const NewGroupScreen = () => {
           rightNode={
             <FAB disabled={selectedContacts.length === 0}
               icon={<IonIcon name='return-down-forward' size={24}/>} 
-              style={{ ...styles.next, ...globalStyles.FABshadow}} 
+              style={globalStyles.FABshadow} 
               disabledStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)', opacity: .4 }}
               onPress={handleNewGroup}
             />

@@ -50,6 +50,7 @@ const GroupScreen = () => {
           keyExtractor={item => item._id}
           renderItem={({ item }) => <Message message={item}/>}
           contentContainerStyle={styles.messagesContainer}
+          inverted={true}
         />
       )}
       
@@ -77,7 +78,8 @@ const styles = StyleSheet.create({
   messagesContainer: {
     width: '100%',
     minHeight: '100%',
-    paddingBottom: 100
+    paddingTop: 100,
+    paddingBottom: 20
   },
   buttonContainer: {
     display: 'flex',
