@@ -4,9 +4,7 @@ import { useGetUserQuery } from '../../hooks/queries/getUser'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import ExploreTabHeader from '../../components/headers/ExploreTabHeader'
 import { useNavigation } from '@react-navigation/core'
-import { FAB } from '@rneui/themed'
-import { globalStyles } from '../../styles/globalStyles'
-import FontelloIcon from '../../components/icons/Fontello'
+
 
 const FeedScreen = ({}) => {
 
@@ -20,11 +18,6 @@ const FeedScreen = ({}) => {
       <ExploreTabHeader/>
       { data && <Text>THE DATA IS HERE</Text>}
       { data && <Text>{data.getUser.details.fullName}</Text> }
-      <FAB icon={<FontelloIcon name='fish' size={36}/>} 
-        style={{ ...globalStyles.FAB, ...globalStyles.FABshadow }}
-        onPress={() => navigation.navigate('NewCatch')}
-        buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
-      />
     </PrimaryBackground>
   )
 }
