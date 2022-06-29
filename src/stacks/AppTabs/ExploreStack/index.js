@@ -10,8 +10,8 @@ const ExploreStack = () => {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false}}>
-            <Stack.Screen name='GlobalMap' component={MapScreen}/>
             <Stack.Screen name='GlobalFeed' component={FeedScreen}/>
+            <Stack.Screen name='GlobalMap' component={MapScreen}/>
         </Stack.Navigator>
     )
 }
