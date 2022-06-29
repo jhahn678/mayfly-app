@@ -11,16 +11,19 @@ import ViewableContact from '../../../components/groups/ViewableContact'
 import PlacesListItem from '../../../components/groups/PlacesListItem'
 import CatchListItem from '../../../components/places/CatchListItem'
 import { initialState, reducer } from './reducer'
+import { useNavigation, useRoute } from '@react-navigation/core'
 
 
 
-const GroupSettingsScreen = ({ groupId }) => {
+const GroupSettingsScreen = () => {
+
 
     const { width: screenWidth } = Dimensions.get('window')
-
+    const navigation = useNavigation()
+    const route = useRoute()
     const [formState, dispatch] = useReducer(reducer, initialState)
-
     const [tabIndex, setTabIndex] = useState(0)
+
 
     useEffect(() => {
         dispatch({ type: 'LOAD_DATA', value: makeFakeGroup(20, 4) })
@@ -71,7 +74,7 @@ const GroupSettingsScreen = ({ groupId }) => {
 
             <View style={styles.main}>
 
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddUserToGroup', { groupId: route.params.groupId })}>
                     <View style={styles.addUsers}>
                         <Text style={{ fontSize: 18, color: '#0eaaa7', marginRight: 6}}>Add users</Text>
                         <IonIcon name='person-add-outline' size={20} color='#0eaaa7'/>
@@ -91,18 +94,18 @@ const GroupSettingsScreen = ({ groupId }) => {
                 <TabView value={tabIndex} onChange={setTabIndex} animationType="spring">
                     <TabView.Item style={{ width: '100%' }}>
                         <FlatList data={formState.users}
-                            renderItem={({ item }) =>  (
-                                <ViewableContact item={item} style={{ backgroundColor: '#fefefe' }}/>
-                            )}
-                            keyExtractor={item => item._id}
-                            contentContainerStyle={styles.membersList}
-                            ItemSeparatorComponent={() => <View style={{ height: 2 }}/>}
+                        renderItem={({ item }) =>  (
+                            <ViewableContact item={item} style={{ backgroundColor: '#fefefe' }}/>
+                        )}
+                        keyExtractor={item => item._id}
+                        contentContainerStyle={styles.membersList}
+                        ItemSeparatorComponent={() => <View style={{ height: 2 }}/>}
                         />
                     </TabView.Item>
                     <TabView.Item style={{ width: '100%' }}>
                         <FlatList data={formState.places}
                         renderItem={({ item }) => <PlacesListItem item={item} />}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item._id}
                         contentContainerStyle={styles.membersList}
                         ItemSeparatorComponent={() => <View style={{ height: 4 }}/>}
                         />
@@ -119,13 +122,13 @@ const GroupSettingsScreen = ({ groupId }) => {
                     </TabView.Item>
                     <TabView.Item style={{ width: '100%' }}>
                         <FlatList data={formState.media}
-                            renderItem={({ item }) => (
-                                <Image source={{ uri: item.url }} style={{ height: (screenWidth*.49), width: '49%'}}/>
-                            )}
-                            keyExtractor={item => item.id} numColumns={2} 
-                            columnWrapperStyle={{ justifyContent: 'space-evenly', }}
-                            contentContainerStyle={styles.imageGrid} horizontal={false}
-                            ItemSeparatorComponent={() => <View style={{ height: (screenWidth * .01) }}/>}
+                        renderItem={({ item }) => (
+                            <Image source={{ uri: item.url }} style={{ height: (screenWidth*.49), width: '49%'}}/>
+                        )}
+                        keyExtractor={item => item.id} numColumns={2} 
+                        columnWrapperStyle={{ justifyContent: 'space-evenly' }}
+                        contentContainerStyle={styles.imageGrid} horizontal={false}
+                        ItemSeparatorComponent={() => <View style={{ height: (screenWidth * .01) }}/>}
                         />
                     </TabView.Item>
                 </TabView>

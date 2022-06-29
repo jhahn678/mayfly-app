@@ -65,11 +65,13 @@ const styles = StyleSheet.create({
     invite: {
         backgroundColor: 'rgb(220,220,220)',
         color: 'rgb(80,80,80)',
-        paddingHorizontal: 16,
-        paddingVertical: 6,
-        borderRadius: 20,
-        borderColor: 'rgb(80,80,80)',
         borderWidth: .5,
-        fontSize: 10
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 14,
+        overflow: 'hidden',
+        fontSize: 10,
+        color: 'rgb(80,80,80)',
+        borderColor: 'rgb(80,80,80)',
     }
 })

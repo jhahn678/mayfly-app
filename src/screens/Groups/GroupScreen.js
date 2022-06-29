@@ -30,7 +30,7 @@ const GroupScreen = () => {
 
   const [data, setData] = useState(makeFakeGroup(20, 2))
 
-
+  
   return (
     <PrimaryBackground>
       <GroupHeader groupId={data._id} 

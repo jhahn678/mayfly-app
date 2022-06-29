@@ -6,6 +6,7 @@ import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap';
 import { useNavigation } from '@react-navigation/core';
 
 const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
+    
 
     const navigateToMap = useNavigateToMap()
     const navigation = useNavigation()
@@ -38,7 +39,7 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
                     name='settings-outline' 
                     size={28} 
                     style={styles.settings} 
-                    onPress={() => navigation.navigate('GroupSettings')}
+                    onPress={() => navigation.navigate('GroupSettings', { groupId: groupId })}
                 />
                 <IonIcon 
                     name='map-outline' 
