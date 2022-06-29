@@ -26,12 +26,12 @@ const CatchesTabHeader = ({ selectedItems }) => {
                 { selectedItems.length > 0 ?
                     <View style={styles.buttonContainer}>
                         <FAB onPress={handleDeleteCatch}
-                            icon={<EntypoIcon name='trash' size={20} color='white'/>} 
+                            icon={<EntypoIcon name='trash' size={20} color='#fefefe'/>} 
                             style={globalStyles.FABshadow}
                         />
                         { selectedItems.length === 1 &&
                             <FAB onPress={handleEditCatch}
-                                icon={<IonIcon name='pencil' size={20} color='white'/>} 
+                                icon={<IonIcon name='pencil' size={20} color='#fefefe'/>} 
                                 style={{ ...globalStyles.FABshadow, marginLeft: 12 }}
                             />
                         }
