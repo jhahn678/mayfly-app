@@ -45,10 +45,11 @@ const GroupSettingsScreen = () => {
     return (
         <PrimaryBackground style={styles.container}>
             <CreateHeader title={formState.name.value}
-                rightNode={
-                    <FAB disabled={formState.form.edited === false}
-                    icon={<IonIcon name='return-down-forward' size={24}/>} 
-                    style={globalStyles.FABshadow}
+                onGoBack={() => dispatch({ type: 'RESET' })}
+                rightNode={ formState.form.edited === true &&
+                    <FAB
+                    icon={{ type: 'ionicon', name: 'checkmark', color: '#fefefe'}} 
+                    style={globalStyles.FABshadow} size='small'
                     disabledStyle={{ backgroundColor: 'rgba(53, 52, 64, .3)', opacity: .4 }}
                     onPress={handleSaveChanges}
                     />
@@ -81,14 +82,14 @@ const GroupSettingsScreen = () => {
                     </View>
                 </TouchableOpacity>
 
-                <Tab value={tabIndex} onChange={e => setTabIndex(e)} scrollable
+                <Tab value={tabIndex} onChange={e => setTabIndex(e)}
                     indicatorStyle={{ backgroundColor: '#0eaaa7', height: 3 }}
                     containerStyle={{ backgroundColor: '#fefefe', marginTop: 8 }}
                 >
-                    <Tab.Item title='Members' titleStyle={{ fontSize: 14 }}/>
-                    <Tab.Item title='Places' titleStyle={{ fontSize: 14 }}/>
-                    <Tab.Item title='Catches' titleStyle={{ fontSize: 14 }}/>
-                    <Tab.Item title='Media' titleStyle={{ fontSize: 14 }}/>
+                    <Tab.Item title='Members' titleStyle={{ fontSize: 14, paddingHorizontal: 0 }} />
+                    <Tab.Item title='Places' titleStyle={{ fontSize: 14, paddingHorizontal: 0 }}/>
+                    <Tab.Item title='Catches' titleStyle={{ fontSize: 14, paddingHorizontal: 0 }}/>
+                    <Tab.Item title='Media' titleStyle={{ fontSize: 14, paddingHorizontal: 0 }}/>
                 </Tab>
 
                 <TabView value={tabIndex} onChange={setTabIndex} animationType="spring">

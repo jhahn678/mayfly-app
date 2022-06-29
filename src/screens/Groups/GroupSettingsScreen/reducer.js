@@ -41,5 +41,8 @@ export const reducer = (state, action) => {
             media: action.value.media 
         }
     }
+    if(action.type === 'RESET'){
+        return { ...initialState }
+    }
     return { ...state }
 }
