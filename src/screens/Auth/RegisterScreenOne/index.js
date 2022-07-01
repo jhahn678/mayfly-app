@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { FAB } from '@rneui/themed'
-import PrismBackground from '../../../components/backgrounds/PrismBackground'
 import AuthStackHeader from '../../../components/headers/AuthStackHeader';
 import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -8,9 +7,13 @@ import IconInput from '../../../components/inputs/IconInput';
 import GoogleLoginButton from '../../../components/buttons/GoogleLoginButton/GoogleLoginButton';
 import FacebookLoginButton from '../../../components/buttons/FacebookLoginButton/FacebookLoginButton';
 import { useRegisterContext } from '../../../store/context/register'
+import { useNavigation } from '@react-navigation/core';
+import AuthBackground from '../../../components/backgrounds/AuthBackground';
 
 
-const RegisterScreenOne = ({ navigation }) => {
+const RegisterScreenOne = () => {
+
+    const navigation = useNavigation()
 
     const handleNextStep = async () => {
         navigation.navigate('Choose Username')
@@ -19,9 +22,9 @@ const RegisterScreenOne = ({ navigation }) => {
     const { formState, dispatch } = useRegisterContext()
 
     return (
-        <PrismBackground style={styles.container}>
-            <AuthStackHeader navigation={navigation} title='Sign Up'/>
-            <BlurView intensity={10} style={styles.main}>
+        <AuthBackground style={styles.container}>
+            <AuthStackHeader navigation={navigation} title='Sign Up' showBackArrow/>
+            <View style={styles.main}>
                 <View style={styles.form}>
                     <IconInput 
                         Icon={<IonIcon name='person-outline' size={28}/>} 
@@ -67,8 +70,8 @@ const RegisterScreenOne = ({ navigation }) => {
                         <FacebookLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
                     </View>
                 </View>
-            </BlurView>
-        </PrismBackground>
+            </View>
+        </AuthBackground>
     )
 }
 
@@ -86,21 +89,14 @@ const styles = StyleSheet.create({
         height: '70%',
         width: '100%',
         marginBottom: '20%',
-        backgroundColor: 'rgba(255, 254, 243, .4)',
         display: 'flex',
         alignItems: 'center',
         paddingTop: '20%',
-        shadowColor: 'rgb(0,0,0)',
-        shadowOpacity: .4,
-        shadowRadius: 8,
-        shadowOffset: { height: 4 },
-        transform: [{ skewY: '-15deg'}]
     },
     form: {
         width: '80%',
         display: 'flex',
         alignSelf: 'center',
-        transform: [{ skewY: '15deg'}]
     },
     buttonContainer: {
         marginTop: 8,
@@ -110,9 +106,6 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#0A3542',
         color: '#FFFEF3'
-    },
-    buttonDisabled: {
-        backgroundColor: 'rgba(10, 53, 66, .7)'
     },
     input: {
         marginBottom: 6

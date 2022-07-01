@@ -34,7 +34,7 @@ const RootStack = () => {
 
     return (
         <NavigationContainer>
-            {/* { isSignedIn ?  */}
+            { isSignedIn ? 
                 <ApolloProvider client={client}>
                     <StatusBar style='auto'/>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -54,8 +54,8 @@ const RootStack = () => {
                         </Stack.Group>
                     </Stack.Navigator>
                 </ApolloProvider> 
-                {/* : <AuthStack/>
-            } */}
+                : <AuthStack/>
+            }
         </NavigationContainer>
     )
 }

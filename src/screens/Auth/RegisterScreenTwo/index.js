@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { BlurView } from 'expo-blur';
 import { FAB, Input, useTheme } from '@rneui/themed'
-import PrismBackground from '../../../components/backgrounds/PrismBackground'
 import AuthStackHeader from '../../../components/headers/AuthStackHeader';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { useRegisterContext } from '../../../store/context/register'
@@ -32,9 +31,9 @@ const RegisterScreenTwo = ({ navigation }) => {
     }
 
     return (
-      <PrismBackground style={styles.container}>
+      <View style={styles.container}>
             <AuthStackHeader navigation={navigation} title='Last Step'/>
-            <BlurView intensity={10} style={styles.main}>
+            <View style={styles.main}>
                 <View style={styles.form}>
                     <Input 
                         leftIcon={<IonIcon name='at' size={28} color='#FFFEF3'/>} 
@@ -56,8 +55,8 @@ const RegisterScreenTwo = ({ navigation }) => {
                         disabledStyle={styles.buttonDisabled}
                     />
                 </View>
-            </BlurView>
-        </PrismBackground>
+            </View>
+        </View>
     )
 }
 
