@@ -46,7 +46,6 @@ const PlacesScreen = () => {
               <PlacesListItem item={item} 
                 selectedItems={selectedItems}
                 setSelectedItems={setSelectedItems}
-                showPlace={() => navigation.navigate('Place', { placeId: item._id })}
               />
             )}
             keyExtractor={item => item._id}

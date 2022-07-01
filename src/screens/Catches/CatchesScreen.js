@@ -43,7 +43,6 @@ const CatchesScreen = () => {
               <CatchesListItem item={item} 
                 selectedItems={selectedItems}
                 setSelectedItems={setSelectedItems}
-                showCatch={() => navigation.navigate('Catch', { catchId: item._id })}
               />
             )}
             keyExtractor={item => item._id}

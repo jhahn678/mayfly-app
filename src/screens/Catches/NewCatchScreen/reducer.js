@@ -125,7 +125,7 @@ export const reducer = (state, action) => {
         return { ...state, title, length, weight, rig, species, place, publishType }
     }
     if(action.type === 'RESET'){
-        return initialState;
+        return {...initialState};
     }
     return { ...state }
 }
