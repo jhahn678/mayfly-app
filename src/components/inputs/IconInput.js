@@ -4,8 +4,8 @@ import React from 'react'
 export default function IconInput({ Icon, containerStyle, value, setValue, label, isError, error, isPassword }) {
   return (
     <View style={containerStyle}>
-    <View style={{...styles.inputContainer, borderColor: isError && '#df2c0c' }}>
-        <View style={{...styles.inputIcon, borderRightColor: isError && '#df2c0c'}}>
+    <View style={{...styles.inputContainer, borderColor: isError ? '#AA0E11' :  'rgb(220,220,220)'}}>
+        <View style={{...styles.inputIcon, borderRightColor: isError ? '#AA0E11' : 'rgb(220,220,220)'}}>
             {Icon}
         </View>
         <TextInput placeholder={label}
@@ -26,15 +26,17 @@ const styles = StyleSheet.create({
     inputContainer: {
         display: 'flex',
         flexDirection: 'row',
-        borderColor: 'rgba(0,0,0,.3)',
-        borderWidth: 1,
         borderRadius: 8,
-        backgroundColor: 'rgba(255, 254, 243, .3)',
-        marginBottom: 6
+        backgroundColor: '#fefefe',
+        marginBottom: 6,
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 8,
+        elevation: 4,
+        shadowOffset: { height: 4 }
       },
       inputIcon: {
         marginRight: 4,
-        borderRightColor: 'rgba(0,0,0,.3)',
         borderRightWidth: 1,
         padding: 12
       }, 
