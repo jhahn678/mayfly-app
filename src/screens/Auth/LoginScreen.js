@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import {  Button } from '@rneui/themed';
 import axios from '../../utils/axios'
 import { useAuthContext } from '../../store/context/auth'
@@ -12,6 +12,7 @@ import AuthBackground from '../../components/backgrounds/AuthBackground';
 
 const LoginScreen = ({ navigation }) => {
 
+  const { width: screenWidth } = Dimensions.get('window')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [hidden, setHidden] = useState(true)
@@ -29,10 +30,9 @@ const LoginScreen = ({ navigation }) => {
   
   return (
       <AuthBackground style={styles.container}>
-        <AuthStackHeader title='Sign in' />
-        <View intensity={10} style={styles.main}>
-          <View style={styles.form}>
-            <IconInput Icon={<Icon name='mail-outline' size={28}/>} 
+        <AuthStackHeader title='Sign in' style={{ position: 'absolute', top: 0}}/>
+        <View style={styles.main}>
+            <IconInput Icon={<Icon name='mail-outline' size={24} />} 
               value={email}
               setValue={setEmail}
               label='Email'
@@ -40,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
             <IconInput 
               Icon={
                 <Icon name={hidden ? 'lock-closed-outline' : 'lock-open-outline'} 
-                  size={28}
+                  size={24}
                   onPress={() => setHidden(h => !h)}
                 />
               } 
@@ -58,21 +58,20 @@ const LoginScreen = ({ navigation }) => {
               color='#0A3542'
             />
             <View style={styles.providerButtonContainer}>
-                <GoogleLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
-                <FacebookLoginButton iconSize={36} containerStyle={{ width: 150 }}/>
+                <GoogleLoginButton iconSize={36} containerStyle={{ width: screenWidth*.39  }}/>
+                <FacebookLoginButton iconSize={36} containerStyle={{ width: screenWidth*.39 }}/>
             </View>
-            <View style={styles.altAuthPrompts}>
-              <TouchableOpacity onPress={() => navigation.navigate('Choose Username')}>
-                <Text style={styles.forgotPassword}>Forgot password?</Text>
-              </TouchableOpacity>
-              <Text style={styles.noAccount}>Don't have an account? 
-                <TouchableOpacity onPress={() => navigation.navigate('Sign Up')}>
-                    <Text style={styles.getStarted}>Get started</Text>
-                </TouchableOpacity>
-              </Text>
-            </View>
-          </View>
         </View>
+        <View style={styles.altAuthPrompts}>
+            <TouchableOpacity onPress={() => navigation.navigate('Choose Username')}>
+              <Text style={styles.forgotPassword}>Forgot password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Sign Up')}>
+                <Text style={styles.noAccount}>Create a new account
+                  <Icon name='arrow-forward' size={16}/>
+                </Text>
+            </TouchableOpacity>
+          </View>
       </AuthBackground>
   )
 }
@@ -83,24 +82,18 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
-      justifyContent: 'space-between',
-      overflow: 'hidden'
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     main: {
-      height: '65%',
-      width: '100%',
+      width: '80%',
       marginBottom: '30%',
       display: 'flex',
-      alignItems: 'center',
       paddingTop: '25%',
       shadowColor: 'rgb(0,0,0)',
       shadowOpacity: .2,
       shadowRadius: 2,
       shadowOffset: { height: 1 },
-    },
-    form: {
-      width: '80%',
-      display: 'flex'
     },
     providerButtonContainer: {
       flexDirection: 'row',
@@ -120,28 +113,21 @@ const styles = StyleSheet.create({
       marginTop: 12
     },
     altAuthPrompts: {
-      display: 'flex',
-      marginTop: 24
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      alignItems: 'flex-end',
+      paddingBottom: '15%',
+      paddingRight: 36
     },
     forgotPassword: {
       fontSize: 14,
       fontWeight: '500',
-      padding: 0,
-      color: '#fefefe'
+      padding: 0
     },
     noAccount: {
-      fontSize: 12,
-      marginTop: 12,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'baseline',
-      color: '#fefefe'
-    },
-    getStarted: {
-      height: 14,
-      marginLeft: 5,
-      fontSize: 14,
+      fontSize: 16,
+      marginTop: 20,
       fontWeight: '500',
-      color: '#fefefe'
     }
 })
