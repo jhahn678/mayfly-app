@@ -11,3 +11,7 @@ export const formatTimeMessage = (isoDate) => {
 export const formatCreatedAt = (isoDate) => {
     return moment(isoDate).format('M/D/YYYY [at] h:mm a')
 }   
+
+export const formatProfileCreatedAt = (isoDate) => {
+    return moment(isoDate).format('M/D/YY')
+}
