@@ -4,16 +4,19 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import { formatCreatedAt } from '../../utils/format-dates'
 import FontelloIcon from '../icons/Fontello'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
+import { useNavigation } from '@react-navigation/core'
 
-const CatchesListItem = ({ item, selectedItems, setSelectedItems, showCatch }) => {
+const CatchesListItem = ({ item, selectedItems=null, setSelectedItems, showCatch, style }) => {
 
     const navigateToMap = useNavigateToMap()
-    
+    const navigation = useNavigation()
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        selectedItems.includes(item._id) ?
-        setIsSelected(true) : setIsSelected(false)
+        if(selectedItems){
+            selectedItems.includes(item._id) ?
+            setIsSelected(true) : setIsSelected(false)
+        }
     },[selectedItems])
 
     const onSelect = () => {
@@ -26,9 +29,13 @@ const CatchesListItem = ({ item, selectedItems, setSelectedItems, showCatch }) =
         })
     }
 
+    const onPress = () => {
+        navigation.navigate('Catch', { catchId: item._id })
+    }
+
     return (
-        <TouchableOpacity onPress={ selectedItems.length > 0 ? onSelect : showCatch } onLongPress={onSelect}>
-            <View style={styles.container}>
+        <TouchableOpacity onPress={ selectedItems && selectedItems.length > 0 ? onSelect : onPress } onLongPress={selectedItems && onSelect}>
+            <View style={{...styles.container, ...style}}>
                 <View style={isSelected ? {...styles.imageContainer, borderColor: '#0eaaa7', borderWidth: 3} : styles.imageContainer}>
                     <Image source={{ uri: item.media[0].url }} resizeMode='cover' 
                         style={isSelected ? { ...styles.image, opacity: .4 } : styles.image}

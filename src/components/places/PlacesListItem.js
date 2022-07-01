@@ -4,15 +4,19 @@ import { Chip } from '@rneui/themed'
 import AvatarChip from '../chip/AvatarChip'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
+import { useNavigation } from '@react-navigation/core'
 
-const PlacesListItem = ({ item, selectedItems, setSelectedItems, showPlace }) => {
+const PlacesListItem = ({ item, selectedItems=null, setSelectedItems, style }) => {
 
     const navigateToMap = useNavigateToMap()
+    const navigation = useNavigation()
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        selectedItems.includes(item._id) ?
-        setIsSelected(true) : setIsSelected(false)
+        if(selectedItems){
+            selectedItems.includes(item._id) ?
+            setIsSelected(true) : setIsSelected(false)
+        }
     },[selectedItems])
 
     const onSelect = () => {
@@ -25,11 +29,13 @@ const PlacesListItem = ({ item, selectedItems, setSelectedItems, showPlace }) =>
         })
     }
 
-
+    const onPress = () => {
+        navigation.navigate('Place', { placeId: item._id })
+    }
 
     return (
-        <TouchableOpacity onPress={selectedItems.length > 0 ? onSelect : showPlace} onLongPress={onSelect}>
-            <View style={styles.container}>
+        <TouchableOpacity onPress={selectedItems && selectedItems.length > 0 ? onSelect : onPress } onLongPress={ selectedItems && onSelect}>
+            <View style={{...styles.container, ...style }}>
                 <View style={isSelected ? {...styles.imageContainer, borderColor: '#0eaaa7', borderWidth: 3} : styles.imageContainer}>
                     <Image source={{ uri: item.avatar.url }} resizeMode='cover' 
                         style={isSelected ? { ...styles.image, opacity: .4 } : styles.image}

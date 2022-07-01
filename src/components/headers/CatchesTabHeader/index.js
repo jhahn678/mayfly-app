@@ -4,17 +4,19 @@ import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
 import { FAB } from '@rneui/themed'
+import { useNavigation } from '@react-navigation/core';
 
 const CatchesTabHeader = ({ selectedItems }) => {
 
     const navigateToMap = useNavigateToMap()
+    const navigation = useNavigation()
 
     const handleDeleteCatch = async () => {
 
     }
 
     const handleEditCatch = () => {
-        
+        navigation.navigate('NewCatch', { catchId: selectedItems[0]._id })
     }
 
     return (
