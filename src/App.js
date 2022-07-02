@@ -4,8 +4,9 @@ import { loadAsync } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import RootStack from './stacks';
 import { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { ImageContextProvider } from './store/context/image';
+import { SafeAreaView } from 'react-native'
+import { Asset } from 'expo-asset';
 
 
 const theme = createTheme({
@@ -29,6 +30,7 @@ export default function App() {
       await loadAsync({ 
         mayfly: require('../assets/fonts/mayfly.ttf'),
       })
+      await Asset.loadAsync(require('../assets/paper-river-cutout.png'))
     }catch(err){
       console.warn(err)
     }finally{
@@ -61,8 +63,9 @@ export default function App() {
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <ImageContextProvider>
-          <StatusBar translucent={true} style='auto'/>
-          <RootStack/>
+          <SafeAreaView style={{ flex: 1 }}>
+            <RootStack/>
+          </SafeAreaView>
         </ImageContextProvider>
       </ThemeProvider>
     </AuthProvider> 
