@@ -1,16 +1,19 @@
-import { StyleSheet, View } from 'react-native'
-import { BlurView } from 'expo-blur';
-import { FAB, Input, useTheme } from '@rneui/themed'
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { Input, useTheme } from '@rneui/themed'
 import AuthStackHeader from '../../../components/headers/AuthStackHeader';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { useRegisterContext } from '../../../store/context/register'
 import { useAuthContext } from '../../../store/context/auth';
 import axios from '../../../utils/axios'
+import { useNavigation } from '@react-navigation/core';
+import AuthBackground from '../../../components/backgrounds/AuthBackground';
 
-const RegisterScreenTwo = ({ navigation }) => {
+const RegisterScreenTwo = () => {
 
     const { theme } = useTheme()
     const { formState, dispatch } = useRegisterContext()
+    const navigation = useNavigation()
     const { signIn } = useAuthContext()
 
     const handleRegister = async () => {
@@ -31,92 +34,72 @@ const RegisterScreenTwo = ({ navigation }) => {
     }
 
     return (
-      <View style={styles.container}>
-            <AuthStackHeader navigation={navigation} title='Last Step'/>
+      <AuthBackground style={styles.container}>
+           <AuthStackHeader title='Last Step' showBackArrow style={{ position: 'absolute', top: 0 }}/>
             <View style={styles.main}>
-                <View style={styles.form}>
-                    <Input 
-                        leftIcon={<IonIcon name='at' size={28} color='#FFFEF3'/>} 
-                        value={formState?.username.value} 
-                        onChangeText={value => dispatch({ type: 'USERNAME', value: value })} 
-                        label='Choose a Username'
-                        inputStyle={styles.input}
-                        inputContainerStyle={{...styles.inputContainer }}
-                        labelStyle={{ ...styles.inputLabel }}
-                        placeholderTextColor='#FFFEF3'
-                        errorStyle={{ color: theme.colors.error, fontWeight: '500' }}
-                        errorMessage={formState?.username.error}
-                    />
-                    <FAB title='Get Started' 
-                        onPress={handleRegister} 
-                        disabled={!formState?.username.unique || !formState?.username.isValid} 
-                        containerStyle={styles.buttonContainer} 
-                        buttonStyle={styles.button}
-                        disabledStyle={styles.buttonDisabled}
-                    />
-                </View>
+                <Input leftIcon={<IonIcon name='at' size={28} color='#0A3542'/>}  
+                    onChangeText={value => dispatch({ type: 'USERNAME', value: value })} 
+                    label='Choose a Username' inputStyle={styles.input}
+                    inputContainerStyle={{...styles.inputContainer }}
+                    labelStyle={{ ...styles.inputLabel }} value={formState?.username.value}
+                    errorStyle={{ color: theme.colors.error, fontWeight: '500' }}
+                    errorMessage={formState?.username.error}
+                />
+                <TouchableOpacity onPress={handleRegister} disabled={!formState?.username.unique || !formState?.username.isValid}>
+                    <Text style={(!formState?.username.unique || !formState?.username.isValid) ? styles.buttonDisabled : styles.button}>
+                        Get Started <Icon name='arrow-forward' size={18}/>
+                    </Text>
+                </TouchableOpacity>
             </View>
-        </View>
+        </AuthBackground>
     )
 }
 
 export default RegisterScreenTwo
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    overflow: 'hidden'
-  },
-  main: {
-      height: '70%',
-      width: '100%',
-      marginBottom: '20%',
-      backgroundColor: 'rgba(255, 254, 243, .4)',
-      display: 'flex',
-      alignItems: 'center',
-      paddingTop: '35%',
-      shadowColor: 'rgb(0,0,0)',
-      shadowOpacity: .4,
-      shadowRadius: 8,
-      shadowOffset: { height: 4 },
-      transform: [{ skewY: '-15deg'}]
-  },
-  form: {
-      width: '80%',
-      display: 'flex',
-      alignSelf: 'center',
-      transform: [{ skewY: '15deg' }]
-  },
-  buttonContainer: {
-      marginTop: 12,
-      width: '100%',
-      borderRadius: 8
-  },
-  button: {
-      backgroundColor: '#0A3542',
-      color: '#FFFEF3'
-  },
-  buttonDisabled: {
-      backgroundColor: 'rgba(10, 53, 66, .7)'
-  },
-  input: {
-    color: '#FFFEF3',
-    fontSize: 24
-  },
-  inputContainer: {
-    borderBottomColor: '#0A3542',
-    borderBottomWidth: 1,
-    paddingTop: 8
-  },
-  inputLabel: {
-    color: '#0A3542',
-    fontWeight: '400'
-  },
-  providerButtonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 12
-  }
+    container: {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    main: {
+        width: '90%',
+        display: 'flex',
+        alignItems: 'flex-end',
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 6,
+        elevation: 12,
+        shadowOffset: { height: 6 },
+        backgroundColor: '#fefefe',
+        paddingVertical: 24,
+        paddingHorizontal: 12,
+        borderRadius: 12
+    },
+    button: {
+        fontSize: 18,
+        marginTop: 16,
+        marginRight: 12
+    },
+    buttonDisabled: {
+        fontSize: 18,
+        marginTop: 16,
+        marginRight: 12,
+        color: 'rgb(180,180,180)'
+    },
+    input: {
+        fontSize: 24,
+    },
+    inputContainer: {
+        borderBottomColor: '#0A3542',
+        borderBottomWidth: 1,
+        paddingTop: 8,
+        
+    },
+    inputLabel: {
+        color: '#0A3542',
+        fontWeight: '400'
+    }
 })

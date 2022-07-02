@@ -3,7 +3,7 @@ import { BlurView } from 'expo-blur';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/core';
 
-const AuthStackHeader = ({ showBackArrow, title, style }) => {
+const AuthStackHeader = ({ showBackArrow, title, style, titleStyle }) => {
 
     const navigation = useNavigation()
 
@@ -18,7 +18,7 @@ const AuthStackHeader = ({ showBackArrow, title, style }) => {
                         onPress={() => navigation.goBack()}
                     /> 
                 }
-                <Text style={styles.title}>{title}</Text>
+                <Text style={{...styles.title, ...titleStyle}}>{title}</Text>
             </View>
         </View>
     )
@@ -29,7 +29,7 @@ export default AuthStackHeader;
 const styles = StyleSheet.create({
     header: {
         width: '100%',
-        height: '14%',
+        height: '12%',
         display: 'flex',
         justifyContent: 'flex-end',
         paddingBottom: 15,
