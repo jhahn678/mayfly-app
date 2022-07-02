@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { ImageContextProvider } from './store/context/image';
 import { SafeAreaView } from 'react-native'
 import { Asset } from 'expo-asset';
+import { StatusBar } from 'expo-status-bar';
 
 
 const theme = createTheme({
@@ -63,9 +64,8 @@ export default function App() {
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <ImageContextProvider>
-          <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar style='auto'/>
             <RootStack/>
-          </SafeAreaView>
         </ImageContextProvider>
       </ThemeProvider>
     </AuthProvider> 

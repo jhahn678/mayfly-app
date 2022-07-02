@@ -6,11 +6,12 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { useRegisterContext } from '../../../store/context/register'
 import { useAuthContext } from '../../../store/context/auth';
 import axios from '../../../utils/axios'
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import AuthBackground from '../../../components/backgrounds/AuthBackground';
 
 const RegisterScreenTwo = () => {
 
+    const route = useRoute()
     const { theme } = useTheme()
     const { formState, dispatch } = useRegisterContext()
     const navigation = useNavigation()
@@ -29,8 +30,20 @@ const RegisterScreenTwo = () => {
             await signIn(data.user, data.token)
         }catch(err){
             alert(err)
+        } 
+    }
+
+    const handleAddUsername = async () => {
+        try{
+            const { username } = formState;
+            const { data } = await axios.patch('/auth/register/username', { 
+                username: username.value, 
+                token: route.params.token 
+            })
+            await signIn(data.user, data.token)
+        }catch(err){
+            alert(err)
         }
-        
     }
 
     return (
@@ -45,7 +58,9 @@ const RegisterScreenTwo = () => {
                     errorStyle={{ color: theme.colors.error, fontWeight: '500' }}
                     errorMessage={formState?.username.error}
                 />
-                <TouchableOpacity onPress={handleRegister} disabled={!formState?.username.unique || !formState?.username.isValid}>
+                <TouchableOpacity onPress={route.params?.token ? handleAddUsername : handleRegister} 
+                    disabled={!formState?.username.unique || !formState?.username.isValid}
+                >
                     <Text style={(!formState?.username.unique || !formState?.username.isValid) ? styles.buttonDisabled : styles.button}>
                         Get Started <Icon name='arrow-forward' size={18}/>
                     </Text>

@@ -24,11 +24,12 @@ const GoogleLoginButton = ({ containerStyle, text, iconSize }) => {
             const { id_token } = response.params;
             (async () => {
                 try{
-                    const { authentication } = response;
-                    const { data } = await axios.post('/auth/google', {
-                        token: id_token
-                    })
-                    signIn(data.user, data.token)
+                    const { data } = await axios.post('/auth/google', { token: id_token })
+                    if(data.user?.username){
+                        await signIn(data.user, data.token)
+                    }else{
+                        navigation.navigate('RegisterTwo', { token: data.token })
+                    }
                 }catch(err){
                     alert('Something went wrong!')
                 }

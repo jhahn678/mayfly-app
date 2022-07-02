@@ -1,16 +1,19 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import * as WebBrowser from 'expo-web-browser';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import { ResponseType } from 'expo-auth-session';
 import FacebookIcon from '../../icons/FacebookIcon'
 import { useAuthContext } from '../../../store/context/auth';
+import axios from '../../../utils/axios'
+import { useNavigation } from '@react-navigation/core';
 
 WebBrowser.maybeCompleteAuthSession()
 
 const FacebookLoginButton = ({ containerStyle, text, iconSize }) => {
 
     const { signIn } = useAuthContext()
+    const navigation = useNavigation()
 
     const [request, response, promptAsync] = Facebook.useAuthRequest({
         expoClientId: process.env.FACEBOOK_APP_ID,
@@ -26,7 +29,11 @@ const FacebookLoginButton = ({ containerStyle, text, iconSize }) => {
                     const { data } = await axios.post('/auth/facebook', {
                         token: authentication.accessToken
                     })
-                    signIn(data.user, data.token)
+                    if(data.user?.username){
+                        await signIn(data.user, data.token)
+                    }else{
+                        navigation.navigate('RegisterTwo', { token: data.token })
+                    }
                 }catch(err){
                     alert('Something went wrong!')
                 }
@@ -34,13 +41,10 @@ const FacebookLoginButton = ({ containerStyle, text, iconSize }) => {
         }
     },[response])
 
-    const handleFacebookLogin = async () => {
-        promptAsync()
-    }
 
     return (
         <TouchableOpacity style={{ ...styles.container, ...containerStyle}} 
-            onPress={handleFacebookLogin} disabled={!request}
+            onPress={() => promptAsync()} disabled={!request}
         >
             <FacebookIcon containerStyle={styles.icon} size={iconSize}/>
             <Text style={styles.text}>{text}</Text>
