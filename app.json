@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "mayfly-app",
-    "slug": "mayfly-app",
+    "name": "mayfly",
+    "slug": "mayfly",
+    "scheme": "mayfly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
