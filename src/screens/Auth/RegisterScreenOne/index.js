@@ -16,7 +16,7 @@ const RegisterScreenOne = () => {
     const { theme } = useTheme()
 
     const handleNextStep = async () => {
-        navigation.navigate('Choose Username')
+        navigation.navigate('RegisterTwo')
     }
     
     const { formState, dispatch } = useRegisterContext()

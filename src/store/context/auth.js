@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import axios from '../../utils/axios'
 import * as SecureStore from 'expo-secure-store'
 
 const initialState = {
@@ -16,6 +17,18 @@ export const AuthProvider = ({ children }) => {
     const [isSignedIn, setIsSignedIn] = useState(false)
     const [user, setUser] = useState({})
     const [token, setToken] = useState('')
+
+    useEffect(() => {
+        (async () => {
+            const token = await SecureStore.getItemAsync('ACCESS_TOKEN')
+            if(token){
+                const { data } = axios.get(`/auth/me?token=${token}`)
+                setUser(data.user)
+                setToken(token)
+                setIsSignedIn(true)
+            }
+        })
+    },[])
 
     const signIn = async (user, token) => {
         await SecureStore.setItemAsync('ACCESS_TOKEN', token)
