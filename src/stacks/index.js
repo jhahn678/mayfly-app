@@ -27,6 +27,11 @@ const RootStack = () => {
     const client = new ApolloClient({
         uri: `${process.env.API_BASE_URL}/api`,
         cache: new InMemoryCache(),
+        defaultOptions:{ 
+            query: {
+                fetchPolicy: 'cache-first'
+            }
+        },
         headers: {
             authorization: `Bearer ${token}`
         }
