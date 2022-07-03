@@ -9,10 +9,11 @@ import { initialState, reducer } from './reducer';
 
 const ProfileTabView = () => {
 
+    const { user } = useAuthContext()
     const [formState, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        dispatch({ type: 'LOAD_DATA', value: makeFakeUsers(1)[0].details })
+        dispatch({ type: 'LOAD_DATA', value: user })
     },[])
 
     const handleSave = async () => {

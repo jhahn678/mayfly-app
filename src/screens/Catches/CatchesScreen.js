@@ -1,5 +1,5 @@
 import { StyleSheet, View, FlatList } from 'react-native'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { FAB } from '@rneui/themed'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import CatchesListItem from '../../components/catches/CatchesListItem'
@@ -9,11 +9,15 @@ import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import CatchesTabHeader from '../../components/headers/CatchesTabHeader'
 import { useNavigation, useRoute } from '@react-navigation/core'
-import { makeFakeCatches } from '../../../test-data/groups'
+import { formatCreatedAt } from '../../utils/format-dates'
+import { useGetUserCatchesQuery } from '../../hooks/queries/getUserCatches'
+import { useAuthContext } from '../../store/context/auth'
 
 const CatchesScreen = () => {
 
-  const [catches] = useState(makeFakeCatches(10))
+  const { user } = useAuthContext()
+  const { data } = useGetUserCatchesQuery(user._id)
+
 
   const flatListRef = useRef()
   const route = useRoute()
@@ -37,7 +41,7 @@ const CatchesScreen = () => {
         <CatchesTabHeader selectedItems={selectedItems}/>
         
         <View style={styles.main}>
-          <FlatList data={catches} ref={flatListRef}
+          <FlatList data={data?.getUser?.catches} ref={flatListRef}
             onScroll={e => onScroll(e)}
             renderItem={({ item }) => (
               <CatchesListItem item={item} 

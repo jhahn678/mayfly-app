@@ -12,7 +12,7 @@ import SettingsTabView from '../components/profile/SettingsTabView'
 const ProfileScreen = () => {
     
     const { signOut } = useAuthContext()
-    const [user] = useState(makeFakeUsers(1)[0])
+    const { user } = useAuthContext()
     const [tabIndex, setTabIndex] = useState(0)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
 
@@ -30,13 +30,13 @@ const ProfileScreen = () => {
 
             <View style={styles.header}>
 
-                <Avatar source={{ uri: user.details.avatar.url }} 
+                <Avatar source={{ uri: user?.avatar.url }} 
                     size={128} rounded onPress={handlePickImage}
                     icon={{ name: 'image-plus', type: 'material-community' }} 
                 />
                 <View style={styles.headerRight}>
-                    <Text style={{ fontSize: 20 }}>{user.details.fullName}</Text>
-                    <Text style={{ fontSize: 14, fontWeight: '200' }}>@{user.details.username}</Text>
+                    <Text style={{ fontSize: 20 }}>{user.fullName}</Text>
+                    <Text style={{ fontSize: 14, fontWeight: '200' }}>@{user.username}</Text>
                 </View>
 
                 <IonIcon name='log-out-outline' size={28} onPress={() => setShowLogoutModal(true)} 

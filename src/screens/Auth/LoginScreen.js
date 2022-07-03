@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
 import {  Input } from '@rneui/themed';
 import axios from '../../utils/axios'
 import { useAuthContext } from '../../store/context/auth'
@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton/GoogleLoginButton';
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton/FacebookLoginButton';
 import AuthBackground from '../../components/backgrounds/AuthBackground';
+import AuthErrorToast from '../../components/toasts/AuthErrorToast';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -15,23 +16,29 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [hidden, setHidden] = useState(true)
 
   const { signIn } = useAuthContext()
 
   const handleLogin = async () => {
     try{
+      setIsLoading(true)
       const { data } = await axios.post('/auth/login', { email, password })
       await signIn(data.user, data.token)
     }catch(err){
-      alert(err)
+      alert('Invalid credentials')
+      setEmail('')
+      setPassword('')
       setIsError(true)
+      setIsLoading(false)
     }
   }
   
   return (
       <AuthBackground style={styles.container}>
         <AuthStackHeader title='Sign in'/>
+        {/* <AuthErrorToast visible={isError} setVisible={setIsError}/> */}
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' && 'padding'} 
           style={{ width: '100%', alignItems: 'center'}}>
           <View style={styles.main}>
@@ -52,9 +59,9 @@ const LoginScreen = ({ navigation }) => {
               inputContainerStyle={{...styles.inputContainer }}
               labelStyle={{ ...styles.inputLabel }} value={password} 
             />
-            <TouchableOpacity onPress={handleLogin} disabled={email.length > 0 && password.length > 0}>
+            <TouchableOpacity onPress={handleLogin} disabled={email.length === 0 || password.length === 0}>
                 <Text style={styles.button}>
-                    Sign in <Icon name='arrow-forward' size={18}/>
+                    Sign in {isLoading ? <ActivityIndicator color='#0eaaa7' size='small'/> : <Icon name='arrow-forward' size={18}/> }
                 </Text>
             </TouchableOpacity>
             </View>
@@ -113,7 +120,8 @@ const styles = StyleSheet.create({
   },
   input: {
       fontSize: 20,
-      paddingLeft: 4
+      paddingLeft: 4,
+      color: '#0A3542'
   },
   inputContainer: {
       borderBottomColor: '#0A3542',

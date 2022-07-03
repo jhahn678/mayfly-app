@@ -37,7 +37,7 @@ const CatchesListItem = ({ item, selectedItems=null, setSelectedItems, showCatch
         <TouchableOpacity onPress={ selectedItems && selectedItems.length > 0 ? onSelect : onPress } onLongPress={selectedItems && onSelect}>
             <View style={{...styles.container, ...style}}>
                 <View style={isSelected ? {...styles.imageContainer, borderColor: '#0eaaa7', borderWidth: 3} : styles.imageContainer}>
-                    <Image source={{ uri: item.media[0].url }} resizeMode='cover' 
+                    <Image source={{ uri: item.media[0]?.url }} resizeMode='cover' 
                         style={isSelected ? { ...styles.image, opacity: .4 } : styles.image}
                     />
                     {isSelected && <IonIcon name='checkmark-circle-outline' size={56} style={styles.checked}/>}

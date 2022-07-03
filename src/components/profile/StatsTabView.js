@@ -1,17 +1,24 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import { TabView } from "@rneui/themed";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PlacesListItem from '../../components/places/PlacesListItem'
 import CatchesListItem from '../../components/catches/CatchesListItem'
 import { useNavigation } from '@react-navigation/core';
 import { makeFakeCatches, makeFakePlaces, makeFakeUsers } from '../../../test-data/groups';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { formatProfileCreatedAt } from '../../utils/format-dates';
+import { useAuthContext } from '../../store/context/auth';
 
 const StatsTabView = () => {
 
     const navigation = useNavigation()
-    const [user] = useState(makeFakeUsers(1)[0])
+    const { user } = useAuthContext()
+
+
+    useEffect(() => {
+        console.log(user.createdAt)
+    },[user])
+
     
     
     return (
@@ -42,10 +49,10 @@ const StatsTabView = () => {
                     <Text style={styles.value}>Largemouth Bass</Text>
                 </View>
 
-                <View style={styles.itemCol}>
+                {/* <View style={styles.itemCol}>
                     <Text style={styles.label}>Personal Best: </Text>
                     <CatchesListItem item={makeFakeCatches(1)[0]} style={styles.preview}/>
-                </View>
+                </View> */}
 
                 <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Places')}>
                     <Text style={styles.label}>Saved Locations: </Text>
