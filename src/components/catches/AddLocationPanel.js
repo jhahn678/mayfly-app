@@ -15,7 +15,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
 
         { groupId && (
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ groupId: groupId, selectPlace: true })}
+                onPress={() => navigateToMap({ groupId: groupId, selectPlace: true, showToggle: false })}
             >
                 <View style={styles.locationOptionIcon}>
                 <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
@@ -28,7 +28,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
         )}
         { userId && (
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ userId: userId, selectPlace: true })}
+                onPress={() => navigateToMap({ userId: userId, selectPlace: true, showToggle: false })}
             >
                 <View style={styles.locationOptionIcon}>
                 <IonIcon name='ios-bookmarks-outline' size={36} color='rgb(100,100,100)'/>
@@ -40,7 +40,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
         )}
 
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ save: true, replace: true, currentLocation: true, snapshot: true })}
+                onPress={() => navigateToMap({ save: true, replace: true, currentLocation: true, snapshot: true, showToggle: false })}
             >
                 <View style={styles.locationOptionIcon}>
                     <FontelloIcon name='map' size={40} color='rgb(100,100,100)'/>
@@ -49,7 +49,7 @@ const AddLocationPanel = ({ groupId=null, userId=null, numberOfSavedLocations=0,
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.locationOption} 
-                onPress={() => navigateToMap({ currentLocation: true, snapshot: true })}
+                onPress={() => navigateToMap({ currentLocation: true, snapshot: true, showToggle: false })}
             >
                 <View style={styles.locationOptionIcon}>
                     <FontelloIcon name='pin-current-location' size={48} color='rgb(100,100,100)'/>
