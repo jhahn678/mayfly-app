@@ -49,10 +49,10 @@ const StatsTabView = () => {
                     <Text style={styles.value}>Largemouth Bass</Text>
                 </View>
 
-                {/* <View style={styles.itemCol}>
+                <View style={styles.itemCol}>
                     <Text style={styles.label}>Personal Best: </Text>
                     <CatchesListItem item={makeFakeCatches(1)[0]} style={styles.preview}/>
-                </View> */}
+                </View>
 
                 <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Places')}>
                     <Text style={styles.label}>Saved Locations: </Text>
