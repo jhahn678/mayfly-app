@@ -1,40 +1,50 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { useState, useRef, useEffect } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { Switch } from '@rneui/themed';
 import CurrentLocationButton from '../components/buttons/CurrentLocationButton';
 import { useCurrentLocation } from '../hooks/utils/useCurrentLocation';
+import { useAuthContext } from '../store/context/auth';
+import { useLazyGetUserPlacesQuery } from '../hooks/queries/getUserPlaces'
+import { useLazyGetUserCatchesQuery } from '../hooks/queries/getUserCatches';
+import { useLazyGetGroupPlacesQuery } from '../hooks/queries/getGroupPlaces'
+import { useLazyGetGroupCatchesQuery } from '../hooks/queries/getGroupCatches'
 import { useRoute, useNavigation } from '@react-navigation/core'
 import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import FadeAnimation from '../components/animations/FadeAnimation'
-import { makeFakePlaces, makeFakeCatches } from '../../test-data/groups';
 import MapToggleBox from '../components/buttons/MapToggleBox';
 
 const MapScreen = () => {
 
-    
-    const [savedPlaces, setSavedPlaces] = useState([])
-    const [catches, setCatches] = useState([])
-    const [showCatches, setShowCatches] = useState(false)
-    const [showPlaces, setShowPlaces] = useState(false)
-    useEffect(() => {
-        if(route.params?.places === true){
-            setShowPlaces(true)
-            setSavedPlaces(makeFakePlaces(10))
-        }
-        if(route.params?.catches === true){
-            setShowCatches(true)
-            setCatches(makeFakeCatches(20))
-        }
-    },[])
-
-
     const navigation = useNavigation()
     const route = useRoute()
     const mapRef = useRef()
+    const { user } = useAuthContext()
+    const [getUserCatches, { data: userCatches, error: userCatchesError, loading: userCatchesLoading,  }] = useLazyGetUserCatchesQuery()
+    const [getUserPlaces, { data: userPlaces, error: userPlacesError, loading: userPlacesLoading }] = useLazyGetUserPlacesQuery()
+    const [getGroupCatches, { data: groupCatches, error: groupCatchesError, loading: groupCatchesLoading }] = useLazyGetGroupCatchesQuery()
+    const [getGroupPlaces, { data: groupPlaces, error: groupPlacesError, loading: groupPlacesLoading }] = useLazyGetGroupPlacesQuery()
+    const [showCatches, setShowCatches] = useState(false)
+    const [showPlaces, setShowPlaces] = useState(false)
     const getCurrentLocation = useCurrentLocation()
+
+
+
+    useEffect(() => {
+        if(route.params?.groupId){
+            getGroupCatches({ variables: { userId: route.params.groupId }})
+            getGroupPlaces({ variables: { userId: route.params.groupId }})
+        }
+        else if(route.params?.userId){
+            getUserCatches({ variables: { userId: route.params.userId }})
+            getUserPlaces({ variables: { userId: route.params.userId }})
+        }else{
+            getUserCatches({ variables: { userId: user._id }})
+            getUserPlaces({ variables: { userId: user._id }})
+        }
+        route.params?.places === true ? setShowPlaces(true) : setShowPlaces(false)
+        route.params?.catches === true ? setShowCatches(true) : setShowCatches(false)
+    },[])
 
     const [viewInstructionBubble, setViewInstructionBubble] = useState(false)
     const [showDoneButton, setShowDoneButton] = useState(false)
@@ -139,27 +149,52 @@ const MapScreen = () => {
                         longitude: pinCoordinates.longitude
                     }}/> 
                 }
-                { showPlaces && savedPlaces.map(sp => (
-                    <Marker key={sp._id} pinColor='#3ea9e2'
-                    title={sp.name || 'untitled'} 
-                    description={`Added by ${sp.user.details.firstName}`} 
-                    onPress={() => handleOnPressPin({ placeId: sp._id})}
-                    coordinate={{ 
-                        latitude: sp.location.coordinates[1],
-                        longitude: sp.location.coordinates[0]
-                    }}/>
-                ))}
-                { showCatches && catches.map(c => c.place && (
-                    <Marker key={c._id} pinColor='#8AC926'
-                        title={c.name || 'untitled'}
-                        description={`Added by ${c.user.details.firstName}`}
-                        onPress={() => handleOnPressPin({ catchId: c._id })}
-                        coordinate={{
-                            latitude: c.place.location.coordinates[1],
-                            longitude: c.place.location.coordinates[0]
-                        }}
-                    />
-                ))}
+                { showPlaces && 
+                    (route.params?.groupId ? 
+                        (groupPlaces && groupPlaces.map(p => (
+                            <Marker key={p._id} pinColor='#3ea9e2'
+                            title={p.name || 'untitled'} 
+                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
+                            onPress={() => handleOnPressPin({ placeId: p._id})}
+                            coordinate={{ 
+                                latitude: p.location.coordinates[1],
+                                longitude: p.location.coordinates[0]
+                            }}/>
+                        ))):
+                        (userPlaces && userPlaces?.getUser?.places.map(p => (
+                            <Marker key={p._id} pinColor='#3ea9e2' title={p.name || 'untitled'} 
+                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`} 
+                            onPress={() => handleOnPressPin({ placeId: p._id})}
+                            coordinate={{ 
+                                latitude: p.location.coordinates[1],
+                                longitude: p.location.coordinates[0]
+                            }}/>
+                        )))
+                    )
+                }
+                { showCatches && 
+                    (route.params?.groupId ? 
+                        (groupCatches && groupCatches.map(c => (
+                            <Marker key={c._id} pinColor='#3ea9e2' title={c.name || 'untitled'} 
+                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
+                            onPress={() => handleOnPressPin({ placeId: c._id})}
+                            coordinate={{ 
+                                latitude: c.location.coordinates[1],
+                                longitude: c.location.coordinates[0]
+                            }}/>
+                        ))):
+                        (userCatches && userCatches?.getUser?.catches.map(c => (
+                            <Marker key={c._id} pinColor='#3ea9e2' title={c.name || 'untitled'} 
+                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
+                            onPress={c.place ? () => handleOnPressPin({ placeId: c.place._id}) : null}
+                            coordinate={{ 
+                                latitude: c.place?.location.coordinate[1] || c.location.coordinates[1],
+                                longitude: c.place?.location.coordinates[0] || c.location.coordinates[0]
+                            }}/>
+                        ))) 
+                    )
+                }
+
             </MapView>
             <View style={styles.header}>
                 <GoBackFAB/>
@@ -172,7 +207,7 @@ const MapScreen = () => {
                     /> 
                 }
             </View>
-            <CurrentLocationButton style={styles.currentLocation} setLocation={setFocusedLocation}/>
+            <CurrentLocationButton style={styles.currentLocation} setLocation={setFocusedLocation} mapRef={mapRef}/>
             <View style={styles.zoom}>
                 <FeatherIcon name='zoom-in' size={24} onPress={handleZoomIn}/>
                 <View style={{ width: '100%', height: 1, backgroundColor: 'black'}}/>
@@ -183,11 +218,10 @@ const MapScreen = () => {
                     <Text style={styles.bubble}>Press and hold to place a marker</Text>
                 </FadeAnimation>
             }
-            { route.params?.showToggle &&
-                <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
-                    showPlaces={showPlaces} setShowPlaces={setShowPlaces}
-                />
-            }
+            
+            <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
+                showPlaces={showPlaces} setShowPlaces={setShowPlaces}
+            />
         </View>
     )
 }
@@ -263,3 +297,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     }
 })
+
+
+
+
