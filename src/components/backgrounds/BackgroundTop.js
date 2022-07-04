@@ -1,7 +1,7 @@
 import { ImageBackground, StyleSheet} from 'react-native'
-import image from '../../../assets/paper-river.jpg'
+import image from '../../../assets/background-top.jpg'
 
-const AuthBackground = ({ children, style }) => {
+const BackgroundTop = ({ children, style }) => {
   return (
     <ImageBackground
     source={image}
@@ -12,7 +12,7 @@ const AuthBackground = ({ children, style }) => {
   )
 }
 
-export default AuthBackground;
+export default BackgroundTop;
 
 const styles = StyleSheet.create({
     container: {
