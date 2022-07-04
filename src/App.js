@@ -31,7 +31,10 @@ export default function App() {
       await loadAsync({ 
         mayfly: require('../assets/fonts/mayfly.ttf'),
       })
-      await Asset.loadAsync(require('../assets/paper-river-cutout.png'))
+      await Asset.loadAsync(require('../assets/paper-river.jpg'))
+      await Asset.loadAsync(require('../assets/background-bottom.jpg'))
+      await Asset.loadAsync(require('../assets/background-top.jpg'))
+      await Asset.loadAsync(require('../assets/background-left.jpg'))
     }catch(err){
       console.warn(err)
     }finally{
