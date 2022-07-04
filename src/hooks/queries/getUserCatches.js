@@ -1,30 +1,47 @@
 import { gql, useQuery, useLazyQuery } from '@apollo/client'
 
 const GET_USER_CATCHES = gql`
-    query GetUser($userId: ID!) {
+    query GetUserCatches($userId: ID!) {
         getUser(userId: $userId) {
-        catches {
             _id
-            publish_type
-            title
-            species
-            length {
-            value
-            unit
+            details {
+                username
             }
-            weight {
-            value
-            unit
+            catches {
+                _id
+                publish_type
+                title
+                species
+                length {
+                    value
+                    unit
+                }
+                weight {
+                    value
+                    unit
+                }
+                rig
+                media {
+                    id
+                    url
+                }
+                createdAt
+                place {
+                    name
+                    avatar {
+                        id
+                        url
+                    }
+                    location {
+                        type
+                        coordinates
+                    }
+                }
+                location {
+                    type
+                    coordinates
+                }
             }
-            createdAt
-            media {
-            url
-            id
-            }
-            place {
-            _id
-            }
-        }
         }
     }
 `

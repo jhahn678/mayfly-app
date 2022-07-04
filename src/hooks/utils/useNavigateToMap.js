@@ -28,7 +28,7 @@ export const useNavigateToMap = () => {
         userId=null,
         catches=false,
         places=true,
-        showToggle=false
+        showToggle=true
 
     }) => {
         navigation.navigate('Map', { 
