@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import { useState, useRef, useEffect } from 'react'
 import { FAB } from '@rneui/themed'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
@@ -9,15 +9,13 @@ import React from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import CatchesTabHeader from '../../components/headers/CatchesTabHeader'
 import { useNavigation, useRoute } from '@react-navigation/core'
-import { formatCreatedAt } from '../../utils/format-dates'
 import { useGetUserCatchesQuery } from '../../hooks/queries/getUserCatches'
 import { useAuthContext } from '../../store/context/auth'
 
 const CatchesScreen = () => {
 
   const { user } = useAuthContext()
-  const { data } = useGetUserCatchesQuery(user._id)
-
+  const { data, error, loading, refetch } = useGetUserCatchesQuery(user._id)
 
   const flatListRef = useRef()
   const route = useRoute()
@@ -41,18 +39,21 @@ const CatchesScreen = () => {
         <CatchesTabHeader selectedItems={selectedItems}/>
         
         <View style={styles.main}>
-          <FlatList data={data?.getUser?.catches} ref={flatListRef}
-            onScroll={e => onScroll(e)}
-            renderItem={({ item }) => (
-              <CatchesListItem item={item} 
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-              />
-            )}
-            keyExtractor={item => item._id}
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-          />
+          { data &&
+            <FlatList data={data.getUser.catches} ref={flatListRef}
+              onScroll={e => onScroll(e)} keyExtractor={item => item._id}
+              renderItem={({ item }) => (
+                <CatchesListItem item={item} 
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                />
+              )}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+              refreshing={loading} onRefresh={() => refetch()}
+            />
+          }
+          { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
         </View>
 
         <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
