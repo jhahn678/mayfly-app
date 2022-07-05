@@ -15,8 +15,8 @@ query Query($groupId: ID!) {
                 _id
                 details {
                     avatar {
-                    id
-                    url
+                        id
+                        url
                     }
                     username
                     fullName
