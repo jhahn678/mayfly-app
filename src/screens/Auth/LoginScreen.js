@@ -27,6 +27,7 @@ const LoginScreen = ({ navigation }) => {
       const { data } = await axios.post('/auth/login', { email, password })
       await signIn(data.user, data.token)
     }catch(err){
+      console.error(err)
       alert('Invalid credentials')
       setEmail('')
       setPassword('')
