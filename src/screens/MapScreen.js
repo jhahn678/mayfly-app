@@ -13,6 +13,9 @@ import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import MapToggleBox from '../components/buttons/MapToggleBox';
+import PinLocationMarker from '../components/markers/PinLocationMarker';
+import PlaceMarkers from '../components/markers/PlaceMarkers';
+import CatchMarkers from '../components/markers/CatchMarkers';
 
 const MapScreen = () => {
 
@@ -141,67 +144,23 @@ const MapScreen = () => {
                 pitchEnabled={false} onMapReady={onMapReady} showsUserLocation={true}
                 onLongPress={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
             >
-                { pinCoordinates && 
-                    <Marker draggable
-                    onDragEnd={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
-                    coordinate={{ 
-                        latitude: pinCoordinates.latitude,
-                        longitude: pinCoordinates.longitude
-                    }}/> 
-                }
-                { showPlaces && 
-                    (route.params?.groupId ? 
-                        (groupPlaces && groupPlaces.map(p => (
-                            <Marker key={p._id} pinColor='#3ea9e2'
-                            title={p.name || 'untitled'} 
-                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
-                            onPress={() => handleOnPressPin({ placeId: p._id})}
-                            coordinate={{ 
-                                latitude: p.location.coordinates[1],
-                                longitude: p.location.coordinates[0]
-                            }}/>
-                        ))):
-                        (userPlaces && userPlaces?.getUser?.places.map(p => (
-                            <Marker key={p._id} pinColor='#3ea9e2' title={p.name || 'untitled'} 
-                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`} 
-                            onPress={() => handleOnPressPin({ placeId: p._id})}
-                            coordinate={{ 
-                                latitude: p.location.coordinates[1],
-                                longitude: p.location.coordinates[0]
-                            }}/>
-                        )))
-                    )
-                }
-                { showCatches && 
-                    (route.params?.groupId ? 
-                        (groupCatches && groupCatches.map(c => (
-                            <Marker key={c._id} pinColor='#3ea9e2' title={c.name || 'untitled'} 
-                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
-                            onPress={() => handleOnPressPin({ placeId: c._id})}
-                            coordinate={{ 
-                                latitude: c.location.coordinates[1],
-                                longitude: c.location.coordinates[0]
-                            }}/>
-                        ))):
-                        (userCatches && userCatches?.getUser?.catches.map(c => (
-                            <Marker key={c._id} pinColor='#3ea9e2' title={c.name || 'untitled'} 
-                            description={`Added by ${route.params?.userId ? userPlaces.getUser.details.username : 'you'}`}  
-                            onPress={c.place ? () => handleOnPressPin({ placeId: c.place._id}) : null}
-                            coordinate={{ 
-                                latitude: c.place?.location.coordinate[1] || c.location.coordinates[1],
-                                longitude: c.place?.location.coordinates[0] || c.location.coordinates[0]
-                            }}/>
-                        ))) 
-                    )
-                }
+                { pinCoordinates && <PinLocationMarker coordinates={pinCoordinates} setCoordinates={setPinCoordinates}/>}
+                { showPlaces && (groupPlaces ? 
+                    <PlaceMarkers groupData={groupPlaces} onPressPin={handleOnPressPin}/> :
+                    <PlaceMarkers userData={userPlaces} userId={userPlaces?.getUser._id} onPressPin={handleOnPressPin}/> 
+                )}
+                { showCatches && (groupCatches ? 
+                    <CatchMarkers groupData={groupCatches} onPressPin={handleOnPressPin}/> :
+                    <CatchMarkers userData={userCatches} onPressPin={handleOnPressPin} userId={userCatches?.getUser._id}/>
+                )}
 
             </MapView>
             <View style={styles.header}>
                 <GoBackFAB/>
                 { showDoneButton && 
-                    <CheckmarkFAB onPress={handleDone} 
-                        disabled={
-                            ((route.params?.save || route.params?.currentLocation) && !pinCoordinates) ||
+                    <CheckmarkFAB 
+                        onPress={handleDone} 
+                        disabled={((route.params?.save || route.params?.currentLocation) && !pinCoordinates) ||
                             (route.params?.selectPlace && !selectedPlaceId)
                         }
                     /> 
@@ -218,10 +177,11 @@ const MapScreen = () => {
                     <Text style={styles.bubble}>Press and hold to place a marker</Text>
                 </FadeAnimation>
             }
-            
-            <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
-                showPlaces={showPlaces} setShowPlaces={setShowPlaces}
-            />
+            { route.params?.showToggle &&
+                <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
+                    showPlaces={showPlaces} setShowPlaces={setShowPlaces}
+                />
+            }
         </View>
     )
 }
