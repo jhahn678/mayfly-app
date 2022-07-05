@@ -22,10 +22,14 @@ export const AuthProvider = ({ children }) => {
         (async () => {
             const token = await SecureStore.getItemAsync('ACCESS_TOKEN')
             if(token){
-                const { data } = await axios.get(`/auth/me?token=${token}`)
-                setUser(data.user)
-                setToken(token)
-                setIsSignedIn(true)
+                try{
+                    const { data } = await axios.get(`/auth/me?token=${token}`)
+                    setUser(data.user)
+                    setToken(token)
+                    setIsSignedIn(true)
+                }catch(err){
+                    console.error(err)
+                }
             }
         })()
     },[])
