@@ -26,7 +26,9 @@ const RootStack = () => {
 
     const client = new ApolloClient({
         uri: `${process.env.API_BASE_URL}/api`,
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+            dataIdFromObject: object => object._id,
+        }),
         defaultOptions:{ 
             query: {
                 fetchPolicy: 'cache-first'
