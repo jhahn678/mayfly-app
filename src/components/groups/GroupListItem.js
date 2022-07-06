@@ -40,7 +40,7 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
                             { item.latest_message.body }
                         </Text>
                     </View>
-                    <Text style={styles.date}>{ formatDateGroupList(item.updatedAt) }</Text>
+                    <Text style={styles.date}>{ formatDateGroupList(item.latest_message.createdAt) }</Text>
                 </View>
             </View>
             {/* <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> */}
