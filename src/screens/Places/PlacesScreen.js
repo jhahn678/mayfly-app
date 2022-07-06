@@ -5,35 +5,21 @@ import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { FAB } from '@rneui/themed'
 import { globalStyles } from '../../styles/globalStyles'
-import { useNavigation } from '@react-navigation/core'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
-import { makeFakePlaces } from '../../../test-data/groups'
 import PlacesListItem from '../../components/places/PlacesListItem'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 import { useGetUserPlacesQuery } from '../../hooks/queries/getUserPlaces'
 import { useAuthContext } from '../../store/context/auth'
+import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
 
 const PlacesScreen = () => {
 
   const { user } = useAuthContext()
   const { data, loading, error } = useGetUserPlacesQuery(user._id)
 
-  const navigation = useNavigation()
+  const { handleScrollToTop, flatListRef, onScroll, showScrollButton} = useScrollToTopButton()
   const navigateToMap = useNavigateToMap()
-  const flatListRef = useRef()
-
-  const [showScrollToTop, setShowScrollToTop] = useState(false) 
   const [selectedItems, setSelectedItems] = useState([])
-  
-  const handleScrollToTop = () => {
-    flatListRef.current.scrollToOffset({ offset: 0 })
-  }
-
-  const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
-    if(y > 600) return setShowScrollToTop(true)
-    if(y <= 600) return setShowScrollToTop(false)
-  }
-
 
 
   return (
@@ -60,7 +46,7 @@ const PlacesScreen = () => {
           { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
         </View>
 
-        <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
+        <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
 
         <FAB icon={<Icon name='add-location-alt' size={32} color='#fefefe'/>} 
           style={{ ...globalStyles.FAB, ...globalStyles.FABshadow, bottom: 112 }}

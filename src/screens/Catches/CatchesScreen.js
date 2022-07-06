@@ -11,27 +11,18 @@ import CatchesTabHeader from '../../components/headers/CatchesTabHeader'
 import { useNavigation, useRoute } from '@react-navigation/core'
 import { useGetUserCatchesQuery } from '../../hooks/queries/getUserCatches'
 import { useAuthContext } from '../../store/context/auth'
+import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
 
 const CatchesScreen = () => {
 
   const { user } = useAuthContext()
   const { data, error, loading, refetch } = useGetUserCatchesQuery(user._id)
 
-  const flatListRef = useRef()
   const route = useRoute()
   const navigation = useNavigation()
-
-  const [showScrollToTop, setShowScrollToTop] = useState(false) 
+  const { flatListRef, showScrollButton, handleScrollToTop, onScroll } = useScrollToTopButton()
   const [selectedItems, setSelectedItems] = useState([])
   
-  const handleScrollToTop = () => {
-    flatListRef.current.scrollToOffset({ offset: 0 })
-  }
-
-  const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
-    if(y > 600) return setShowScrollToTop(true)
-    if(y <= 600) return setShowScrollToTop(false)
-  }
 
   return (
     <PrimaryBackground style={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -56,7 +47,7 @@ const CatchesScreen = () => {
           { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
         </View>
 
-        <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
+        <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
 
         <FAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
           style={{ ...globalStyles.FAB, ...globalStyles.FABshadow, bottom: 112 }}
