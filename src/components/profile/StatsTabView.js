@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import PlacesListItem from '../../components/places/PlacesListItem'
 import CatchesListItem from '../../components/catches/CatchesListItem'
 import { useNavigation } from '@react-navigation/core';
-import { makeFakeCatches, makeFakePlaces, makeFakeUsers } from '../../../test-data/groups';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { formatProfileCreatedAt } from '../../utils/format-dates';
 import { useAuthContext } from '../../store/context/auth';
@@ -15,12 +14,6 @@ const StatsTabView = () => {
     const { user } = useAuthContext()
 
 
-    useEffect(() => {
-        console.log(user.createdAt)
-    },[user])
-
-    
-    
     return (
         <TabView.Item style={{ width: '100%' }}>
 
@@ -49,10 +42,10 @@ const StatsTabView = () => {
                     <Text style={styles.value}>Largemouth Bass</Text>
                 </View>
 
-                <View style={styles.itemCol}>
+                {/* <View style={styles.itemCol}>
                     <Text style={styles.label}>Personal Best: </Text>
-                    <CatchesListItem item={makeFakeCatches(1)[0]} style={styles.preview}/>
-                </View>
+                    <CatchesListItem item={} style={styles.preview}/>
+                </View> */}
 
                 <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Places')}>
                     <Text style={styles.label}>Saved Locations: </Text>
@@ -62,10 +55,10 @@ const StatsTabView = () => {
                     </View>
                 </TouchableOpacity>
 
-                <View style={styles.itemCol}>
+                {/* <View style={styles.itemCol}>
                     <Text style={styles.label}>Top location: </Text>
-                    <PlacesListItem item={makeFakePlaces(1)[0]} style={styles.preview}/>
-                </View>
+                    <PlacesListItem item={} style={styles.preview}/>
+                </View> */}
 
             </ScrollView>
 
