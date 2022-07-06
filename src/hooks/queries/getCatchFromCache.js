@@ -8,6 +8,7 @@ const GET_CATCH_LOCATION = gql`
             coordinates
         }
         place {
+            _id
             location {
                 coordinates
             }

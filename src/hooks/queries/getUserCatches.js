@@ -27,6 +27,7 @@ const GET_USER_CATCHES = gql`
                 }
                 createdAt
                 place {
+                    _id
                     name
                     avatar {
                         id

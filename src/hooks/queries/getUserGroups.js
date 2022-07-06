@@ -3,6 +3,7 @@ import { gql, useQuery, useLazyQuery } from '@apollo/client'
 const GET_USER_GROUPS = gql`
     query GetUserGroups($userId: ID!) {
         getUser(userId: $userId) {
+            _id
             groups {
                 _id
                 name

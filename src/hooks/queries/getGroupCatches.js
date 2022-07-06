@@ -3,6 +3,7 @@ import { gql, useQuery, useLazyQuery } from '@apollo/client'
 const GET_GROUP_CATCHES = gql`
 query Query($groupId: ID!) {
     getGroup(groupId: $groupId) {
+        _id
         catches {
             _id
             user {

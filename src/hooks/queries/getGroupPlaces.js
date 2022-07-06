@@ -3,6 +3,7 @@ import { gql, useQuery, useLazyQuery } from '@apollo/client'
 const GET_GROUP_PLACES = gql`
 query Query($groupId: ID!) {
     getGroup(groupId: $groupId) {
+        _id
         places {
             _id
             name
