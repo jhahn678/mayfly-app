@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
     },
     showOnMap: {
         position: 'absolute', 
-        top: 8, 
-        right: 8,
+        top: 10, 
+        right: 10,
         backgroundColor: '#EBF6F6',
         padding: 6,
         borderRadius: 14,

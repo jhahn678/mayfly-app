@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { useState, useEffect} from 'react'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { formatCreatedAt } from '../../utils/format-dates'
-import FontelloIcon from '../icons/Fontello'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 import { useNavigation } from '@react-navigation/core'
 
@@ -51,14 +50,9 @@ const CatchesListItem = ({ item, selectedItems=null, setSelectedItems, showCatch
                     </View>
                     <Text style={styles.createdAt}>{formatCreatedAt(item.createdAt)}</Text>
                 </View>
-                { item.place &&
-                    <FontelloIcon size={16} name='location' 
-                        style={styles.taggedLocation} 
-                        onPress={() => navigateToMap({ 
-                            catches: true, 
-                            places: false, 
-                            placeId: item.place._id 
-                        })}
+                { item.place || item.location &&
+                    <IonIcon size={16} name='map-outline' style={styles.showOnMap} 
+                        onPress={() => navigateToMap({ catches: true, catchId: item._id })}
                     />
                 }
             </View>
@@ -122,9 +116,18 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: '300'
     },
-    taggedLocation: {
-        position: 'absolute',
-        right: 12,
-        bottom: 12
+    showOnMap: {
+        position: 'absolute', 
+        top: 10, 
+        right: 10,
+        backgroundColor: '#EBF6F6',
+        padding: 6,
+        borderRadius: 14,
+        overflow: 'hidden',
+        elevation: 4,
+        shadowColor: 'black',
+        shadowOffset: { height: 1},
+        shadowRadius: 2,
+        shadowOpacity: .1
     }
 })

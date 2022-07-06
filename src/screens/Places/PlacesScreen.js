@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import { useState, useRef } from 'react'
 import PlacesTabHeader from '../../components/headers/PlacesTabHeader'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
@@ -10,10 +10,13 @@ import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import { makeFakePlaces } from '../../../test-data/groups'
 import PlacesListItem from '../../components/places/PlacesListItem'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
+import { useGetUserPlacesQuery } from '../../hooks/queries/getUserPlaces'
+import { useAuthContext } from '../../store/context/auth'
 
 const PlacesScreen = () => {
 
-  const [places] = useState(makeFakePlaces(10))
+  const { user } = useAuthContext()
+  const { data, loading, error } = useGetUserPlacesQuery(user._id)
 
   const navigation = useNavigation()
   const navigateToMap = useNavigateToMap()
@@ -40,18 +43,21 @@ const PlacesScreen = () => {
         <PlacesTabHeader selectedItems={selectedItems}/>
         
         <View style={styles.main}>
-          <FlatList data={places} ref={flatListRef}
-            onScroll={e => onScroll(e)}
-            renderItem={({ item }) => (
-              <PlacesListItem item={item} 
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-              />
-            )}
-            keyExtractor={item => item._id}
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-          />
+          { data &&
+            <FlatList data={data.getUser.places} ref={flatListRef}
+              onScroll={e => onScroll(e)}
+              renderItem={({ item }) => (
+                <PlacesListItem item={item} 
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                />
+              )}
+              keyExtractor={item => item._id}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+            />
+          }
+          { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
         </View>
 
         <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
