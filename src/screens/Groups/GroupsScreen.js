@@ -1,26 +1,21 @@
-import { useState, useRef } from 'react'
-import { StyleSheet, FlatList, View } from 'react-native'
+import { useState, useEffect } from 'react'
+import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GroupsTabHeader from '../../components/headers/GroupsTabHeader'
 import GroupListItem from '../../components/groups/GroupListItem'
-import { fakeGroups } from '../../../test-data/groups'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
+import { useGetUserGroups } from '../../hooks/queries/getUserGroups'
+import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
+import { useAuthContext } from '../../store/context/auth'
 
 
 const GroupsScreen = () => {
 
-  const flatListRef = useRef()
-  const [showScrollToTop, setShowScrollToTop] = useState(false) 
+  const { user } = useAuthContext()
+  const { data, loading, error, subscribeToMore } = useGetUserGroups(user._id)
+  const { showScrollButton, onScroll, handleScrollToTop, flatListRef } = useScrollToTopButton()
   const [selectedItems, setSelectedItems] = useState([])
-  
-  const handleScrollToTop = () => {
-    flatListRef.current.scrollToOffset({ offset: 0 })
-  }
 
-  const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
-    if(y > 600) return setShowScrollToTop(true)
-    if(y <= 600) return setShowScrollToTop(false)
-  }
 
   return (
     <PrimaryBackground style={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -28,24 +23,27 @@ const GroupsScreen = () => {
         <GroupsTabHeader selectedItems={selectedItems}/>
 
         <View style={styles.main}>
-          <FlatList
-            data={fakeGroups}
-            ref={flatListRef}
-            onScroll={e => onScroll(e)}
-            renderItem={({ item }) => (
-              <GroupListItem 
-                item={item} 
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-              />
-            )}
-            keyExtractor={item => item._id}
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-          />
+          { data &&
+            <FlatList
+              data={data?.getUser.groups}
+              ref={flatListRef}
+              onScroll={e => onScroll(e)}
+              renderItem={({ item }) => (
+                <GroupListItem 
+                  item={item} 
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                />
+              )}
+              keyExtractor={item => item._id}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+            />
+          }
+          { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
         </View>
         
-        <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
+        <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
 
     </PrimaryBackground>
   )
