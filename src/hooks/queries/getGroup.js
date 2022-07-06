@@ -42,22 +42,6 @@ const GET_GROUP = gql`
                     }
                 }
             }
-            latest_message {
-                _id
-                user {
-                    _id
-                    details {
-                        username
-                        avatar {
-                            url
-                        }
-                        firstName
-                    }
-                }
-                type
-                createdAt
-                body
-            }
             name
             avatar {
                 url
