@@ -6,7 +6,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/core';
 import { useEffect, useState } from 'react';
 
-const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
+const GroupListItem = ({ item, selectedItems, setSelectedItems, subscribeToUpdates=null }) => {
 
     const [isSelected, setIsSelected] = useState(false)
 
@@ -15,9 +15,15 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
         setIsSelected(true) : setIsSelected(false)
     },[selectedItems])
 
+    useEffect(() => {
+        if(subscribeToUpdates) subscribeToUpdates()
+    },[])
+
+    
+
     const navigation = useNavigation()
 
-    const onPress = () => navigation.navigate('GroupScreen', { _id: item._id})
+    const onPress = () => navigation.navigate('GroupScreen', { groupId: item._id})
 
     const onSelect = () => {
         selectedItems.includes(item._id) ?
@@ -29,14 +35,16 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
         <TouchableOpacity onPress={selectedItems.length > 0 ? onSelect : onPress} onLongPress={onSelect}>
             <View style={isSelected ? {...styles.container, ...styles.selected} : styles.container}>
                 <Avatar rounded size={72}
-                    source={{ uri: item.latest_message.user.details.avatar.url }} 
+                    source={{ uri: item.avatar.url || item.latest_message.user.details.avatar.url }} 
                     containerStyle={isSelected ? {...styles.avatar, ...styles.avatarSelected} : styles.avatar}
                 />
                 <View style={styles.right}>
                     <Text style={styles.title} numberOfLines={1} ellipsizeMode='tail'>{ item.name }</Text>
                     <View style={styles.main}>
                         <Text style={styles.body} numberOfLines={2} ellipsizeMode='tail'>
-                            <Text style={styles.name}>{`${item.latest_message.user.details.firstName}: `}</Text>
+                            {item.latest_message.user.details && 
+                                <Text style={styles.name}>{`${item.latest_message.user.details.firstName}: `}</Text>
+                            }
                             { item.latest_message.body }
                         </Text>
                     </View>
@@ -44,7 +52,7 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
                 </View>
             </View>
             {/* <Badge value={2} status='success' containerStyle={{ position: 'absolute', top: -5, right: 5 }}/> */}
-            { !item &&
+            {/* { !item &&
                 <EntypoIcon name='pin' size={20} 
                     style={{ 
                         position: 'absolute', 
@@ -63,7 +71,7 @@ const GroupListItem = ({ item, selectedItems, setSelectedItems }) => {
                         color: '#262b2f'
                     }}
                 />
-            }
+            } */}
         </TouchableOpacity>
     )
 }

@@ -4,12 +4,20 @@ import { globalStyles } from '../../../styles/globalStyles';
 import { Avatar } from '@rneui/themed';
 import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap';
 import { useNavigation } from '@react-navigation/core';
+import { useGetGroupFromCache } from '../../../hooks/queries/getGroupFromCache'
+import { useEffect, useState } from 'react';
 
-const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
+const GroupHeader = ({ groupId, numberOfUsers, onGoBack }) => {
     
 
     const navigateToMap = useNavigateToMap()
     const navigation = useNavigation()
+    const { getGroup } = useGetGroupFromCache()
+    const [cachedData, setCachedData] = useState({ _id: '', avatar: { url: null }, name: '' })
+
+    useEffect(() => {
+        setCachedData(getGroup(groupId))
+    },[])
 
     const handleGoBack = () => {
         onGoBack && onGoBack()
@@ -26,11 +34,11 @@ const GroupHeader = ({ groupId, name, avatar, numberOfUsers, onGoBack }) => {
                     style={{...globalStyles.fontShadow, ...styles.back}}
                     onPress={handleGoBack}
                 /> 
-                <Avatar source={{ uri: avatar }} size={52} rounded containerStyle={styles.avatar}/>
+                <Avatar source={{ uri: cachedData.avatar.uri }} title={cachedData.name[0]} size={52} rounded containerStyle={styles.avatar}/>
                 <View style={styles.group}>
-                    <Text style={styles.title}>{name}</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={styles.members}>{numberOfUsers} members</Text>
+                    <Text style={styles.title}>{cachedData.name}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 2}}>
+                        <Text style={styles.members}>{numberOfUsers ? `${numberOfUsers} members` : '...loading'}</Text>
                     </View>
                 </View>
 
