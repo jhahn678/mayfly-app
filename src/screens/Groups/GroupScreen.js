@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text} from 'react-native'
+import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text, ActivityIndicator} from 'react-native'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GroupHeader from '../../components/headers/GroupHeader'
-import { makeFakeGroup } from '../../../test-data/groups'
 import { formatTimeMessage } from '../../utils/format-dates'
 import MessageBar from '../../components/groups/MessageBar'
 import Message from '../../components/groups/Message'
@@ -14,13 +12,15 @@ import { useToggleAnimation } from '../../hooks/utils/useToggleAnimation'
 import { Avatar } from '@rneui/themed'
 import { useRoute } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
+import { useGetGroupQuery } from '../../hooks/queries/getGroup'
+import { useEffect } from 'react'
  
 
 const GroupScreen = () => {
 
   const { setChatImages } = useImageContext()
-  const route = useRoute()
-  // const groupId = route.params._id
+  const { params } = useRoute()
+  const { data, loading, error, subscribeToMore } = useGetGroupQuery(params?.groupId)
 
   const { 
     ref: buttonTranslate, 
@@ -28,25 +28,26 @@ const GroupScreen = () => {
     setToggledOn: setExpandButtons 
   } = useToggleAnimation({ initialValue: 300 })
 
-  const [data, setData] = useState(makeFakeGroup(20, 2))
 
   
   return (
     <PrimaryBackground>
-      <GroupHeader groupId={data._id} 
-        name={data.name} 
-        avatar={data.avatar.url} 
-        numberOfUsers={data.users.length}
+
+      <GroupHeader groupId={params?.groupId}  
+        numberOfUsers={data?.getGroup.users.length}
         onGoBack={() => setChatImages([])}
       />
 
-      { data?.messages.length === 0 ? (
+      { loading && <ActivityIndicator color='#0eaaa7' size={64} style={{ paddingTop: '50%' }}/> }
+      { data?.getGroup.messages.length === 0 && (
         <View style={styles.newGroup}>
-          <Avatar source={{ uri: data.avatar.url }} containerStyle={styles.avatar} size={150} rounded/>
+          <Avatar source={{ uri: data.getGroup.avatar.url }} title={data.getGroup.name[0]} containerStyle={styles.avatar} size={150} rounded/>
           <Text style={styles.createdBy}>{data.created_by.details.fullName} created a new group</Text>
           <Text style={styles.createdAt}>at {formatTimeMessage(data.createdAt)}</Text>
-        </View>  ):(
-        <FlatList data={data.messages}
+        </View>  
+      )}
+      { data?.getGroup.messages.length > 0 && (
+        <FlatList data={data?.getGroup.messages}
           keyExtractor={item => item._id}
           renderItem={({ item }) => <Message message={item}/>}
           contentContainerStyle={styles.messagesContainer}
@@ -56,8 +57,8 @@ const GroupScreen = () => {
       
       <View style={{...styles.buttonContainer }}>
         <Animated.View style={{...styles.actions, transform: [{ translateY: buttonTranslate }]}}>
-          <NewCatchButton groupId={data._id}/>
-          <NewPlaceButton groupId={data._id}/>
+          <NewCatchButton groupId={params?.groupId}/>
+          <NewPlaceButton groupId={params?.groupId}/>
           <ShareImageButton/>
         </Animated.View>
         <TouchableOpacity onPress={() => setExpandButtons(e => !e)}

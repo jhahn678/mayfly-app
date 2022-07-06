@@ -7,6 +7,7 @@ import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import { useGetUserGroups } from '../../hooks/queries/getUserGroups'
 import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
 import { useAuthContext } from '../../store/context/auth'
+import { messageSubscription } from '../../hooks/subscriptions/getMessageSubscription'
 
 
 const GroupsScreen = () => {
@@ -33,6 +34,7 @@ const GroupsScreen = () => {
                   item={item} 
                   selectedItems={selectedItems}
                   setSelectedItems={setSelectedItems}
+                  subscribeToUpdates={() => subscribeToMore(messageSubscription(item._id))}
                 />
               )}
               keyExtractor={item => item._id}
