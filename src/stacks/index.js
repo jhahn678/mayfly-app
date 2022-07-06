@@ -28,11 +28,24 @@ const RootStack = () => {
         uri: `${process.env.API_BASE_URL}/api`,
         cache: new InMemoryCache({
             dataIdFromObject: object => object._id,
+            typePolicies: {
+                User: { fields: { details: {
+                    //Alternate here was to use username as cacheID
+                    //Not really sure why it objects werent merging in
+                    //the first place. For now, if incoming UserDetails comes
+                    //in as undefined/null, just return the existing
+                    merge: (existing, incoming, { mergeObjects }) => {
+                        if(existing && !incoming){
+                            return existing
+                        }else{
+                            return mergeObjects(existing, incoming)
+                        }
+                    }
+                }}}
+            }
         }),
         defaultOptions:{ 
-            query: {
-                fetchPolicy: 'cache-first'
-            }
+            query: { fetchPolicy: 'cache-first' }
         },
         headers: {
             authorization: `Bearer ${token}`
