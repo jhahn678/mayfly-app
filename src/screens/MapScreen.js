@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { useState, useRef, useEffect } from 'react'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import CurrentLocationButton from '../components/buttons/CurrentLocationButton';
 import { useCurrentLocation } from '../hooks/utils/useCurrentLocation';
 import { useAuthContext } from '../store/context/auth';
@@ -16,13 +16,19 @@ import MapToggleBox from '../components/buttons/MapToggleBox';
 import PinLocationMarker from '../components/markers/PinLocationMarker';
 import PlaceMarkers from '../components/markers/PlaceMarkers';
 import CatchMarkers from '../components/markers/CatchMarkers';
+import CatchMarker from '../components/markers/CatchMarker';
+import PlaceMarker from '../components/markers/PlaceMarker';
+import { useGetCatchFromCache } from '../hooks/queries/getCatchFromCache';
+import { useGetPlaceFromCache } from '../hooks/queries/getPlaceFromCache';
 
 const MapScreen = () => {
 
     const navigation = useNavigation()
-    const route = useRoute()
+    const { params } = useRoute()
     const mapRef = useRef()
     const { user } = useAuthContext()
+    const { getCatch } = useGetCatchFromCache()
+    const { getPlace } = useGetPlaceFromCache()
     const [getUserCatches, { data: userCatches, error: userCatchesError, loading: userCatchesLoading,  }] = useLazyGetUserCatchesQuery()
     const [getUserPlaces, { data: userPlaces, error: userPlacesError, loading: userPlacesLoading }] = useLazyGetUserPlacesQuery()
     const [getGroupCatches, { data: groupCatches, error: groupCatchesError, loading: groupCatchesLoading }] = useLazyGetGroupCatchesQuery()
@@ -34,19 +40,32 @@ const MapScreen = () => {
 
 
     useEffect(() => {
-        if(route.params?.groupId){
-            getGroupCatches({ variables: { userId: route.params.groupId }})
-            getGroupPlaces({ variables: { userId: route.params.groupId }})
-        }
-        else if(route.params?.userId){
-            getUserCatches({ variables: { userId: route.params.userId }})
-            getUserPlaces({ variables: { userId: route.params.userId }})
+        if(params?.groupId){
+            getGroupCatches({ variables: { userId: params.groupId }})
+            getGroupPlaces({ variables: { userId: params.groupId }})
+        }else if(params?.userId){
+            getUserCatches({ variables: { userId: params.userId }})
+            getUserPlaces({ variables: { userId: params.userId }})
+        }else if(params?.placeId){
+            const result = getPlace(params.placeId)
+            setFocusedLocation({ 
+                longitude: result.location.coordinates[0], 
+                latitude: result.location.coordinates[1], 
+                place: result
+            })
+        }else if(params?.catchId){
+            const result = getCatch(params.catchId)
+            setFocusedLocation({ 
+                longitude: result.place?.location.coordinates[0] || result.location.coordinates[0], 
+                latitude: result.place?.location.coordinates[1] || result.location.coordinates[1], 
+                catch: result
+            })
         }else{
             getUserCatches({ variables: { userId: user._id }})
             getUserPlaces({ variables: { userId: user._id }})
         }
-        route.params?.places === true ? setShowPlaces(true) : setShowPlaces(false)
-        route.params?.catches === true ? setShowCatches(true) : setShowCatches(false)
+        params?.places === true ? setShowPlaces(true) : setShowPlaces(false)
+        params?.catches === true ? setShowCatches(true) : setShowCatches(false)
     },[])
 
     const [viewInstructionBubble, setViewInstructionBubble] = useState(false)
@@ -60,16 +79,16 @@ const MapScreen = () => {
     //On map load we check route params for to see if map
     //should auto focus on current location
     const onMapReady = async () => {
-        if(route.params?.currentLocation){
+        if(params?.currentLocation){
             const { coords } = await getCurrentLocation()
             const latlong = { latitude: coords.latitude, longitude: coords.longitude }
             mapRef.current.animateCamera({ center: latlong, zoom: 18 })
             setPinCoordinates(latlong)
         }
-        if(route.params?.save && !route.params?.currentLocation){
+        if(params?.save && !params?.currentLocation){
             setViewInstructionBubble(true)
         }
-        if(route.params?.save || route.params?.currentLocation || route.params?.selectPlace){
+        if(params?.save || params?.currentLocation || params?.selectPlace){
             setShowDoneButton(true)
         }
     } 
@@ -87,7 +106,7 @@ const MapScreen = () => {
         if(focusedLocation){
             mapRef.current.animateCamera({ 
                 center: { 
-                    latitude: focusedLocation.latitude, 
+                    latitude: focusedLocation.latitude , 
                     longitude: focusedLocation.longitude
                 },
                 zoom: 16,
@@ -97,7 +116,7 @@ const MapScreen = () => {
 
 
     const handleOnPressPin = ({ catchId, placeId }) => {
-        if(route.params?.selectPlace){
+        if(params?.selectPlace){
             return setSelectedPlaceId(placeId)
         }
         if(placeId){
@@ -113,23 +132,23 @@ const MapScreen = () => {
         const history = navigation.getState().routes
         const navigatedFrom = history[history.length - 2].name
         const params = { coordinates: pinCoordinates }
-        if(route.params?.groupId){
-            params.groupId = route.params.groupId
+        if(params?.groupId){
+            params.groupId = params.groupId
         }
-        if(route.params?.selectPlace === true){
+        if(params?.selectPlace === true){
             params.placeId = selectedPlaceId;
         }
-        if(route.params?.snapshot === true){
+        if(params?.snapshot === true){
             const options = { format: 'jpg', width: 300, height: 300, quality: .5, result: 'base64' }
             const res = await mapRef.current.takeSnapshot(options)
             params.image = res;
         }
         //Check if params indicate we are saving this location and/or replacing route
-        if(route.params?.save === true && route.params?.replace === true){
+        if(params?.save === true && params?.replace === true){
             navigation.replace('NewPlace', params)
-        }else if(route.params?.save === true){
+        }else if(params?.save === true){
             navigation.navigate('NewPlace', params)
-        }else if(route.params?.replace === true){
+        }else if(params?.replace === true){
             navigation.replace(navigatedFrom, params)
         }else{
             navigation.navigate(navigatedFrom, params)
@@ -145,6 +164,8 @@ const MapScreen = () => {
                 onLongPress={({ nativeEvent }) => setPinCoordinates(nativeEvent.coordinate)}
             >
                 { pinCoordinates && <PinLocationMarker coordinates={pinCoordinates} setCoordinates={setPinCoordinates}/>}
+                { focusedLocation?.place && <PlaceMarker data={focusedLocation.place}/> }
+                { focusedLocation?.catch && <CatchMarker data={focusedLocation.catch}/> }
                 { showPlaces && (groupPlaces ? 
                     <PlaceMarkers groupData={groupPlaces} onPressPin={handleOnPressPin}/> :
                     <PlaceMarkers userData={userPlaces} userId={userPlaces?.getUser._id} onPressPin={handleOnPressPin}/> 
@@ -160,8 +181,8 @@ const MapScreen = () => {
                 { showDoneButton && 
                     <CheckmarkFAB 
                         onPress={handleDone} 
-                        disabled={((route.params?.save || route.params?.currentLocation) && !pinCoordinates) ||
-                            (route.params?.selectPlace && !selectedPlaceId)
+                        disabled={((params?.save || params?.currentLocation) && !pinCoordinates) ||
+                            (params?.selectPlace && !selectedPlaceId)
                         }
                     /> 
                 }
@@ -177,7 +198,7 @@ const MapScreen = () => {
                     <Text style={styles.bubble}>Press and hold to place a marker</Text>
                 </FadeAnimation>
             }
-            { route.params?.showToggle &&
+            { params?.showToggle &&
                 <MapToggleBox showCatches={showCatches} setShowCatches={setShowCatches}
                     showPlaces={showPlaces} setShowPlaces={setShowPlaces}
                 />
