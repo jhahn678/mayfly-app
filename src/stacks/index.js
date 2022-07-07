@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { split, HttpLink } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { getMainDefinition, mergeDeepArray } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { StatusBar } from "expo-status-bar";
@@ -29,7 +29,10 @@ const RootStack = () => {
     const Stack = createNativeStackNavigator()
 
     const httpLink = new HttpLink({
-        uri: `${process.env.API_BASE_URL}/api`
+        uri: `${process.env.API_BASE_URL}/api`,
+        headers: {
+            authorization: `Bearer ${token}`
+        }
     });
 
     const wsLink = new GraphQLWsLink(createClient({
@@ -52,8 +55,7 @@ const RootStack = () => {
     );
 
     const client = new ApolloClient({
-        // link: splitLink,
-        uri: `${process.env.API_BASE_URL}/api`,
+        link: splitLink,
         cache: new InMemoryCache({
             dataIdFromObject: object => object._id,
             typePolicies: {
@@ -74,9 +76,6 @@ const RootStack = () => {
         }),
         defaultOptions:{ 
             query: { fetchPolicy: 'cache-first' }
-        },
-        headers: {
-            authorization: `Bearer ${token}`
         }
     })
 
