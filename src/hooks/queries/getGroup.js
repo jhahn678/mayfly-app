@@ -60,7 +60,11 @@ const GET_GROUP = gql`
             created_by {
                 _id
                 details {
+                    username
                     fullName
+                    avatar {
+                        url
+                    }  
                 }
             }
         }
@@ -76,3 +80,4 @@ export const useGetGroupQuery = (groupId) => {
 
     return result;
 }
+

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { globalStyles } from '../../../styles/globalStyles';
 import { Avatar } from '@rneui/themed';
@@ -34,13 +34,16 @@ const GroupHeader = ({ groupId, numberOfUsers, onGoBack }) => {
                     style={{...globalStyles.fontShadow, ...styles.back}}
                     onPress={handleGoBack}
                 /> 
-                <Avatar source={{ uri: cachedData.avatar.uri }} title={cachedData.name[0]} size={52} rounded containerStyle={styles.avatar}/>
-                <View style={styles.group}>
-                    <Text style={styles.title}>{cachedData.name}</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 2}}>
-                        <Text style={styles.members}>{numberOfUsers ? `${numberOfUsers} members` : '...loading'}</Text>
+
+                <TouchableOpacity onPress={() => navigation.navigate('GroupSettings', { groupId: groupId })} style={{ flexDirection: 'row', alignItems: 'center'}}>
+                    <Avatar source={{ uri: cachedData.avatar.url }} title={cachedData.name[0]} size={52} rounded containerStyle={styles.avatar}/>
+                    <View style={styles.group}>
+                        <Text style={styles.title}>{cachedData.name}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 2}}>
+                            <Text style={styles.members}>{numberOfUsers ? `${numberOfUsers} members` : '...loading'}</Text>
+                        </View>
                     </View>
-                </View>
+                </TouchableOpacity>
 
 
                 <IonIcon 

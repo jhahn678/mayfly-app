@@ -30,13 +30,15 @@ const GroupScreen = () => {
   } = useToggleAnimation({ initialValue: 300 })
 
   
-  // useEffect(() => {
-  //   subscribeToMore(groupSubscription(params?.groupId))
-  // },[])
+  useEffect(() => {
+    const config = groupSubscription(params?.groupId)
+    const unsub = subscribeToMore(config)
+    return () => unsub()
+  },[])
 
 
 
-  
+
   return (
     <PrimaryBackground>
 
