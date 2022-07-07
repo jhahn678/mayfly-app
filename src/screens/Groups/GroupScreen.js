@@ -1,4 +1,5 @@
 import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text, ActivityIndicator} from 'react-native'
+import { useEffect } from 'react'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import GroupHeader from '../../components/headers/GroupHeader'
 import { formatTimeMessage } from '../../utils/format-dates'
@@ -13,8 +14,8 @@ import { Avatar } from '@rneui/themed'
 import { useRoute } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
 import { useGetGroupQuery } from '../../hooks/queries/getGroup'
-import { useEffect } from 'react'
- 
+import { groupSubscription } from '../../hooks/subscriptions/getGroupSubscription'
+
 
 const GroupScreen = () => {
 
@@ -27,6 +28,12 @@ const GroupScreen = () => {
     toggledOn: expandButtons, 
     setToggledOn: setExpandButtons 
   } = useToggleAnimation({ initialValue: 300 })
+
+  
+  // useEffect(() => {
+  //   subscribeToMore(groupSubscription(params?.groupId))
+  // },[])
+
 
 
   

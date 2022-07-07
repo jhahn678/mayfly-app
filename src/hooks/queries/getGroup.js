@@ -71,8 +71,7 @@ const GET_GROUP = gql`
 export const useGetGroupQuery = (groupId) => {
 
     const result = useQuery(GET_GROUP, {
-        variables: { groupId },
-        // fetchPolicy: 'no-cache'
+        variables: { groupId }
     })
 
     return result;
