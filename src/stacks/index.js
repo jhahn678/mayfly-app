@@ -1,8 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { StatusBar } from "expo-status-bar";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useAuthContext } from "../store/context/auth";
 import AuthStack from './AuthStack'
 import AppTabs from './AppTabs'
-import { useAuthContext } from "../store/context/auth";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GroupScreen from "../screens/Groups/GroupScreen";
 import MapScreen from "../screens/MapScreen";
 import NewGroupScreen from "../screens/Groups/NewGroupScreen";
@@ -12,8 +18,6 @@ import CameraScreen from "../screens/CameraScreen";
 import PlaceScreen from "../screens/Places/PlaceScreen";
 import CatchScreen from "../screens/Catches/CatchScreen";
 import ContactsScreen from "../screens/Groups/ContactsScreen";
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { StatusBar } from "expo-status-bar";
 import GroupSettingsScreen from "../screens/Groups/GroupSettingsScreen";
 import AddUserToGroupScreen from "../screens/Groups/AddUserToGroupScreen";
 
@@ -24,7 +28,31 @@ const RootStack = () => {
     const { isSignedIn, token } = useAuthContext()
     const Stack = createNativeStackNavigator()
 
+    const httpLink = new HttpLink({
+        uri: `${process.env.API_BASE_URL}/api`
+    });
+
+    const wsLink = new GraphQLWsLink(createClient({
+        url: process.env.WS_URL,
+        connectionParams: {
+            Authorization: `Bearer ${token}`
+        }
+    }));
+
+    const splitLink = split(
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        wsLink,
+        httpLink
+    );
+
     const client = new ApolloClient({
+        // link: splitLink,
         uri: `${process.env.API_BASE_URL}/api`,
         cache: new InMemoryCache({
             dataIdFromObject: object => object._id,
