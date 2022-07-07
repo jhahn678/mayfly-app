@@ -30,7 +30,7 @@ export const messageSubscription = (groupId) => ({
         //We will look through our cached query and find the group in the
         //groups array. Then we will overwrite its latest_message and 
         //save it to the cache
-        console.log('messageCreated was non null')
+        
         //prev groups array filtered
         const filteredGroups = prev.getUser.groups.filter(g => g._id !== groupId)
         //group item to be updated
