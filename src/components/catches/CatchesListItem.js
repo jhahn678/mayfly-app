@@ -64,27 +64,32 @@ export default CatchesListItem
 
 const styles = StyleSheet.create({
     container: {
-        height: 120,
-        width: '100%',
-        paddingHorizontal: 8,
-        paddingVertical: 12,
-        borderBottomColor: 'rgba(53, 52, 64, .3)',
-        borderBottomWidth: .3,
+        height: 132,
+        width: '96%',
+        padding: 8,
+        backgroundColor: '#fefefe',
+        borderRadius: 12,
         display: 'flex',
         flexDirection: 'row',
+        alignSelf: 'center',
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 8,
+        elevation: 6,
+        shadowOffset: { height: 2 },
     },
     imageContainer: {
         width: '40%',
         height: '100%',
         display: 'flex',
         justifyContent: 'center',
-        borderRadius: 22,
+        borderRadius: 12,
         alignItems: 'center'
     },
     image: {
         height: '100%',
         width: '100%',
-        borderRadius: 20,
+        borderRadius: 12,
         position: 'absolute',
     },
     checked: {

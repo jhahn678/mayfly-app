@@ -79,14 +79,19 @@ export default PlacesListItem
 
 const styles = StyleSheet.create({
     container: {
-        height: 120,
-        width: '100%',
-        paddingHorizontal: 8,
-        paddingVertical: 12,
-        borderBottomColor: 'rgba(53, 52, 64, .3)',
-        borderBottomWidth: .3,
+        height: 132,
+        width: '96%',
+        padding: 8,
         display: 'flex',
         flexDirection: 'row',
+        backgroundColor: '#fefefe',
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 8,
+        elevation: 6,
+        shadowOffset: { height: 2 },
+        borderRadius: 12,
+        alignSelf: 'center'
     },
     rightSelected: {
         borderRightColor: '#0eaaa7',
@@ -97,13 +102,13 @@ const styles = StyleSheet.create({
         height: '100%',
         display: 'flex',
         justifyContent: 'center',
-        borderRadius: 22,
+        borderRadius: 12,
         alignItems: 'center'
     },
     image: {
         height: '100%',
         width: '100%',
-        borderRadius: 20,
+        borderRadius: 12,
         position: 'absolute',
     },
     checked: {
