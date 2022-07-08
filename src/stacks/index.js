@@ -71,7 +71,7 @@ const RootStack = () => {
                             return mergeObjects(existing, incoming)
                         }
                     }
-                }}}
+                }}}   
             }
         }),
         defaultOptions:{ 
