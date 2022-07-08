@@ -47,12 +47,6 @@ const GroupHeader = ({ groupId, numberOfUsers, onGoBack }) => {
 
 
                 <IonIcon 
-                    name='settings-outline' 
-                    size={28} 
-                    style={styles.settings} 
-                    onPress={() => navigation.navigate('GroupSettings', { groupId: groupId })}
-                />
-                <IonIcon 
                     name='map-outline' 
                     size={28} 
                     style={styles.mapIcon}
@@ -72,9 +66,15 @@ const styles = StyleSheet.create({
         height: '12%',
         display: 'flex',
         justifyContent: 'flex-end',
-        borderBottomColor: '#353440',
-        borderBottomWidth: .5,
-        backgroundColor: '#fefefe'
+        backgroundColor: '#fefefe',
+        position: 'relative',
+        zIndex: 100,
+        borderRadius: 12,
+        shadowColor: 'black',
+        shadowOpacity: .2,
+        shadowRadius: 8,
+        elevation: 6,
+        shadowOffset: { height: 2 },
     },
     headerContent: {
         display: 'flex',

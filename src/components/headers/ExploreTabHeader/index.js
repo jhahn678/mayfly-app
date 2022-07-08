@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import { FAB } from '@rneui/themed'
-import { globalStyles } from '../../../styles/globalStyles';
+import BaseFAB from '../../buttons/BaseFAB';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
 const ExploreTabHeader = ({}) => {
@@ -14,15 +13,13 @@ const ExploreTabHeader = ({}) => {
             <View style={styles.headerContent}>
                 <Text style={styles.title}>Explore</Text>
                 { route.name === 'GlobalMap' ?
-                    <FAB 
+                    <BaseFAB 
                         onPress={() => navigation.navigate('GlobalFeed')}
                         icon={<IonIcon size={24} name='list-outline' color='#fefefe'/>} 
-                        style={globalStyles.FABshadow}
                     /> :
-                    <FAB 
+                    <BaseFAB 
                         onPress={() => navigation.navigate('GlobalMap')}
-                        icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>} 
-                        style={globalStyles.FABshadow}
+                        icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>}        
                     />
                 }
             </View>
