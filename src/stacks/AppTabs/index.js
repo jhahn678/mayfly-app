@@ -8,13 +8,11 @@ import PlacesScreen from '../../screens/Places/PlacesScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 import { useAuthContext } from '../../store/context/auth';
 import { Avatar } from '@rneui/themed';
-import { makeFakeUsers } from '../../../test-data/groups';
 
 const AppTabs = () => {
 
     const Tab = createBottomTabNavigator();
-    // const { user } = useAuthContext()
-    const [user] = makeFakeUsers(1)
+    const { user } = useAuthContext()
     
     return (
         <Tab.Navigator 
@@ -30,13 +28,13 @@ const AppTabs = () => {
                 tabBarShowLabel: false
             }}/>
             <Tab.Screen name='Catches' component={CatchesScreen} options={{
-                tabBarIcon: ({ color }) => (<FontelloIcon name='fish' color={color} size={36}/>),
+                tabBarIcon: ({ color }) => (<FontelloIcon name='fish' color={color} size={28}/>),
                 tabBarShowLabel: false
             }}/>
             <Tab.Screen name='Profile' component={ProfileScreen} options={{
                 tabBarIcon: ({ color }) => (
-                    <Avatar source={{ uri: user.details.avatar.url }}
-                    title={user.details.firstName[0]} size={32} rounded 
+                    <Avatar source={{ uri: user.details?.avatar?.url }}
+                    title={user.firstName[0]} size={32} rounded 
                     containerStyle={{ backgroundColor: color, borderWidth: 1, borderColor: color }}/>
                 ),
                 tabBarShowLabel: false
