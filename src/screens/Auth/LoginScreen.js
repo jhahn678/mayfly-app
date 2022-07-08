@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
     width: '90%',
     display: 'flex',
     alignItems: 'flex-end',
+    paddingVertical: 24,
+    paddingHorizontal: 12,
     shadowColor: 'black',
     shadowOpacity: .3,
     shadowRadius: 6,
     elevation: 12,
     shadowOffset: { height: 6 },
     backgroundColor: '#fefefe',
-    paddingVertical: 24,
-    paddingHorizontal: 12,
     borderRadius: 12
   },
   button: {
