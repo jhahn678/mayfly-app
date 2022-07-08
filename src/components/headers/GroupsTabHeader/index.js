@@ -3,9 +3,11 @@ import FontelloIcon from '../../icons/Fontello'
 import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native'
 import { FAB } from '@rneui/themed'
+import BaseFAB from '../../buttons/BaseFAB';
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { LinearGradient } from 'expo-linear-gradient';
 
 const GroupsTabHeader = ({ selectedItems }) => {
 
@@ -33,13 +35,12 @@ const GroupsTabHeader = ({ selectedItems }) => {
                         />
                     </View> : 
                     <View style={{ flexDirection: 'row'}}>
-                        <FAB onPress={() => navigation.navigate('Contacts')} 
+                        <BaseFAB onPress={() => navigation.navigate('Contacts')} 
                             icon={<MCIcon name='account-group-outline' size={24} color='#fefefe'/>}
-                            style={{...styles.headerButton, ...globalStyles.FABshadow, marginRight: 12 }}
+                            style={{ marginRight: 12 }}
                         />
-                        <FAB onPress={() => navigation.navigate('NewGroup')} 
+                        <BaseFAB onPress={() => navigation.navigate('NewGroup')} 
                             icon={<FontelloIcon size={24} name='new-chat' color='#fefefe'/>} 
-                            style={{...styles.headerButton, ...globalStyles.FABshadow}}
                         />
                     </View>
                 }
@@ -82,5 +83,19 @@ const styles = StyleSheet.create({
     },
     FAB: {
         paddingLeft: 6,
-    }
+    },
+    fab: {
+        elevation: 12,
+        shadowColor: 'black',
+        shadowOffset: { height: 6 },
+        shadowOpacity: .4,
+        shadowRadius: 4
+    },
+    view: {
+        height: 56,
+        width: 56,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })

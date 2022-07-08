@@ -1,18 +1,12 @@
 import { StyleSheet } from 'react-native'
-import { FAB } from '@rneui/themed'
 import { LinearGradient } from 'expo-linear-gradient'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
+import { FAB } from '@rneui/themed'
+import React from 'react'
 
-
-const MapFAB = ({ mapOptions, style }) => {
-
-    const navigateToMap = useNavigateToMap()
-
+const BaseFAB = ({ onPress, icon, style }) => {
     return (
-        <FAB onPress={() => navigateToMap({...mapOptions})} 
-            style={{...styles.fab, ...style}}
-            icon={<Icon name='map-outline' size={24} color='#fefefe'/>}
+        <FAB onPress={onPress}  
+            icon={icon} style={{...styles.fab, ...style}}
             ViewComponent={({ children }) => (
                 <LinearGradient style={styles.view}
                     colors={['#06beb6','#48b1bf']} 
@@ -25,7 +19,7 @@ const MapFAB = ({ mapOptions, style }) => {
     )
 }
 
-export default MapFAB;
+export default BaseFAB
 
 const styles = StyleSheet.create({
     view: {

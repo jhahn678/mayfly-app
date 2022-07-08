@@ -5,6 +5,7 @@ import { globalStyles } from '../../../styles/globalStyles';
 import { useNavigateToMap } from '../../../hooks/utils/useNavigateToMap'
 import { FAB } from '@rneui/themed'
 import { useNavigation } from '@react-navigation/core';
+import MapFAB from '../../buttons/MapFAB';
 
 const CatchesTabHeader = ({ selectedItems }) => {
 
@@ -38,10 +39,7 @@ const CatchesTabHeader = ({ selectedItems }) => {
                             />
                         }
                     </View> : 
-                    <FAB onPress={() => navigateToMap({ catches: true, places: false })} 
-                        icon={<IonIcon size={24} name='map-outline' color='#fefefe'/>} 
-                        style={globalStyles.FABshadow}
-                    />
+                    <MapFAB mapOptions={{ catches: true, places: false }}/>
                 }
             </View>
         </View>
