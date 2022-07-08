@@ -24,7 +24,7 @@ const TextMessage = ({ data }) => {
                 />
             }
             <Gradient style={isAuthor ? styles.bubbleAuthor : styles.bubble} colors={ isAuthor ? ['#06beb6','#48b1bf'] : ['#F6F4F3', '#F4F5F2']}>
-                <Text style={{ fontWeight: '500'}}>{data.body}</Text>
+                <Text style={{ fontWeight: '400'}}>{data.body}</Text>
                 <Text>{formatTimeMessage(data.createdAt)}</Text>
             </Gradient>
         </View>
@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         paddingLeft: 8,
         paddingTop: 8,
+        elevation: 2,
+        shadowColor: 'black',
+        shadowOpacity: .3,
+        shadowRadius: 2,
+        shadowOffset: { height: 2 }
     },  
     containerAuthor: {
         display: 'flex',
@@ -61,14 +66,15 @@ const styles = StyleSheet.create({
     bubble: {
         maxWidth: '70%',
         backgroundColor: 'rgba(53, 52, 64,.3)',
-        borderRadius: 20,
+        minWidth: 80,
+        borderRadius: 12,
         padding: 16,
-        paddingTop: 8,
-        paddingBottom: 16,
+        paddingTop: 10,
+        paddingBottom: 6,
         marginLeft: 6,
         elevation: 2,
         shadowColor: 'black',
-        shadowOpacity: .3,
+        shadowOpacity: .2,
         shadowRadius: 1,
         shadowOffset: { height: 1 }
     },
@@ -78,10 +84,10 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 10,
         paddingBottom: 6,
-        borderRadius: 20,
+        borderRadius: 12,
         elevation: 2,
         shadowColor: 'black',
-        shadowOpacity: .3,
+        shadowOpacity: .2,
         shadowRadius: 1,
         shadowOffset: { height: 1 }
     },

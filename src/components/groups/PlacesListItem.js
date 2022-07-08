@@ -41,26 +41,25 @@ const styles = StyleSheet.create({
     container: {
         height: 132,
         width: '100%',
-        borderColor: 'rgba(0,0,0,.2)',
-        borderWidth: .5,
-        borderRadius: 20,
-        padding: 12,
+        borderRadius: 12,
+        padding: 8,
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#fefefe'
+        backgroundColor: '#fefefe',
+        
     },
     imageContainer: {
         width: '40%',
         height: '100%',
         display: 'flex',
         justifyContent: 'center',
-        borderRadius: 22,
+        borderRadius: 12,
         alignItems: 'center'
     },
     image: {
         height: '100%',
         width: '100%',
-        borderRadius: 20,
+        borderRadius: 12,
         position: 'absolute',
     },
     right: {

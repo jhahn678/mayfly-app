@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         minWidth: 100
     },
     image: {
-        borderRadius: 20,
+        borderRadius: 12,
         height: '100%',
     },
     remove: {
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
         top: -6,
         right: -6,
         color: '#fefefe',
-        backgroundColor: 'rgba(255,0,0,.3)',
+        backgroundColor: '#0eaaa7',
         borderRadius: 13,
         paddingLeft: 2,
-        overflow: 'hidden'
+        overflow: 'hidden',
     }
 })
