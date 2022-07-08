@@ -11,17 +11,16 @@ import PendingContactsListItem from '../../components/groups/PendingContactsList
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import ViewableContact from '../../components/groups/ViewableContact'
 import NewContactBottomSheet from '../../components/groups/NewContactBottomSheet'
-
+import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
 
 const ContactsScreen = () => {
   
     const { user } = useAuthContext()
+    const { flatListRef, handleScrollToTop, onScroll, showScrollButton} = useScrollToTopButton()
     const [contacts, setContacts] = useState([ ...makeFakePendingRequests(3), ...makeFakeContacts(12) ])
     const [filteredContacts, setFilteredContacts] = useState([])
     const [search, setSearch] = useState('')
     const [selectedContacts, setSelectedContacts] = useState([])
-    const flatListRef = useRef()
-    const [showScrollToTop, setShowScrollToTop] = useState(false) 
     const [showNewContact, setShowNewContact] = useState(false)
   
     useEffect(() => {
@@ -39,15 +38,6 @@ const ContactsScreen = () => {
                 c.details.username.startsWith(value)
             )))
         }
-    }
-
-    const handleScrollToTop = () => {
-        flatListRef.current.scrollToOffset({ offset: 0 })
-    }
-
-    const onScroll = ({ nativeEvent: { contentOffset: { y } }}) => {
-        if(y > 600) return setShowScrollToTop(true)
-        if(y <= 600) return setShowScrollToTop(false)
     }
 
 
@@ -89,7 +79,7 @@ const ContactsScreen = () => {
                 ItemSeparatorComponent={() => <View style={{ height: 5 }}/>}
             />
         </View>
-        <ScrollToTopButton showScrollToTop={showScrollToTop} onPress={handleScrollToTop}/>
+        <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
         <NewContactBottomSheet isVisible={showNewContact} setIsVisible={setShowNewContact}/>
     </PrimaryBackground>
   )

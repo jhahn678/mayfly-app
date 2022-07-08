@@ -1,10 +1,9 @@
 import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text, ActivityIndicator} from 'react-native'
-import { useEffect } from 'react'
-import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
+import { useEffect, useState } from 'react'
 import GroupHeader from '../../components/headers/GroupHeader'
 import { formatTimeMessage } from '../../utils/format-dates'
 import MessageBar from '../../components/groups/MessageBar'
-import Message from '../../components/groups/Message'
+import TextMessage from '../../components/groups/message/TextMessage'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import NewCatchButton from '../../components/buttons/NewCatchButton'
 import NewPlaceButton from '../../components/buttons/NewPlaceButton'
@@ -13,21 +12,39 @@ import { useToggleAnimation } from '../../hooks/utils/useToggleAnimation'
 import { Avatar } from '@rneui/themed'
 import { useRoute } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
-import { useGetGroupQuery } from '../../hooks/queries/getGroup'
+import { useGetGroupQuery, GET_GROUP_MESSAGES } from '../../hooks/queries/getGroup'
 import { groupSubscription } from '../../hooks/subscriptions/getGroupSubscription'
+
 
 
 const GroupScreen = () => {
 
   const { setChatImages } = useImageContext()
   const { params } = useRoute()
-  const { data, loading, error, subscribeToMore } = useGetGroupQuery(params?.groupId)
+  const { data, loading, error, fetchMore, subscribeToMore } = useGetGroupQuery(params?.groupId)
 
   const { 
     ref: buttonTranslate, 
     toggledOn: expandButtons, 
     setToggledOn: setExpandButtons 
   } = useToggleAnimation({ initialValue: 300 })
+
+  const handleFetchMoreMessages = () => {
+      fetchMore({
+        query: GET_GROUP_MESSAGES,
+        variables: {
+          groupId: params.groupId,
+          offset: data.getGroup.messages.length
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          const { messages: lastPage } = prev.getGroup;
+          const { messages: nextPage } = fetchMoreResult.getGroup;
+          const combined = [ ...nextPage, ...lastPage]
+          const { getGroup } = prev;
+          return { getGroup: { ...getGroup, messages: combined } }
+        }
+      })
+  }
 
   
   useEffect(() => {
@@ -38,9 +55,8 @@ const GroupScreen = () => {
 
 
 
-
   return (
-    <PrimaryBackground>
+    <View style={styles.container}>
 
       <GroupHeader groupId={params?.groupId}  
         numberOfUsers={data?.getGroup.users.length}
@@ -56,10 +72,13 @@ const GroupScreen = () => {
         </View>  
       )}
       { data?.getGroup.messages.length > 0 && (
-        <FlatList data={data?.getGroup.messages}
-          keyExtractor={item => item._id}
-          renderItem={({ item }) => <Message message={item}/>}
+        <FlatList data={[...data?.getGroup.messages].reverse()}
+          ListFooterComponent={loading && <ActivityIndicator size={32}/>}
           contentContainerStyle={styles.messagesContainer}
+          keyExtractor={item => item._id}
+          renderItem={({ item }) => <TextMessage data={item}/>}
+          onEndReachedThreshold={.2}
+          onEndReached={handleFetchMoreMessages} 
           inverted={true}
         />
       )}
@@ -78,13 +97,17 @@ const GroupScreen = () => {
       </View>
 
       <MessageBar/>
-    </PrimaryBackground>
+    </View>
   )
 }
 
 export default GroupScreen
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#fefefe'
+  },  
   messagesContainer: {
     width: '100%',
     minHeight: '100%',
