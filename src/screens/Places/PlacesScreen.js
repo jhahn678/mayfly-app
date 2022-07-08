@@ -1,10 +1,9 @@
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import PlacesTabHeader from '../../components/headers/PlacesTabHeader'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { FAB } from '@rneui/themed'
-import { globalStyles } from '../../styles/globalStyles'
+import BaseFAB from '../../components/buttons/BaseFAB'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import PlacesListItem from '../../components/places/PlacesListItem'
 import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
@@ -39,6 +38,7 @@ const PlacesScreen = () => {
                 />
               )}
               keyExtractor={item => item._id}
+              ItemSeparatorComponent={() => <View style={{ height: 16, width: '100%' }}/>}
               contentContainerStyle={styles.list}
               showsVerticalScrollIndicator={false}
             />
@@ -47,11 +47,10 @@ const PlacesScreen = () => {
         </View>
 
         <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
-
-        <FAB icon={<Icon name='add-location-alt' size={32} color='#fefefe'/>} 
-          style={{ ...globalStyles.FAB, ...globalStyles.FABshadow, bottom: 112 }}
+        
+        <BaseFAB icon={<Icon name='add-location-alt' size={32} color='#fefefe'/>} 
+          style={{ position: 'absolute', right: 24, bottom: 112 }}
           onPress={() => navigateToMap({ snapshot: true, save: true, replace: true })}
-          buttonStyle={{ padding: 0 }}
         />
 
     </PrimaryBackground>
@@ -64,16 +63,11 @@ const styles = StyleSheet.create({
   list: {
     width: '100%',
     paddingBottom: 100,
-    paddingTop: 16,
-    backgroundColor: '#fefefe'
+    paddingTop: 16
   },
   main: {
     width: '100%',
-    height: '80%',
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    overflow: 'hidden',
-    backgroundColor: '#fefefe',
-    elevation: 20
+    height: '84%',
+    overflow: 'hidden'
   }
 })

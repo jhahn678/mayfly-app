@@ -14,6 +14,7 @@ import { useRoute } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
 import { useGetGroupQuery, GET_GROUP_MESSAGES } from '../../hooks/queries/getGroup'
 import { groupSubscription } from '../../hooks/subscriptions/getGroupSubscription'
+import Gradient from '../../components/backgrounds/Gradient'
 
 
 
@@ -56,7 +57,7 @@ const GroupScreen = () => {
 
 
   return (
-    <View style={styles.container}>
+    <Gradient style={styles.container} colors={['#136a8a','#032836']}>
 
       <GroupHeader groupId={params?.groupId}  
         numberOfUsers={data?.getGroup.users.length}
@@ -97,7 +98,7 @@ const GroupScreen = () => {
       </View>
 
       <MessageBar/>
-    </View>
+    </Gradient>
   )
 }
 
