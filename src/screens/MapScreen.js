@@ -9,6 +9,7 @@ import { useLazyGetUserCatchesQuery } from '../hooks/queries/getUserCatches';
 import { useLazyGetGroupPlacesQuery } from '../hooks/queries/getGroupPlaces'
 import { useLazyGetGroupCatchesQuery } from '../hooks/queries/getGroupCatches'
 import { useRoute, useNavigation } from '@react-navigation/core'
+import FadeAnimation from '../components/animations/FadeAnimation';
 import GoBackFAB from '../components/buttons/GoBackFAB';
 import CheckmarkFAB from '../components/buttons/CheckmarkFAB';
 import FeatherIcon from 'react-native-vector-icons/Feather'
