@@ -7,19 +7,15 @@ import { useNavigation } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
 import ChatImage from './ChatImage'
 import Gradient from '../backgrounds/Gradient'
-import { BottomSheet } from '@rneui/themed'
-import ExpandingView from '../animations/ExpandingView'
+import MessageBarControlPanel from './MessageBarControlPanel/MessageBarControlPanel'
 
-const MessageBar = () => {
+const MessageBar = ({ onSend }) => {
 
-    const navigation = useNavigation()
     const [showOptions, setShowOptions] = useState(false)
     const { onContentSizeChange, inputHeight } = useTextInputAutosize()
     const [messageInput, setMessageInput] = useState('')
-    const sendMessage = () => console.log(messageInput)
-
+    const sendMessage = () => onSend()
     const { chatImages, removeChatImage } = useImageContext()
-    const handleCamera = () => navigation.navigate('Camera')
 
     return (
         <KeyboardAvoidingView
@@ -30,12 +26,11 @@ const MessageBar = () => {
             { chatImages && chatImages.map(i => <ChatImage key={i.uri} image={i} clearImage={() => removeChatImage(i.uri)}/>) }
             </ScrollView>
 
-            <ExpandingView expand={showOptions} expandedValue={150} style={styles.optionsContainer}>
+            <MessageBarControlPanel show={showOptions}/>
 
-            </ExpandingView>
 
             <View style={{ ...styles.inputContainer, height: inputHeight > 150 ? 178 : inputHeight + 28 }}>
-                {/* <IonIcon name='camera-outline' size={32} color='#353440' onPress={handleCamera}/> */}
+                
                 <TouchableOpacity onPress={() => setShowOptions(s => !s)}>
                     <Gradient style={styles.moreOptions}>
                         <AntIcon name={showOptions ? 'downcircleo' : 'pluscircleo'} size={37} color='#fefefe' />
@@ -127,11 +122,5 @@ const styles = StyleSheet.create({
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center' 
-    },
-    optionsContainer: {
-        backgroundColor: '#fefefe', 
-        width: '100%',
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12
     }
 })

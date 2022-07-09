@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from '@rneui/themed'
 import { formatTimeMessage } from '../../../utils/format-dates'
 import { useState, useEffect } from 'react'
@@ -23,9 +23,14 @@ const TextMessage = ({ data }) => {
                     size={36} containerStyle={styles.avatar}
                 />
             }
-            <Gradient style={isAuthor ? styles.bubbleAuthor : styles.bubble} colors={ isAuthor ? ['#06beb6','#48b1bf'] : ['#F6F4F3', '#F4F5F2']}>
-                <Text style={{ fontWeight: '400'}}>{data.body}</Text>
-                <Text>{formatTimeMessage(data.createdAt)}</Text>
+            <Gradient style={isAuthor ? styles.bubbleAuthor : styles.bubble} colors={ isAuthor ? ['#a0cfcd','#a7d3d1'] : ['#a8cad7', '#bdd8e1']}>
+                { user._id !== data.user._id && (
+                    <View style={styles.header}>
+                        <Text style={{ color: '#2b515f'}}>{data.user.details.fullName}</Text>
+                    </View> 
+                )}
+                <Text style={styles.body}>{data.body}</Text>
+                <Text style={{...styles.time, color: isAuthor ? '#254b48' : '#2b515f'}}>{formatTimeMessage(data.createdAt)}</Text>
             </Gradient>
         </View>
     )
@@ -65,7 +70,6 @@ const styles = StyleSheet.create({
     },
     bubble: {
         maxWidth: '70%',
-        backgroundColor: 'rgba(53, 52, 64,.3)',
         minWidth: 80,
         borderRadius: 12,
         padding: 16,
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowColor: 'black',
         shadowOpacity: .2,
-        shadowRadius: 1,
+        shadowRadius: 3,
         shadowOffset: { height: 1 }
     },
     bubbleAuthor: {
@@ -88,7 +92,20 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowColor: 'black',
         shadowOpacity: .2,
-        shadowRadius: 1,
+        shadowRadius: 3,
         shadowOffset: { height: 1 }
     },
+    body: {
+        paddingTop: 4
+    },
+    time: {
+        alignSelf: 'flex-end',
+        fontSize: 14,
+        paddingTop: 4
+    },
+    header: {
+        borderBottomWidth: .5,
+        borderBottomColor: '#2b515f',
+        marginBottom: 2
+    }
 })

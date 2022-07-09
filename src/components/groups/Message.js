@@ -3,6 +3,7 @@ import React from 'react'
 import { Avatar } from '@rneui/themed'
 import { formatTimeMessage } from '../../utils/format-dates'
 import { useAuthContext } from '../../store/context/auth'
+import Gradient from '../../components/Gradient'
 
 const Message = ({ message }) => {
 
@@ -12,8 +13,8 @@ const Message = ({ message }) => {
 
 
     return (
-        <View style={user._id == message.user._id ? styles.containerAuthor : styles.container}>
-            { message.user._id!== user._id &&
+        <View style={user._id === message.user._id ? styles.containerAuthor : styles.container}>
+            { message.user._id !== user._id &&
                 <Avatar 
                     source={{ uri: message.user.details.avatar.url }} 
                     size={36} rounded containerStyle={styles.avatar}
@@ -50,11 +51,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         paddingLeft: 8,
         paddingTop: 8,
-        elevation: 2,
+        elevation: 4,
         shadowColor: 'black',
         shadowOpacity: .3,
-        shadowRadius: 2,
-        shadowOffset: { height: 2 }
+        shadowRadius: 1,
+        shadowOffset: { height: 1 }
     },  
     containerAuthor: {
         display: 'flex',
