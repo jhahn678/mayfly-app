@@ -1,5 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { useState } from 'react'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/core'
@@ -24,12 +23,12 @@ const MessageBarControlPanel = ({ show }) => {
                 <ShareImageButton/>
                 <MCIcon name='file-gif-box' size={32} color='#032836'/>
             </View>
-            <View style={styles.right}>
+            <ScrollView horizontal contentContainerStyle={styles.right} showsHorizontalScrollIndicator={false}>
                 <NewCatchPanelButton/>
                 <NewPlacePanelButton/>
                 <ShareCatchPanelButton/>
                 <SharePlacePanelButton/>
-            </View>
+            </ScrollView>
         </ExpandingView>
 
     )
@@ -47,16 +46,17 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     left: {
+        borderRightColor: '#ececec',
+        borderRightWidth: 1,
         paddingHorizontal: 16,
         height: '100%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
     },
     right: {
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 12,
-        paddingTop: 12
+        alignItems: 'flex-end',
+        paddingLeft: 12
     },
 })

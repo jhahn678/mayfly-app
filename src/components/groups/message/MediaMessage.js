@@ -40,7 +40,7 @@ const MediaMessage = ({ data }) => {
 
                     <Image source={{ uri: data.media[0].url }} resizeMode='cover' style={styles.image}/>
 
-                    { data.media.length === 1 && data.body.length < 25 && <>
+                    { data.media.length === 1 && data.body.length < 80 && <>
                         <Text style={styles.body}>{data.body}</Text>
                         <Text style={{...styles.time, color: isAuthor ? '#254b48' : '#2b515f'}}>
                             {formatTimeMessage(data.createdAt)}
@@ -58,7 +58,7 @@ const MediaMessage = ({ data }) => {
                 ))}
 
                 {/* MESSAGE BODY IF THERE IS ONE THAT WASNT ALREADY DISPLAYED*/}
-                { data.media.length > 1  || data.body.length >= 25 &&
+                { data.media.length > 1  || data.body.length >= 80 &&
                     <Gradient style={isAuthor ? styles.captionAuthor : styles.caption} key={uuid.v4()}
                         colors={ isAuthor ? ['#a0cfcd','#a7d3d1'] : ['#a8cad7', '#bdd8e1']}
                     >
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     },
     bubbleAuthor: {
         flex: 1,
+        width: '100%',
         minWidth: 80,
         padding: 4,
         borderRadius: 12,
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
         flex: 1,
         minWidth: 80,
         borderRadius: 12,
-        padding: 16,
+        padding: 8,
         paddingTop: 10,
         paddingBottom: 6,
         marginLeft: 6,
@@ -174,9 +175,9 @@ const styles = StyleSheet.create({
     captionAuthor: {
         flex: 1,
         minWidth: 80,
-        padding: 16,
-        paddingTop: 10,
-        paddingBottom: 6,
+        padding: 12,
+        paddingTop: 8,
+        paddingBottom: 8,
         borderRadius: 12,
         elevation: 2,
         shadowColor: 'black',

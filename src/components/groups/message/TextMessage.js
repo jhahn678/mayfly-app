@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Avatar } from '@rneui/themed'
 import { formatTimeMessage } from '../../../utils/format-dates'
 import { useState, useEffect } from 'react'
