@@ -2,7 +2,6 @@ import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import { useState } from 'react'
 import PlacesTabHeader from '../../components/headers/PlacesTabHeader'
 import PrimaryBackground from '../../components/backgrounds/PrimaryBackground'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import BaseFAB from '../../components/buttons/BaseFAB'
 import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import PlacesListItem from '../../components/places/PlacesListItem'
@@ -10,6 +9,7 @@ import { useNavigateToMap } from '../../hooks/utils/useNavigateToMap'
 import { useGetUserPlacesQuery } from '../../hooks/queries/getUserPlaces'
 import { useAuthContext } from '../../store/context/auth'
 import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
+import FontelloIcon from '../../components/icons/Fontello'
 
 const PlacesScreen = () => {
 
@@ -48,7 +48,7 @@ const PlacesScreen = () => {
 
         <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
         
-        <BaseFAB icon={<Icon name='add-location-alt' size={32} color='#fefefe'/>} 
+        <BaseFAB icon={<FontelloIcon name='map-add' size={28} color='#fefefe'/>} 
           style={{ position: 'absolute', right: 24, bottom: 112 }}
           onPress={() => navigateToMap({ snapshot: true, save: true, replace: true })}
         />

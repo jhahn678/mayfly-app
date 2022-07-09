@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, FlatList } from 'react-native'
 import { useState, useEffect } from 'react'
-import { Chip, Icon, FAB } from '@rneui/themed'
-import { globalStyles } from '../../styles/globalStyles'
+import { Chip, Icon } from '@rneui/themed'
+import BaseFAB from '../../components/buttons/BaseFAB'
 import AvatarChip from '../../components/chip/AvatarChip'
 import GoBackFAB from '../../components/buttons/GoBackFAB'
 import MapFAB from '../../components/buttons/MapFAB'
@@ -51,10 +51,8 @@ const PlaceScreen = () => {
             />
           }
           <MapFAB style={styles.mapButton} mapOptions={{ placeId: place._id}}/>
-          <FAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
-            style={{ ...styles.newCatch, ...globalStyles.FABshadow }}
-            onPress={() => navigation.navigate('NewCatch')}
-            buttonStyle={{ paddingTop: 10, paddingLeft: 8 }}
+          <BaseFAB icon={<FontelloIcon name='fish' size={28} color='#fefefe'/>} 
+            style={styles.newCatch} onPress={() => navigation.navigate('NewCatch')}
           />
         </View>
 
