@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Avatar } from '@rneui/themed'
 import { useSendSMSInvite } from '../../hooks/utils/useSendSMSInvite'
+import Gradient from '../backgrounds/Gradient'
 
 const  DeviceContactsListItem = ({ item }) => {
 
@@ -31,8 +32,11 @@ const  DeviceContactsListItem = ({ item }) => {
                 <Text>{item.name}</Text>
                 <Text style={styles.phone}>{phoneNumber}</Text>
             </View>
-            <TouchableOpacity onPress={handleInvite} style={styles.inviteContainer}>
-                <Text style={styles.invite}>Invite</Text>
+        
+            <TouchableOpacity onPress={handleInvite} style={styles.shadow}>
+                <Gradient style={styles.invite}>
+                    <Text style={{ fontSize: 10, color: '#fff'}}>Invite</Text>
+                </Gradient>
             </TouchableOpacity>
         </View>
     )
@@ -57,21 +61,21 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         color: 'rgba(53, 52, 64, .6)'
     },
-    inviteContainer: {
+    shadow: {
+        elevation: 1,
+        shadowColor: 'black',
+        shadowOffset: { height: 1 },
+        shadowOpacity: .1,
+        shadowRadius: 1,
         position: 'absolute',
         right: 28,
-
     },
     invite: {
-        backgroundColor: 'rgb(220,220,220)',
-        color: 'rgb(80,80,80)',
-        borderWidth: .5,
-        paddingHorizontal: 12,
+        paddingHorizontal: 10,
         paddingVertical: 6,
-        borderRadius: 14,
-        overflow: 'hidden',
+        borderRadius: 16,
         fontSize: 10,
-        color: 'rgb(80,80,80)',
-        borderColor: 'rgb(80,80,80)',
+        color: '#fefefe',
+        marginLeft: 8
     }
 })

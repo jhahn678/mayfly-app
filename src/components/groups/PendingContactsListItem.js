@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
         borderColor: '#cfcfcf',
         borderWidth: .5,
         paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 12,
+        paddingVertical: 6,
+        borderRadius: 13,
         overflow: 'hidden',
         fontSize: 10,
         color: 'rgb(80,80,80)'
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     accept: {
         backgroundColor: '#a8cad7',
         paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 12,
+        paddingVertical: 6,
+        borderRadius: 13,
         fontSize: 10,
         color: '#fefefe',
         marginLeft: 8,
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
         borderColor: '#cfcfcf',
         borderWidth: .5,
         paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 12,
+        paddingVertical: 6,
+        borderRadius: 13,
         overflow: 'hidden',
         fontSize: 10,
         color: '#000'
