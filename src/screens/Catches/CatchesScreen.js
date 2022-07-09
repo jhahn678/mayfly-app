@@ -49,7 +49,7 @@ const CatchesScreen = () => {
 
         <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
 
-        <BaseFAB icon={<FontelloIcon name='fish' size={36} color='#fefefe'/>} 
+        <BaseFAB icon={<FontelloIcon name='fish-add' size={28} color='#fefefe'/>} 
           style={{ position: 'absolute', right: 24, bottom: 112 }}
           onPress={() => navigation.navigate('NewCatch')}
         />
