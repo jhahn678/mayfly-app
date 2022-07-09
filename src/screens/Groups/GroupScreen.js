@@ -1,34 +1,28 @@
-import { StyleSheet, View, FlatList, Animated, TouchableOpacity, Text, ActivityIndicator} from 'react-native'
-import { useEffect, useState } from 'react'
+import { StyleSheet, View, FlatList, Text, ActivityIndicator} from 'react-native'
+import { useEffect } from 'react'
 import GroupHeader from '../../components/headers/GroupHeader'
 import { formatTimeMessage } from '../../utils/format-dates'
 import MessageBar from '../../components/groups/MessageBar'
 import TextMessage from '../../components/groups/message/TextMessage'
-import IonIcon from 'react-native-vector-icons/Ionicons'
-import NewCatchButton from '../../components/buttons/NewCatchButton'
-import NewPlaceButton from '../../components/buttons/NewPlaceButton'
-import ShareImageButton from '../../components/buttons/ShareImageButton'
-import { useToggleAnimation } from '../../hooks/utils/useToggleAnimation'
 import { Avatar } from '@rneui/themed'
 import { useRoute } from '@react-navigation/core'
 import { useImageContext } from '../../store/context/image'
 import { useGetGroupQuery, GET_GROUP_MESSAGES } from '../../hooks/queries/getGroup'
 import { groupSubscription } from '../../hooks/subscriptions/getGroupSubscription'
 import Gradient from '../../components/backgrounds/Gradient'
+import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
+import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
+import MediaMessage from '../../components/groups/message/MediaMessage'
 
 
 
 const GroupScreen = () => {
 
+  const { flatListRef, handleScrollToTop, onScroll, showScrollButton} = useScrollToTopButton()
   const { setChatImages } = useImageContext()
   const { params } = useRoute()
   const { data, loading, error, fetchMore, subscribeToMore } = useGetGroupQuery(params?.groupId)
 
-  const { 
-    ref: buttonTranslate, 
-    toggledOn: expandButtons, 
-    setToggledOn: setExpandButtons 
-  } = useToggleAnimation({ initialValue: 300 })
 
   const handleFetchMoreMessages = () => {
       fetchMore({
@@ -77,25 +71,22 @@ const GroupScreen = () => {
           ListFooterComponent={loading && <ActivityIndicator size={32}/>}
           contentContainerStyle={styles.messagesContainer}
           keyExtractor={item => item._id}
-          renderItem={({ item }) => <TextMessage data={item}/>}
+          renderItem={({ item }) => (
+            item.type === 'TEXT' ? <TextMessage data={item}/> :
+            item.type === 'MEDIA' ? <MediaMessage data={item}/> : null
+          )}
           onEndReachedThreshold={.2}
           onEndReached={handleFetchMoreMessages} 
-          inverted={true}
+          inverted={true} onScroll={onScroll}
+          ref={flatListRef}
         />
       )}
-      
-      <View style={{...styles.buttonContainer }}>
-        <Animated.View style={{...styles.actions, transform: [{ translateY: buttonTranslate }]}}>
-          <NewCatchButton groupId={params?.groupId}/>
-          <NewPlaceButton groupId={params?.groupId}/>
-          <ShareImageButton/>
-        </Animated.View>
-        <TouchableOpacity onPress={() => setExpandButtons(e => !e)}
-          style={{...styles.chevron, transform: [{ rotate: expandButtons ? '180deg' : '0deg' }]}}
-        >
-          <IonIcon name='chevron-down' size={28}/>
-        </TouchableOpacity>
-      </View>
+
+      <ScrollToTopButton arrowUp={false}
+        showScrollToTop={showScrollButton} 
+        onPress={handleScrollToTop} 
+        style={{ bottom: 78, right: 16 }}
+      />
 
       <MessageBar/>
     </Gradient>
@@ -114,20 +105,6 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     paddingTop: 100,
     paddingBottom: 20
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 208,
-    position: 'absolute',
-    bottom: 76,
-    right: 12
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    height: 148
   },
   chevron: {
     marginTop: 12,
