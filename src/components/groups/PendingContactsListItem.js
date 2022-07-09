@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Avatar } from '@rneui/themed'
+import Gradient from '../backgrounds/Gradient'
 
 
 const PendingContactsListItem = ({ item }) => {
@@ -16,7 +17,10 @@ const PendingContactsListItem = ({ item }) => {
         <TouchableOpacity style={styles.container}
             onPress={() => {}}
          >
-            <Avatar source={{ uri: item.user.details.avatar.url }} size={52} rounded containerStyle={{ marginLeft: 10 }}/>
+            <Avatar source={{ uri: item.user.details?.avatar.url }} 
+                size={52} rounded containerStyle={{ marginLeft: 10 }}
+                title={`${item.user.details.firstName[0]}${item.user.details.lastName[0]}`}
+            />
             <View style={{ display: 'flex', paddingLeft: 8}}>
                 <Text style={styles.fullname}>{item.user.details.fullName}</Text>
                 <Text style={styles.username}>@{item.user.details.username}</Text>
@@ -25,11 +29,13 @@ const PendingContactsListItem = ({ item }) => {
                 { item.status === 'TO' ? 
                     <TouchableOpacity><Text style={styles.cancel}>Cancel</Text></TouchableOpacity> :
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => handleAcceptRequest(item.user._id)}>
-                            <Text style={styles.deny}>Deny</Text>
+                        <TouchableOpacity onPress={() => handleAcceptRequest(item.user._id)} style={styles.shadow}>
+                            <Text style={styles.deny}>Ignore</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleDenyRequest(item.user._id)}>
-                            <Text style={styles.accept}>Accept</Text>
+                        <TouchableOpacity onPress={() => handleDenyRequest(item.user._id)} style={styles.shadow}>
+                            <Gradient style={styles.accept}>
+                                <Text style={{ fontSize: 10, color: '#fff'}}>Accept</Text>
+                            </Gradient>
                         </TouchableOpacity>
                     </View>
                 }
@@ -63,8 +69,8 @@ const styles = StyleSheet.create({
         right: 12,
     },
     cancel: {
-        backgroundColor: 'rgb(220,220,220)',
-        borderColor: 'rgb(80,80,80)',
+        backgroundColor: '#ececec',
+        borderColor: '#cfcfcf',
         borderWidth: .5,
         paddingHorizontal: 10,
         paddingVertical: 4,
@@ -74,26 +80,30 @@ const styles = StyleSheet.create({
         color: 'rgb(80,80,80)'
     },
     accept: {
-        backgroundColor: 'rgba(0,255,0,.1)',
-        borderColor: 'green',
-        borderWidth: .5,
+        backgroundColor: '#a8cad7',
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 12,
-        overflow: 'hidden',
         fontSize: 10,
-        color: 'rgb(80,80,80)',
-        marginLeft: 8
+        color: '#fefefe',
+        marginLeft: 8,
     },
     deny: {
-        backgroundColor: 'rgba(255,0,0,.1)',
-        borderColor: 'red',
+        backgroundColor: '#ececec',
+        borderColor: '#cfcfcf',
         borderWidth: .5,
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 12,
         overflow: 'hidden',
         fontSize: 10,
-        color: 'rgb(80,80,80)'
+        color: '#000'
+    },
+    shadow: {
+        elevation: 1,
+        shadowColor: 'black',
+        shadowOffset: { height: 1 },
+        shadowOpacity: .1,
+        shadowRadius: 1
     }
 })
