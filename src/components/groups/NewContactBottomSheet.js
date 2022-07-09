@@ -3,58 +3,63 @@ import { BottomSheet, Input } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { useEffect, useState } from 'react'
 import NewContactListItem from './NewContactListItem'
-import { makeFakeContacts } from '../../../test-data/groups'
 import { useDeviceContacts } from '../../hooks/utils/useDeviceContacts'
+import { useSearchByUsername } from '../../hooks/utils/useSearchByUsername'
 import DeviceContactsListItem from './DeviceContactsListItem'
 
-const NewContactBottomSheet = ({ isVisible, setIsVisible }) => {
+const NewContactBottomSheet = ({ isVisible, setIsVisible, usersContacts }) => {
     
-    const [search, setSearch] = useState('')
-    const [searchResults, setSearchResults] = useState([])
-    const [selectedUser, setSelectedUser] = useState(null)
-    const [deviceContacts, setDeviceContacts] = useState({ data: [], bindex: 30 })
     const { getDeviceContacts } = useDeviceContacts()
+    //deviceContacts.index inidicates the number of contacts to display
+    const [deviceContacts, setDeviceContacts] = useState({ data: [], filtered: [], index: 30 })
+
+    const { input, setInput, results, isError, isLoading } = useSearchByUsername()
 
     useEffect(() => {
+        //Initial cleaning of data ~ Only contacts with mobile phone numbers
         if(deviceContacts.data.length === 0){
             (async () => {
                 const { data } = await getDeviceContacts()
                 const contacts = data.filter(c => (
                     c.hasOwnProperty('phoneNumbers')) && (c.phoneNumbers.find(p => p.label === 'mobile')
                 ))
-                setDeviceContacts({ data: contacts, index: 30 })
+                setDeviceContacts(state => ({ ...state, data: contacts }) )
             })()
         }
     },[])
 
+
     useEffect(() => {
         if(isVisible){
             setTimeout(() => {
-                setDeviceContacts(c => ({ ...c, index: c.data.length-1 }))
+                setDeviceContacts(state => ({ ...state, index: state.data.length-1 }))
             },1000)
         }
     },[isVisible])
 
+
     const handleClose = () => {
-        setDeviceContacts(c => ({ ...c, index: 30 }))
+        setDeviceContacts(state => ({ ...state, index: 30 }))
         setIsVisible(false)
     }
 
-    const handleSearch = async (v) => {
-        setSearch(v)
+
+    const handleInput = (v) => {
+        setInput(v)
         if(v.length > 0){
-            setSearchResults([
-                ...makeFakeContacts(4), 
-                ...deviceContacts.data.filter(c => c.name.startsWith(v))
-            ])
+            const filtered = [ ...deviceContacts.data.filter(c => c.name.startsWith(v)) ]
+            setDeviceContacts(state => ({ ...state, filtered }) )
         }else{
-            setSearchResults([])
+            setDeviceContacts(state => ({ ...state, filtered: [] }))
         }
     }
+
 
     const handleSendRequest = () => {
 
     }
+
+
     
     return (
         <BottomSheet isVisible={isVisible} onBackdropPress={handleClose}
@@ -64,26 +69,30 @@ const NewContactBottomSheet = ({ isVisible, setIsVisible }) => {
             }} 
         >
             <Input placeholder='Search by username' containerStyle={styles.search}
-                rightIcon={selectedUser ? (
-                    <IonIcon name='md-checkmark' size={24} 
-                        onPress={handleSendRequest} style={styles.send}
-                    /> ):(
-                    <IonIcon name='search-outline' size={24}/>
-                )}
-                value={search} onChangeText={value => handleSearch(value)}
+                rightIcon={<IonIcon name='search-outline' size={24}/>}
+                value={input} onChangeText={value => handleInput(value)}
                 inputStyle={{ color: '#353440', fontSize: 18 }}
             />
+
+
             <View style={{ paddingHorizontal: 16 }}>
-            { searchResults.map(item => {
-                if(item.hasOwnProperty('_id')){
-                    return <NewContactListItem key={item._id} item={item}/>
-                }else{
-                    return <DeviceContactsListItem key={item.id} item={item}/>
-                }
-            })}
-            { searchResults.length === 0 && deviceContacts.data.slice(0, deviceContacts.index).map(item => (
-                <DeviceContactsListItem key={item.id} item={item}/>
-            ))}
+
+                {  results?.length > 0 && input.length > 0 &&
+                    results.map(item => (
+                        <NewContactListItem key={item._id} item={item} 
+                            isAdded={usersContacts.includes(item._id)}
+                        />
+                ))}
+
+                { deviceContacts.filtered.length > 0 && deviceContacts.filtered.map(item => ( 
+                    <DeviceContactsListItem key={item.id} item={item}/>
+                ))}
+            
+                { input.length === 0 && 
+                    deviceContacts.data.slice(0, deviceContacts.index).map(item => (
+                        <DeviceContactsListItem key={item.id} item={item}/>
+                ))}
+
             </View>
         </BottomSheet>
     )

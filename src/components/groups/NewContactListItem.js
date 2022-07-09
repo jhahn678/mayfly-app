@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Avatar } from '@rneui/themed'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 
-const NewContactListItem = ({ item }) => {
+const NewContactListItem = ({ item, isAdded }) => {
 
     //Show icon for send request
     //Sent + checkmark after sending
@@ -27,10 +27,21 @@ const NewContactListItem = ({ item }) => {
                 <Text style={styles.username}>@{item.details.username}</Text>
             </View>
             <View style={styles.select}>
-                { !requestSent ?
-                    <IonIcon name='person-add-outline' size={28} onPress={handleSendRequest}/> :
-                    <IonIcon name='checkmark-circle-outline' size={28} 
-                        onPress={handleCancelRequest} color='green'/>
+                { isAdded ? (
+                    <Text>Added</Text> ):( 
+                    requestSent )?(
+                        <IonIcon 
+                            name='checkmark-circle-outline' 
+                            size={28} color='green'
+                            onPress={handleCancelRequest} 
+                        />
+                    ):(
+                        <IonIcon 
+                            name='person-add-outline' 
+                            size={28} 
+                            onPress={handleSendRequest}
+                        /> 
+                    )
                 }
             </View>
         </View>

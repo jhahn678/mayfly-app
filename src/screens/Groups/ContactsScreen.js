@@ -21,6 +21,7 @@ const ContactsScreen = () => {
 
     const [filteredContacts, setFilteredContacts] = useState([])
     const [selectedContacts, setSelectedContacts] = useState([])
+    const [contactIds, setContactIds] = useState([])
     const [search, setSearch] = useState('')
 
     const [showNewContact, setShowNewContact] = useState(false)
@@ -32,6 +33,7 @@ const ContactsScreen = () => {
                 ...data.getUser.pending_contacts,
                 ...data.getUser.contacts
             ])
+            setContactIds(data.getUser.contacts.map(c => c._id))
         }
     },[data])
 
@@ -97,7 +99,9 @@ const ContactsScreen = () => {
 
         <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
 
-        <NewContactBottomSheet isVisible={showNewContact} setIsVisible={setShowNewContact}/>
+        <NewContactBottomSheet isVisible={showNewContact} 
+            setIsVisible={setShowNewContact} 
+            usersContacts={contactIds}/>
 
     </PrimaryBackground>
   )
