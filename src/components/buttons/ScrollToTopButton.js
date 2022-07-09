@@ -1,9 +1,9 @@
 import { StyleSheet, Animated } from 'react-native'
 import { useEffect, useRef } from 'react'
-import { FAB } from '@rneui/themed'
+import BaseFAB from './BaseFAB'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 
-const ScrollToTopButton = ({ showScrollToTop, onPress }) => {
+const ScrollToTopButton = ({ showScrollToTop, onPress, style, arrowUp=true }) => {
 
     const opacityRef = useRef(new Animated.Value(0)).current
     
@@ -25,9 +25,9 @@ const ScrollToTopButton = ({ showScrollToTop, onPress }) => {
 
     return (
         <Animated.View style={{ opacity: opacityRef }}>
-          <FAB size='small' buttonStyle={{ height: 36, width: 36 }}
-            icon={<IonIcon name='arrow-up' size={16} color='#fefefe'/>} 
-            style={{...styles.scrollUp }} onPress={onPress}
+          <BaseFAB size={36}
+            icon={<IonIcon name={arrowUp ? 'arrow-up' : 'arrow-down'} size={20} color='#fefefe'/>} 
+            style={{...styles.scrollUp, ...style}} onPress={onPress}
           />
         </Animated.View>
     )
