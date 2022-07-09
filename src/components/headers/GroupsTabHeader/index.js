@@ -40,7 +40,7 @@ const GroupsTabHeader = ({ selectedItems }) => {
                             style={{ marginRight: 12 }}
                         />
                         <BaseFAB onPress={() => navigation.navigate('NewGroup')} 
-                            icon={<FontelloIcon size={24} name='new-chat' color='#fefefe'/>} 
+                            icon={<IonIcon size={24} name='chatbubble-ellipses-outline' color='#fefefe'/>} 
                         />
                     </View>
                 }

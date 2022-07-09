@@ -30,7 +30,7 @@ const GroupHeader = ({ groupId, numberOfUsers, onGoBack }) => {
 
                 <IonIcon 
                     name='md-return-up-back' 
-                    size={28} 
+                    size={28} color
                     style={{...globalStyles.fontShadow, ...styles.back}}
                     onPress={handleGoBack}
                 /> 
@@ -94,26 +94,21 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '400',
-        color: '#353440'
+        color: '#032836'
     },
     members: {
         fontWeight: '300',
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        color: '#032836'
     },
     back: {
-        color: '#353440',
+        color: '#032836',
         marginRight: 12
     },
-    settings: {
-        color: '#353440',
-        position: 'absolute',
-        right: 64,
-        top: 12
-    },
     mapIcon: {
-        color: '#353440',
+        color: '#032836',
         position: 'absolute',
         right: 20,
         top: 12
