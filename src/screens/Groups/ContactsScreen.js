@@ -12,28 +12,39 @@ import ScrollToTopButton from '../../components/buttons/ScrollToTopButton'
 import ViewableContact from '../../components/groups/ViewableContact'
 import NewContactBottomSheet from '../../components/groups/NewContactBottomSheet'
 import { useScrollToTopButton } from '../../hooks/utils/useScrollToTopButton'
+import { useGetUserContactsQuery } from '../../hooks/queries/getUserContacts'
 
 const ContactsScreen = () => {
   
     const { user } = useAuthContext()
-    const { flatListRef, handleScrollToTop, onScroll, showScrollButton} = useScrollToTopButton()
-    const [contacts, setContacts] = useState([ ...makeFakePendingRequests(3), ...makeFakeContacts(12) ])
+    const { data, loading, error } = useGetUserContactsQuery(user._id)
+
     const [filteredContacts, setFilteredContacts] = useState([])
-    const [search, setSearch] = useState('')
     const [selectedContacts, setSelectedContacts] = useState([])
+    const [search, setSearch] = useState('')
+
     const [showNewContact, setShowNewContact] = useState(false)
+    const { flatListRef, handleScrollToTop, onScroll, showScrollButton} = useScrollToTopButton()
   
     useEffect(() => {
-        setFilteredContacts(contacts)
-    },[contacts])
+        if(data?.getUser){
+            setFilteredContacts([
+                ...data.getUser.pending_contacts,
+                ...data.getUser.contacts
+            ])
+        }
+    },[data])
 
     const handleSearch = (value) => {
         setSearch(value)
         if(value === ''){
-            setFilteredContacts(contacts)
+            setFilteredContacts([
+                ...data.getUser.pending_contacts,
+                ...data.getUser.contacts
+            ])
         }else{
-            setFilteredContacts(contacts.filter(c => c?.details && (
-                c.details.firstName.startsWith(value) ||
+            setFilteredContacts(data.getUser.contacts.filter(c => c?.details && (
+                c.details.fullName .startsWith(value) ||
                 c.details.lastName.startsWith(value) ||
                 c.details.username.startsWith(value)
             )))
@@ -50,6 +61,7 @@ const ContactsScreen = () => {
   
     return (
     <PrimaryBackground style={styles.container}>
+
         <CreateHeader title='Contacts' rightNode={
             <FAB icon={<IonIcon name={selectedContacts.length > 0 ? 'trash-outline' : 'person-add-outline'} size={24} color='#fefefe'/>} 
                 style={globalStyles.FABshadow} 
@@ -57,16 +69,18 @@ const ContactsScreen = () => {
                 onPress={selectedContacts.length > 0 ? handleDelete : () => setShowNewContact(true) }
             />
         }/>
+
+
         <View style={styles.main}>
+
             <Input placeholder='Contacts' containerStyle={styles.searchContacts}
               rightIcon={<IonIcon name='search-outline' size={24}/>}
               value={search} onChangeText={value => handleSearch(value)}
               inputStyle={{ color: '#353440', fontSize: 18 }}
             />
-            <FlatList
-                data={filteredContacts}
-                ref={flatListRef}
-                onScroll={e => onScroll(e)}
+
+            <FlatList data={filteredContacts} ref={flatListRef}
+                onScroll={e => onScroll(e)} showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => ( item?.status ? 
                     <PendingContactsListItem item={item}/> :
                     <ViewableContact item={item} 
@@ -78,9 +92,13 @@ const ContactsScreen = () => {
                 contentContainerStyle={styles.contactsList}
                 ItemSeparatorComponent={() => <View style={{ height: 5 }}/>}
             />
+
         </View>
+
         <ScrollToTopButton showScrollToTop={showScrollButton} onPress={handleScrollToTop}/>
+
         <NewContactBottomSheet isVisible={showNewContact} setIsVisible={setShowNewContact}/>
+
     </PrimaryBackground>
   )
 }
